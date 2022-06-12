@@ -22,7 +22,7 @@ class PerfilPage extends StatelessWidget {
           children: [
             _nombreUsuario(),
             _totalWallet(context),
-            Divider(
+            const Divider(
               thickness: 2,
             ),
             _tituloUltimosPedidos(),
@@ -33,7 +33,7 @@ class PerfilPage extends StatelessWidget {
 
   Widget _nombreUsuario() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: const ListTile(
         leading: Icon(Icons.person),
         title: Text('Alberto Carrion'),
@@ -132,29 +132,30 @@ class PerfilPage extends StatelessWidget {
                         ),
                         children: [
                           GestureDetector(
-                            onTap: () {
-                              print('mandanga!');
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('# ${item['id']}'),
-                                Text(
-                                  'Total: ${item['compra']['total_venta']} €',
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Row(
-                                  children: const [
-                                    Text('ver pedido '),
-                                    Icon(
-                                      Icons.arrow_forward_sharp,
-                                      size: 14,
-                                    )
-                                  ],
-                                ),
-                              ],
+                            onTap: () => con.goToPedidosPage(),
+                            child: AbsorbPointer(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('# ${item['id']}'),
+                                  Text(
+                                    'Total: ${item['compra']['total_venta']} €',
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Row(
+                                    children: const [
+                                      Text('ver pedido '),
+                                      Icon(
+                                        Icons.arrow_forward_sharp,
+                                        size: 14,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],

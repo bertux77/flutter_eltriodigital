@@ -1,7 +1,6 @@
 import 'package:eltriodigital_flutter/src/environment/environment.dart';
 import 'package:eltriodigital_flutter/src/models/response_api.dart';
 import 'package:eltriodigital_flutter/src/models/user.dart';
-import 'package:eltriodigital_flutter/src/models/wallet.dart';
 import 'package:eltriodigital_flutter/src/providers/users_providers.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -14,6 +13,11 @@ class PerfilPageController extends GetxController {
   PerfilPageController() {
     //totalWallet();
     // print('constructor');
+  }
+
+  void goToPedidosPage() {
+    print('mandanga!');
+    Get.toNamed("/pedidos");
   }
 
   void totalWallet() async {
