@@ -132,7 +132,7 @@ class PerfilPage extends StatelessWidget {
                         ),
                         children: [
                           GestureDetector(
-                            onTap: () => con.goToPedidosPage(),
+                            onTap: () => con.goToPedidosPage(item['id']),
                             child: AbsorbPointer(
                               child: Row(
                                 mainAxisAlignment:

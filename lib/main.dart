@@ -1,7 +1,7 @@
 import 'package:eltriodigital_flutter/src/pages/home/home_page.dart';
 import 'package:eltriodigital_flutter/src/pages/perfil/perfil_page.dart';
 import 'package:eltriodigital_flutter/src/pages/register/register_page.dart';
-import 'package:eltriodigital_flutter/src/pages/tienda/pedidos/tienda_pedidos_page.dart';
+import 'package:eltriodigital_flutter/src/pages/tienda/pedidos/detalle/tienda_pedidos_controller_page.dart';
 import 'package:eltriodigital_flutter/src/pages/tienda/tienda_page.dart';
 import 'package:eltriodigital_flutter/src/pages/utils/utils_page.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +44,9 @@ class _MyAppState extends State<MyApp> {
         GetPage(name: '/utils', page: () => UtilsPage()),
         GetPage(name: '/perfil', page: () => PerfilPage()),
         GetPage(name: '/tienda', page: () => TiendaPage()),
-        GetPage(name: '/pedidos', page: () => TiendaPedidosPage()),
+        GetPage(
+            name: '/tienda/pedidos/detalle',
+            page: () => TiendaPedidosDetallePage()),
       ],
       theme: ThemeData(
           primaryColor: const Color.fromRGBO(23, 30, 77, 1),

@@ -15,9 +15,10 @@ class PerfilPageController extends GetxController {
     // print('constructor');
   }
 
-  void goToPedidosPage() {
-    print('mandanga!');
-    Get.toNamed("/pedidos");
+  void goToPedidosPage(pedidoId) {
+    //print('mandanga!');
+    //Get.toNamed("/pedidos");
+    Get.toNamed('tienda/pedidos/detalle', arguments: {'pedidoId': pedidoId});
   }
 
   void totalWallet() async {
