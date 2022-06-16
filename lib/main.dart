@@ -1,7 +1,7 @@
 import 'package:eltriodigital_flutter/src/pages/home/home_page.dart';
 import 'package:eltriodigital_flutter/src/pages/perfil/perfil_page.dart';
 import 'package:eltriodigital_flutter/src/pages/register/register_page.dart';
-import 'package:eltriodigital_flutter/src/pages/tienda/pedidos/detalle/tienda_pedidos_controller_page.dart';
+import 'package:eltriodigital_flutter/src/pages/tienda/pedidos/detalle/tienda_pedidos_detalle_page.dart';
 import 'package:eltriodigital_flutter/src/pages/tienda/tienda_page.dart';
 import 'package:eltriodigital_flutter/src/pages/utils/utils_page.dart';
 import 'package:flutter/material.dart';

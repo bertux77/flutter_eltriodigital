@@ -8,7 +8,7 @@ class HomeController extends GetxController{
   
 
   HomeController(){
-    print('Usuario de sesion: ${user.toJson()}');
+    //print('Usuario de sesion: ${user.toJson()}');
   }
 
   

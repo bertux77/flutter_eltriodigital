@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:eltriodigital_flutter/src/pages/perfil/perfil_page_controller.dart';
 import 'package:eltriodigital_flutter/src/providers/users_providers.dart';
 import 'package:eltriodigital_flutter/src/widgets/appbar/my_appbar.dart';
@@ -52,7 +50,7 @@ class PerfilPage extends StatelessWidget {
             style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
           );
         } else {
-          print(snapshot.data.data);
+          //print(snapshot.data.data);
           return Text('${snapshot.data.data} €',
               style:
                   const TextStyle(fontSize: 40, fontWeight: FontWeight.bold));
@@ -131,32 +129,30 @@ class PerfilPage extends StatelessWidget {
                           ],
                         ),
                         children: [
-                          GestureDetector(
-                            onTap: () => con.goToPedidosPage(item['id']),
-                            child: AbsorbPointer(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('# ${item['id']}'),
-                                  Text(
-                                    'Total: ${item['compra']['total_venta']} €',
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Row(
-                                    children: const [
-                                      Text('ver pedido '),
-                                      Icon(
-                                        Icons.arrow_forward_sharp,
-                                        size: 14,
-                                      )
-                                    ],
-                                  ),
-                                ],
+                          Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('# ${item['id']}'),
+                              Text(
+                                'Total: ${item['compra']['total_venta']} €',
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
                               ),
-                            ),
+                              GestureDetector(
+                                onTap: () => con.goToPedidosPage(item['compra']['id']),
+                                child: Row(
+                                  children: [
+                                    Text(item['compra']['id'].toString()),
+                                    Icon(
+                                      Icons.arrow_forward_sharp,
+                                      size: 14,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

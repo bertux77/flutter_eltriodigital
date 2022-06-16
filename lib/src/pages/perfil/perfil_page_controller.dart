@@ -10,14 +10,10 @@ class PerfilPageController extends GetxController {
   User user = User.fromJson(GetStorage().read('user') ?? {});
   UsersProvider usersProvider = UsersProvider();
   double wallet = 0.0;
-  PerfilPageController() {
-    //totalWallet();
-    // print('constructor');
-  }
+  //CONSTRUCTOR
+  PerfilPageController() {}
 
   void goToPedidosPage(pedidoId) {
-    //print('mandanga!');
-    //Get.toNamed("/pedidos");
     Get.toNamed('tienda/pedidos/detalle', arguments: {'pedidoId': pedidoId});
   }
 
@@ -25,7 +21,6 @@ class PerfilPageController extends GetxController {
     ResponseApi responseApi = await usersProvider.totalWallet();
     if (responseApi.success == true) {
       wallet = responseApi.data;
-      print('wallet ${wallet}');
     } else {
       Get.snackbar('ERROR', responseApi.message ?? '');
     }

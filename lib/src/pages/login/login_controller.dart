@@ -16,7 +16,7 @@ class LoginController extends GetxController {
 
   void prueba() async {
     Response response = await usersProvider.prueba();
-    print(response.body);
+    //print(response.body);
   }
 
   void login() async {

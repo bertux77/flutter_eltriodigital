@@ -10,23 +10,16 @@ class TiendaPedidosDetallePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(() => Scaffold(
       appBar: MyAppBar(),
       bottomNavigationBar: MyBottomNavigationBar(),
       body: Column(
-        children: [
-          Text('Tu Ticket'),
-          Container(
-            width: double.infinity * 0.80,
-            height: double.infinity * 0.80,
-            color: Theme.of(context).colorScheme.primary,
-            child: Container(
-              margin: EdgeInsets.all(20),
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Center(child: Text('Tu Ticket # ${con.numeroFactura.value}', style: TextStyle(fontSize: 30),))),
+            ],
+          )
+      ));
   }
 }

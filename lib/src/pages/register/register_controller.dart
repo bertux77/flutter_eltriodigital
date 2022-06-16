@@ -22,8 +22,8 @@ class RegisterController extends GetxController{
     String confirmpassword = confirmpasswordController.text.trim();
     String name = nameController.text;
 
-    print('Email ${email}');
-    print('Contraseña ${password}');
+    // print('Email ${email}');
+    // print('Contraseña ${password}');
 
     if(isValidForm(email, password, confirmpassword, name)){
 
@@ -36,7 +36,7 @@ class RegisterController extends GetxController{
       //Enviamos la señal al provider y esperamos la respuesta
       Response response = await usersProvider.registro(user);
 
-      print('Respuesta del backend: ${response.body}');
+      //print('Respuesta del backend: ${response.body}');
     }
   }
 

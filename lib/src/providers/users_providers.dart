@@ -18,6 +18,25 @@ class UsersProvider extends GetConnect {
     return response;
   }
 
+
+  // OBTENER PEDIDO Y PRODUCTOS VENDIDOS SOBRE UN ID
+  Future<ResponseApi> pedidoDetalle(pedidoId) async {
+    
+    Response response = await get('$url/pedidos/$pedidoId', headers: {
+      'Content-type': 'application/json',
+      'Authorization': 'Bearer ${user.sessionToken}'
+    });
+
+    if (response.body == null) {
+      Get.snackbar('Error', 'No se ha podido ejecutar la petición');
+      //return ResponseApi();
+    }
+    //print('Response body: $url/pedidos/$pedidoId');
+    ResponseApi responseApi = ResponseApi.fromJson(response.body);
+    return responseApi;
+  }
+
+
   // TOTAL WALLET INDIVIDUAL DE CADA USUARIO
   Future<ResponseApi> totalWallet() async {
     Response response = await get('$url/total-wallet', headers: {
@@ -31,7 +50,6 @@ class UsersProvider extends GetConnect {
     }
     //print('Respuesta cargar Wallet: ${response.body}');
     ResponseApi responseApi = ResponseApi.fromJson(response.body);
-
     return responseApi;
   }
 
@@ -49,6 +67,7 @@ class UsersProvider extends GetConnect {
     //print('Respuesta cargar Wallet: ${response.body}');
     ResponseApi responseApi = ResponseApi.fromJson(response.body);
 
+    //print(responseApi.toJson());
     return responseApi;
   }
 
