@@ -2,10 +2,9 @@ import 'package:eltriodigital_flutter/src/pages/perfil/perfil_page_controller.da
 import 'package:eltriodigital_flutter/src/providers/users_providers.dart';
 import 'package:eltriodigital_flutter/src/widgets/appbar/my_appbar.dart';
 import 'package:eltriodigital_flutter/src/widgets/bottomNavigationBar/my_bottom_navigation_bar.dart';
+import 'package:eltriodigital_flutter/src/widgets/varios/fecha_formateada.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-
 import '../../models/wallet.dart';
 
 class PerfilPage extends StatelessWidget {
@@ -45,17 +44,51 @@ class PerfilPage extends StatelessWidget {
       future: usersProvider.totalWallet(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text(
-            '0€',
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const Text(
+                '0€',
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              ),
+              _btnScanCompra()
+            ],
           );
         } else {
           //print(snapshot.data.data);
-          return Text('${snapshot.data.data} €',
-              style:
-                  const TextStyle(fontSize: 40, fontWeight: FontWeight.bold));
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                children: [
+                  Text('${snapshot.data.data} €',
+                      style: const TextStyle(
+                          fontSize: 40, fontWeight: FontWeight.bold)),
+                  Text('Totems')
+                ],
+              ),
+              _btnScanCompra()
+            ],
+          );
         }
       },
+    );
+  }
+
+  Widget _btnScanCompra() {
+    return Container(
+      height: 50,
+      padding: EdgeInsets.all(0),
+      child: ElevatedButton.icon(
+          onPressed: () {},
+          icon: const Icon(
+            Icons.qr_code_scanner,
+            color: Colors.white,
+          ),
+          label: const Text(
+            'Scan compra',
+            style: TextStyle(color: Colors.white),
+          )),
     );
   }
 
@@ -76,85 +109,86 @@ class PerfilPage extends StatelessWidget {
           } else {
             return Expanded(
               child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  //itemCount: con.wallets.length,
                   itemCount: snapshot.data.data.length,
                   itemBuilder: (_, index) {
-                    //final item = con.wallets[index];
                     final item = snapshot.data.data[index];
 
-                    //FORMATEAMOS CADA FECHA
-                    final dataBD = DateTime.parse(item['created_at']).toLocal();
-                    var formatter = DateFormat('dd-MM-yyyy');
-                    String data = formatter.format(dataBD);
-
-                    return Card(
-                      key: PageStorageKey(item['id']),
-                      color: item['tipo'] == '1'
-                          ? Colors.green[300]
-                          : Colors.red[300],
-                      elevation: 4,
-                      child: ExpansionTile(
-                        controlAffinity: ListTileControlAffinity.leading,
-                        childrenPadding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        expandedCrossAxisAlignment: CrossAxisAlignment.end,
-                        maintainState: true,
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(data.toString()),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            item['tipo'] == '1'
-                                ? const Icon(Icons.add)
-                                : const Icon(Icons.remove),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            item['tipo'] == '1'
-                                ? Text(
-                                    '${item['beneficio_compra'].toString()}'
-                                    '€',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                : Text(
-                                    '${item['canjeo_compra'].toString()}'
-                                    '€',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                        children: [
-                          Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                    return GestureDetector(
+                      onTap: () => con.goToPedidosPage(item['compra']['id']),
+                      child: Card(
+                        key: PageStorageKey(item['id']),
+                        color: item['tipo'] == '1'
+                            ? Colors.green[300]
+                            : Colors.red[300],
+                        elevation: 4,
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('# ${item['id']}'),
+                              Row(
+                                children: [
+                                  Text('#${item['compra']['id']} - '),
+                                  FechaFormateada(
+                                    fecha: item['created_at'],
+                                    textStyle: TextStyle(),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Icon(Icons.add),
+                              const SizedBox(
+                                width: 10,
+                              ),
                               Text(
-                                'Total: ${item['compra']['total_venta']} €',
+                                '${item['beneficio_compra'].toString()}'
+                                '€',
                                 style: const TextStyle(
-                                    fontSize: 16,
                                     fontWeight: FontWeight.bold),
-                              ),
-                              GestureDetector(
-                                onTap: () => con.goToPedidosPage(item['compra']['id']),
-                                child: Row(
-                                  children: [
-                                    Text(item['compra']['id'].toString()),
-                                    Icon(
-                                      Icons.arrow_forward_sharp,
-                                      size: 14,
-                                    )
-                                  ],
-                                ),
-                              ),
+                              )
                             ],
                           ),
-                        ],
+                          subtitle: Row(
+                            children: [
+                              item['tipo'] == '2'
+                                  ? Text(
+                                      'En esta compra has canjeado ${item['canjeo_compra'].toString()} € de tu wallet',
+                                      style: TextStyle(fontSize: 12),
+                                    )
+                                  : Text(
+                                      'En este pedido has acumulado ${item['beneficio_compra'].toString()} € en tu wallet',
+                                      style: TextStyle(fontSize: 12))
+                            ],
+                          ),
+                          // children: [
+                          //   Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       Text('# ${item['id']}'),
+                          //       Text(
+                          //         'Total: ${item['compra']['total_venta']} €',
+                          //         style: const TextStyle(
+                          //             fontSize: 16, fontWeight: FontWeight.bold),
+                          //       ),
+                          //       GestureDetector(
+                          //         onTap: () =>
+                          //             con.goToPedidosPage(item['compra']['id']),
+                          //         child: Row(
+                          //           children: [
+                          //             Text(item['compra']['id'].toString()),
+                          //             Icon(
+                          //               Icons.arrow_forward_sharp,
+                          //               size: 14,
+                          //             )
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ],
+                        ),
                       ),
                     );
                   }),
