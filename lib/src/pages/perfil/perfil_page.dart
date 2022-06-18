@@ -77,10 +77,10 @@ class PerfilPage extends StatelessWidget {
 
   Widget _btnScanCompra() {
     return Container(
-      height: 50,
-      padding: EdgeInsets.all(0),
+      height: 40,
+      //padding: EdgeInsets.all(0),
       child: ElevatedButton.icon(
-          onPressed: () {},
+          onPressed: () => con.scanBar(),
           icon: const Icon(
             Icons.qr_code_scanner,
             color: Colors.white,
@@ -107,92 +107,96 @@ class PerfilPage extends StatelessWidget {
               child: const Center(child: CircularProgressIndicator()),
             );
           } else {
-            return Expanded(
-              child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: snapshot.data.data.length,
-                  itemBuilder: (_, index) {
-                    final item = snapshot.data.data[index];
+            return snapshot.data.data != null
+                ? Expanded(
+                    child: ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: snapshot.data.data.length,
+                        itemBuilder: (_, index) {
+                          final item = snapshot.data.data[index];
 
-                    return GestureDetector(
-                      onTap: () => con.goToPedidosPage(item['compra']['id']),
-                      child: Card(
-                        key: PageStorageKey(item['id']),
-                        color: item['tipo'] == '1'
-                            ? Colors.green[300]
-                            : Colors.red[300],
-                        elevation: 4,
-                        child: ListTile(
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Text('#${item['compra']['id']} - '),
-                                  FechaFormateada(
-                                    fecha: item['created_at'],
-                                    textStyle: TextStyle(),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Icon(Icons.add),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                '${item['beneficio_compra'].toString()}'
-                                '€',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                          subtitle: Row(
-                            children: [
-                              item['tipo'] == '2'
-                                  ? Text(
-                                      'En esta compra has canjeado ${item['canjeo_compra'].toString()} € de tu wallet',
-                                      style: TextStyle(fontSize: 12),
+                          return GestureDetector(
+                            onTap: () =>
+                                con.goToPedidosPage(item['compra']['id']),
+                            child: Card(
+                              key: PageStorageKey(item['id']),
+                              color: item['tipo'] == '1'
+                                  ? Colors.green[300]
+                                  : Colors.red[300],
+                              elevation: 4,
+                              child: ListTile(
+                                title: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text('#${item['compra']['id']} - '),
+                                        FechaFormateada(
+                                          fecha: item['created_at'],
+                                          textStyle: TextStyle(),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    const Icon(Icons.add),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      '${item['beneficio_compra'].toString()}'
+                                      '€',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     )
-                                  : Text(
-                                      'En este pedido has acumulado ${item['beneficio_compra'].toString()} € en tu wallet',
-                                      style: TextStyle(fontSize: 12))
-                            ],
-                          ),
-                          // children: [
-                          //   Row(
-                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //     children: [
-                          //       Text('# ${item['id']}'),
-                          //       Text(
-                          //         'Total: ${item['compra']['total_venta']} €',
-                          //         style: const TextStyle(
-                          //             fontSize: 16, fontWeight: FontWeight.bold),
-                          //       ),
-                          //       GestureDetector(
-                          //         onTap: () =>
-                          //             con.goToPedidosPage(item['compra']['id']),
-                          //         child: Row(
-                          //           children: [
-                          //             Text(item['compra']['id'].toString()),
-                          //             Icon(
-                          //               Icons.arrow_forward_sharp,
-                          //               size: 14,
-                          //             )
-                          //           ],
-                          //         ),
-                          //       ),
-                          //     ],
-                        ),
-                      ),
-                    );
-                  }),
-            );
+                                  ],
+                                ),
+                                subtitle: Row(
+                                  children: [
+                                    item['tipo'] == '2'
+                                        ? Text(
+                                            'En esta compra has canjeado ${item['canjeo_compra'].toString()} € de tu wallet',
+                                            style: TextStyle(fontSize: 12),
+                                          )
+                                        : Text(
+                                            'En este pedido has acumulado ${item['beneficio_compra'].toString()} € en tu wallet',
+                                            style: TextStyle(fontSize: 12))
+                                  ],
+                                ),
+                                // children: [
+                                //   Row(
+                                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //     children: [
+                                //       Text('# ${item['id']}'),
+                                //       Text(
+                                //         'Total: ${item['compra']['total_venta']} €',
+                                //         style: const TextStyle(
+                                //             fontSize: 16, fontWeight: FontWeight.bold),
+                                //       ),
+                                //       GestureDetector(
+                                //         onTap: () =>
+                                //             con.goToPedidosPage(item['compra']['id']),
+                                //         child: Row(
+                                //           children: [
+                                //             Text(item['compra']['id'].toString()),
+                                //             Icon(
+                                //               Icons.arrow_forward_sharp,
+                                //               size: 14,
+                                //             )
+                                //           ],
+                                //         ),
+                                //       ),
+                                //     ],
+                              ),
+                            ),
+                          );
+                        }),
+                  )
+                : Container();
           }
         });
   }

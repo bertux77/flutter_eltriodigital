@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "757087496576",
+    "project_id": "flutter-eltriodigital",
+    "storage_bucket": "flutter-eltriodigital.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:757087496576:android:1950b0686eb4a8351af965",
+        "android_client_info": {
+          "package_name": "com.example.eltriodigital_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "757087496576-biis14lpcei3302u968l2qol2l4m6tso.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLAePXaHID0QfqtPsUVT6kP3YuryUESBs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "757087496576-biis14lpcei3302u968l2qol2l4m6tso.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
