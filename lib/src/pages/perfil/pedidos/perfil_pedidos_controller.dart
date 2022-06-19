@@ -8,7 +8,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-class PerfilPageController extends GetxController {
+class PerfilPedidosController extends GetxController {
   String url = Environment.API_URL + 'api';
   User user = User.fromJson(GetStorage().read('user') ?? {});
   UsersProvider usersProvider = UsersProvider();
@@ -16,7 +16,7 @@ class PerfilPageController extends GetxController {
 
   String _scanBarcode = 'Unknown';
   //CONSTRUCTOR
-  PerfilPageController() {}
+  PerfilPedidosController() {}
 
   Future<void> scanBar() async {
     String barcodeScanRes;
@@ -53,20 +53,12 @@ class PerfilPageController extends GetxController {
     }
   }
 
-  void goToPerfilPedidosPage() {
-    Get.toNamed('/perfil/pedidos');
-  }
-
-  void goToPerfilShowQrPage() {
-    Get.toNamed('/perfil/showqr');
-  }
-
   void goToPerfilInfoPage() {
     Get.toNamed('/perfil/info');
   }
 
-  void goToPerfilEditarPage() {
-    Get.toNamed('/perfil/editar');
+  void goToPerfilPage() {
+    Get.toNamed('/perfil');
   }
 
   void goToBeneficioPage(beneficio) {

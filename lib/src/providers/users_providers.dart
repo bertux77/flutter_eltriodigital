@@ -19,6 +19,38 @@ class UsersProvider extends GetConnect {
     return response;
   }
 
+  // SIN FOTO
+  Future<ResponseApi> actualizarPerfilSinImagen(User user) async {
+    Response response = await put(
+        '${url}/actualizar-perfil-sin-imagen', user.toJson(),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${user.sessionToken}'
+        });
+
+    if (response.body == null) {
+      Get.snackbar('Error', 'No se pudo actualizar la información');
+      return ResponseApi();
+    }
+
+    if (response.body is String) {
+      Get.snackbar('Error', 'No se ha podido actualizar los datos',
+          icon: const Icon(Icons.dangerous, color: Colors.red),
+          snackPosition: SnackPosition.TOP,
+          colorText: Colors.red,
+          backgroundColor: Colors.white);
+      return ResponseApi();
+    }
+
+    if (response.statusCode == 401) {
+      Get.snackbar('Error', 'No estas autorizado');
+      return ResponseApi();
+    }
+
+    ResponseApi responseApi = ResponseApi.fromJson(response.body);
+    return responseApi;
+  }
+
   // OBTENER PEDIDO Y PRODUCTOS VENDIDOS SOBRE UN ID
   Future<ResponseApi> obtenerBeneficio(pedidoId) async {
     ///canjear-venta/{idVenta}
