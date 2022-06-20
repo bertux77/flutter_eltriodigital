@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
         GetPage(name: '/perfil/info', page: () => PerfilInfoPage()),
         GetPage(name: '/perfil/editar', page: () => PerfilEditarPage()),
         GetPage(name: '/perfil/showqr', page: () => PerfilShowQrPage()),
-        GetPage(name: '/tienda', page: () => const TiendaPage()),
+        GetPage(name: '/tienda', page: () => TiendaPage()),
         GetPage(name: '/canjeo', page: () => TiendaPedidosCanjeoPage()),
         GetPage(
             name: '/tienda/pedidos/detalle',
