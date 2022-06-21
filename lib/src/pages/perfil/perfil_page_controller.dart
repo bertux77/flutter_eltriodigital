@@ -24,11 +24,11 @@ class PerfilPageController extends GetxController {
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancel', true, ScanMode.QR);
-      print(barcodeScanRes);
+      print('Codigo escaneado: $barcodeScanRes');
 
       try {
         var codigo = int.parse(barcodeScanRes);
-        var result = (codigo / 100001 / 24 / 13);
+        var result = (codigo / 10001 / 24 / 13);
         print('resultado: $result');
         ResponseApi resultado = await usersProvider.obtenerBeneficio(result);
 
