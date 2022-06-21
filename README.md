@@ -12,3 +12,14 @@ WALLETS API:
           "canjeo_wallet": 0,
           "total_venta": 31.46
 }
+
+LISTAS
+List lista = [];
+//metodos que acepta:
+list.add()
+final listaNumeros = List.generate(100, (int index) => index);
+
+MAPAS
+Map<Llave,valor> mapa = {};
+se accede mapa['llave']
+
