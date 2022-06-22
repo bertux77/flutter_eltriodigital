@@ -23,61 +23,64 @@ class TiendaPage extends StatelessWidget {
           );
         } else {
           //print(con.listaCategorias.length);
-          return DefaultTabController(
-            length: con.listaCategorias.length,
-            child: Scaffold(
-              body: Column(
-                children: [
-                  SafeArea(
-                    child: TabBar(
-                      isScrollable: true,
-                      labelColor: Colors.black,
-                      unselectedLabelColor: Colors.green,
-                      tabs: List.generate(
-                          con.listaCategorias.length,
-                          (index) => Tab(
-                                text: '${con.listaCategorias[index].name}',
-                              )),
+          return Scaffold(
+            appBar: MyAppBar(),
+            body: DefaultTabController(
+              length: con.listaCategorias.length,
+              child: Scaffold(
+                body: Column(
+                  children: [
+                    SafeArea(
+                      child: TabBar(
+                        isScrollable: true,
+                        labelColor: Colors.black,
+                        unselectedLabelColor: Colors.green,
+                        tabs: List.generate(
+                            con.listaCategorias.length,
+                            (index) => Tab(
+                                  text: '${con.listaCategorias[index].name}',
+                                )),
+                      ),
                     ),
-                  ),
-                  Expanded(
-                      child: TabBarView(
-                          children: List.generate(
-                              con.listaCategorias.length,
-                              (index) => FutureBuilder(
-                                  future: con.getProduct(
-                                      con.listaCategorias[index].id!),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot<dynamic> snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return Container(
-                                        color: Colors.white,
-                                        padding: EdgeInsets.only(top: 20),
-                                        child: const Center(
-                                            child: CircularProgressIndicator()),
-                                      );
-                                    } else {
-                                      return ListView.builder(
-                                        itemCount: snapshot.data.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return ListTile(
-                                            leading: CircleAvatar(
-                                              child: Image.network(
-                                                  snapshot.data[index]["images"]
-                                                      [0]["src"]),
-                                            ),
-                                            title: Text(
-                                                snapshot.data[index]["name"]),
-                                            subtitle: Text("Buy now for \$ " +
-                                                snapshot.data[index]["price"]),
-                                          );
-                                        },
-                                      );
-                                    }
-                                  }))))
-                ],
+                    Expanded(
+                        child: TabBarView(
+                            children: List.generate(
+                                con.listaCategorias.length,
+                                (index) => FutureBuilder(
+                                    future: con.getProduct(
+                                        con.listaCategorias[index].id!),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<dynamic> snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Container(
+                                          color: Colors.white,
+                                          padding: EdgeInsets.only(top: 20),
+                                          child: const Center(
+                                              child: CircularProgressIndicator()),
+                                        );
+                                      } else {
+                                        return ListView.builder(
+                                          itemCount: snapshot.data.length,
+                                          itemBuilder:
+                                              (BuildContext context, int index) {
+                                            return ListTile(
+                                              leading: CircleAvatar(
+                                                child: Image.network(
+                                                    snapshot.data[index]["images"]
+                                                        [0]["src"]),
+                                              ),
+                                              title: Text(
+                                                  snapshot.data[index]["name"]),
+                                              subtitle: Text('${snapshot.data[index]["price"]} €'),
+                                              trailing: Icon(Icons.shopping_cart_checkout_outlined),
+                                            );
+                                          },
+                                        );
+                                      }
+                                    }))))
+                  ],
+                ),
               ),
             ),
           );
