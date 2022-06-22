@@ -9,38 +9,81 @@ import 'package:scroll_navigation/scroll_navigation.dart';
 
 class TiendaPage extends StatelessWidget {
   TiendaPageController con = Get.put(TiendaPageController());
-  
-  
+
   @override
   Widget build(BuildContext context) {
-    return  DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        body: Column(
-          children: [
-            TabBar(
-              isScrollable: true,
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.green,
-              tabs: [
-              Tab(text: 'TAB 1',),
-              Tab(text: 'TAB 2',),
-              Tab(text: 'TAB 3',),
-              Tab(text: 'TAB 4',),
-            ]),
-
-            Expanded(child: 
-            TabBarView(children: [
-              Icon(Icons.abc, size: 150,),
-              Icon(Icons.baby_changing_station, size: 150,),
-              Icon(Icons.cabin, size: 150,),
-              Icon(Icons.dangerous, size: 150,),
-            ]))
-          ],
-        ),
-      ),
+    return FutureBuilder(
+      future: con.getProducts(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Container(
+            color: Colors.white,
+            padding: EdgeInsets.only(top: 20),
+            child: const Center(child: CircularProgressIndicator()),
+          );
+        } else {
+          //print(con.listaCategorias.length);
+          return DefaultTabController(
+            length: con.listaCategorias.length,
+            child: Scaffold(
+              body: Column(
+                children: [
+                  SafeArea(
+                    child: TabBar(
+                      isScrollable: true,
+                      labelColor: Colors.black,
+                      unselectedLabelColor: Colors.green,
+                      tabs: List.generate(
+                          con.listaCategorias.length,
+                          (index) => Tab(
+                                text: '${con.listaCategorias[index].name}',
+                              )),
+                    ),
+                  ),
+                  Expanded(
+                      child: TabBarView(
+                          children: List.generate(
+                              con.listaCategorias.length,
+                              (index) => FutureBuilder(
+                                  future: con.getProduct(
+                                      con.listaCategorias[index].id!),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<dynamic> snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Container(
+                                        color: Colors.white,
+                                        padding: EdgeInsets.only(top: 20),
+                                        child: const Center(
+                                            child: CircularProgressIndicator()),
+                                      );
+                                    } else {
+                                      return ListView.builder(
+                                        itemCount: snapshot.data.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return ListTile(
+                                            leading: CircleAvatar(
+                                              child: Image.network(
+                                                  snapshot.data[index]["images"]
+                                                      [0]["src"]),
+                                            ),
+                                            title: Text(
+                                                snapshot.data[index]["name"]),
+                                            subtitle: Text("Buy now for \$ " +
+                                                snapshot.data[index]["price"]),
+                                          );
+                                        },
+                                      );
+                                    }
+                                  }))))
+                ],
+              ),
+            ),
+          );
+        }
+      },
     );
-  
   }
 
   Widget _textFieldSearch(BuildContext context) {
@@ -71,8 +114,7 @@ class TiendaPage extends StatelessWidget {
     );
   }
 
-
-   Widget _cardProduct(BuildContext context) {
+  Widget _cardProduct(BuildContext context) {
     return GestureDetector(
       onTap: () {},
       child: Column(
@@ -80,7 +122,7 @@ class TiendaPage extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 15, left: 20, right: 20),
             child: ListTile(
-              title: Text('product.name ?? '''),
+              title: Text('product.name ?? ' ''),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -88,7 +130,7 @@ class TiendaPage extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    'product.description ?? ''',
+                    'product.description ?? ' '',
                     maxLines: 2,
                     style: const TextStyle(fontSize: 13),
                   ),
