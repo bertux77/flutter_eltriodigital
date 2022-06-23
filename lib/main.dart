@@ -2,6 +2,7 @@ import 'package:eltriodigital_flutter/src/pages/perfil/editar/perfil_editar_page
 import 'package:eltriodigital_flutter/src/pages/perfil/info/perfil_info_page.dart';
 import 'package:eltriodigital_flutter/src/pages/perfil/pedidos/perfil_pedidos_page.dart';
 import 'package:eltriodigital_flutter/src/pages/perfil/showqr/perfil_showqr_page.dart';
+import 'package:eltriodigital_flutter/src/pages/tienda/producto/tienda_producto_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -55,6 +56,7 @@ class _MyAppState extends State<MyApp> {
         GetPage(name: '/perfil/editar', page: () => PerfilEditarPage()),
         GetPage(name: '/perfil/showqr', page: () => PerfilShowQrPage()),
         GetPage(name: '/tienda', page: () => TiendaPage()),
+        GetPage(name: '/producto', page: () =>TiendaProductoPage()),
         GetPage(name: '/canjeo', page: () => TiendaPedidosCanjeoPage()),
         GetPage(
             name: '/tienda/pedidos/detalle',

@@ -3,6 +3,13 @@ import 'package:get_storage/get_storage.dart';
 
 class MyAppBarController extends GetxController {
 
+
+  void addProductoCarrito(int id){
+    //goToProductoPage(id);
+  }
+
+  
+
   void goToHomePage(){
     Get.offNamed('/home');
   }

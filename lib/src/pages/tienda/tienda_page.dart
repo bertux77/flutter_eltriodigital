@@ -1,6 +1,7 @@
 import 'package:eltriodigital_flutter/src/models/categoria.dart';
 import 'package:eltriodigital_flutter/src/pages/tienda/tienda_controller.dart';
 import 'package:eltriodigital_flutter/src/widgets/appbar/my_appbar.dart';
+import 'package:eltriodigital_flutter/src/widgets/appbar/my_appbar_controller.dart';
 import 'package:eltriodigital_flutter/src/widgets/bottomNavigationBar/My_bottom_navigation_bar.dart';
 import 'package:eltriodigital_flutter/src/widgets/varios/no_data_widget.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +10,12 @@ import 'package:scroll_navigation/scroll_navigation.dart';
 
 class TiendaPage extends StatelessWidget {
   TiendaPageController con = Get.put(TiendaPageController());
+  MyAppBarController conAppBar = Get.put(MyAppBarController());
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: con.getProducts(),
+      future: con.obtenerCategorias(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
@@ -70,10 +72,15 @@ class TiendaPage extends StatelessWidget {
                                                     snapshot.data[index]["images"]
                                                         [0]["src"]),
                                               ),
-                                              title: Text(
-                                                  snapshot.data[index]["name"]),
+                                              title: GestureDetector(
+                                                onTap: () => con.goToProductoPage(snapshot.data[index]["id"]),
+                                                child: Text(
+                                                    snapshot.data[index]["name"]),
+                                              ),
                                               subtitle: Text('${snapshot.data[index]["price"]} €'),
-                                              trailing: Icon(Icons.shopping_cart_checkout_outlined),
+                                              trailing: GestureDetector(
+                                                onTap:() => {},
+                                                child: Icon(Icons.shopping_cart_checkout_outlined)),
                                             );
                                           },
                                         );
