@@ -77,7 +77,26 @@ class TiendaPage extends StatelessWidget {
                                                 child: Text(
                                                     snapshot.data[index]["name"]),
                                               ),
-                                              subtitle: Text('${snapshot.data[index]["price"]} €'),
+                                              subtitle: Row(children: [
+                                                snapshot.data[index]["on_sale"] == true
+                                                  ? Row(children: [
+                                                    snapshot.data[index]["regular_price"] == ''
+                                                    ? Text('')
+                                                    : Text('${snapshot.data[index]["regular_price"]} €', style: const TextStyle(
+                                                          color: Colors.red,
+                                                          decoration: TextDecoration.lineThrough,
+                                                          decorationColor: const Color(0xff000000),
+                                                          fontSize: 14.0,
+                                                        ),
+                                                    ),
+                                                    const SizedBox(width: 10,),
+                                                    const Text('En oferta', style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold),),
+                                                    const SizedBox(width: 10,),
+                                                    Text('${snapshot.data[index]["price"]} €', style: TextStyle(color: Colors.green, fontWeight: FontWeight.w500, fontSize: 16),),
+                                                  ],)
+                                                  : Text('${snapshot.data[index]["price"]} €'),
+                                                ]
+                                                    ),
                                               trailing: GestureDetector(
                                                 onTap:() => {},
                                                 child: Icon(Icons.shopping_cart_checkout_outlined)),

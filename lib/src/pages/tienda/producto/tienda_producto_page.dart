@@ -26,7 +26,7 @@ class TiendaProductoPage extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
               color: Colors.white,
-              padding: EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(top: 20),
               child: const Center(child: CircularProgressIndicator()),
             );
           } else {
@@ -37,7 +37,7 @@ class TiendaProductoPage extends StatelessWidget {
                 body: SingleChildScrollView(
                   child: Column(
                     children: [
-                      _imageSlideshow(context),
+                      _imageSlideshow(context, product),
                       _textNameProduct(product),
                       _textDescriptionProduct(product),
                       _textPriceProduct(product),
@@ -146,7 +146,7 @@ Widget _buttonsAddToBag() {
               onPressed: () => {},
               child: Text(
                 //'AGREGAR ${price.value}€',
-                'Agregar',
+                'Agregar 34.95€',
                 style: TextStyle(color: Colors.black, fontSize: 14),
               ),
               style: ElevatedButton.styleFrom(
@@ -161,41 +161,59 @@ Widget _buttonsAddToBag() {
   );
 }
 
-Widget _imageSlideshow(BuildContext context) {
+Widget _imageSlideshow(BuildContext context, Producto product) {
   return ImageSlideshow(
     width: double.infinity,
     height: MediaQuery.of(context).size.height * 0.4,
     initialPage: 0,
     indicatorColor: Colors.amber,
     indicatorBackgroundColor: Colors.grey,
-    children: [
-      FadeInImage(
-        fit: BoxFit.cover,
-        fadeInDuration: const Duration(milliseconds: 50),
-        placeholder: const AssetImage('assets/img/no-image.png'),
-        image: AssetImage('assets/img/no-image.png') as ImageProvider,
-        //image: product!.image1 != null
-        //    ? NetworkImage(product!.image1!)
-        //    : const AssetImage('assets/img/no-image.png') as ImageProvider,
-      ),
-      FadeInImage(
-        fit: BoxFit.cover,
-        fadeInDuration: const Duration(milliseconds: 50),
-        placeholder: const AssetImage('assets/img/no-image.png'),
-        image: AssetImage('assets/img/no-image.png') as ImageProvider,
-        // image: product!.image2 != null
-        //     ? NetworkImage(product!.image2!)
-        //     : const AssetImage('assets/img/no-image.png') as ImageProvider,
-      ),
-      FadeInImage(
-        fit: BoxFit.cover,
-        fadeInDuration: const Duration(milliseconds: 50),
-        placeholder: const AssetImage('assets/img/no-image.png'),
-        image: AssetImage('assets/img/no-image.png') as ImageProvider,
-        // image: product!.image3 != null
-        //     ? NetworkImage(product!.image3!)
-        //     : const AssetImage('assets/img/no-image.png') as ImageProvider,
-      )
-    ],
+    children: List.generate(product.images!.length, (index) => FadeInImage(
+             fit: BoxFit.cover,
+             fadeInDuration: const Duration(milliseconds: 50),
+             placeholder: const AssetImage('assets/img/no-image.png'),
+             image: NetworkImage(product.images![index].src!)
+             //    : const AssetImage('assets/img/no-image.png') as ImageProvider,
+           ),)
+    
+    // children: [ 
+    //   product.images.forEach((element) => FadeInImage(
+    //         fit: BoxFit.cover,
+    //         fadeInDuration: const Duration(milliseconds: 50),
+    //         placeholder: const AssetImage('assets/img/no-image.png'),
+    //         image: AssetImage('assets/img/no-image.png') as ImageProvider,
+    //         //image: product!.image1 != null
+    //         //    ? NetworkImage(product!.image1!)
+    //         //    : const AssetImage('assets/img/no-image.png') as ImageProvider,
+    //       ),
+    //   )
+      // FadeInImage(
+      //   fit: BoxFit.cover,
+      //   fadeInDuration: const Duration(milliseconds: 50),
+      //   placeholder: const AssetImage('assets/img/no-image.png'),
+      //   image: AssetImage('assets/img/no-image.png') as ImageProvider,
+      //   //image: product!.image1 != null
+      //   //    ? NetworkImage(product!.image1!)
+      //   //    : const AssetImage('assets/img/no-image.png') as ImageProvider,
+      // ),
+      // FadeInImage(
+      //   fit: BoxFit.cover,
+      //   fadeInDuration: const Duration(milliseconds: 50),
+      //   placeholder: const AssetImage('assets/img/no-image.png'),
+      //   image: AssetImage('assets/img/no-image.png') as ImageProvider,
+      //   // image: product!.image2 != null
+      //   //     ? NetworkImage(product!.image2!)
+      //   //     : const AssetImage('assets/img/no-image.png') as ImageProvider,
+      // ),
+      // FadeInImage(
+      //   fit: BoxFit.cover,
+      //   fadeInDuration: const Duration(milliseconds: 50),
+      //   placeholder: const AssetImage('assets/img/no-image.png'),
+      //   image: AssetImage('assets/img/no-image.png') as ImageProvider,
+      //   // image: product!.image3 != null
+      //   //     ? NetworkImage(product!.image3!)
+      //   //     : const AssetImage('assets/img/no-image.png') as ImageProvider,
+      // )
+    
   );
 }
