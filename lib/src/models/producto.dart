@@ -4,62 +4,63 @@
 
 import 'dart:convert';
 import 'package:intl/intl.dart';
+
 Producto productoFromJson(String str) => Producto.fromJson(json.decode(str));
 
 String productoToJson(Producto data) => json.encode(data.toJson());
 
 class Producto {
-    Producto({
-        this.id,
-        this.name,
-        this.slug,
-        this.permalink,
-        this.dateCreated,
-        this.type,
-        this.status,
-        this.description,
-        this.shortDescription,
-        this.sku,
-        this.price,
-        this.regularPrice,
-        this.salePrice,
-        this.onSale,
-        this.purchasable,
-        this.totalSales,
-        this.manageStock,
-        this.stockQuantity,
-        this.parentId,
-        this.categories,
-        this.images,
-        this.attributes,
-        this.relatedIds,
-    });
+  Producto({
+    this.id,
+    this.name,
+    this.slug,
+    this.permalink,
+    this.dateCreated,
+    this.type,
+    this.status,
+    this.description,
+    this.shortDescription,
+    this.sku,
+    this.price,
+    this.regularPrice,
+    this.salePrice,
+    this.onSale,
+    this.purchasable,
+    this.totalSales,
+    this.manageStock,
+    this.stockQuantity,
+    this.parentId,
+    this.categories,
+    this.images,
+    this.attributes,
+    this.relatedIds,
+  });
 
-    int? id;
-    String? name;
-    String? slug;
-    String? permalink;
-    DateTime? dateCreated;
-    String? type;
-    String? status;
-    String? description;
-    String? shortDescription;
-    String? sku;
-    String? price;
-    String? regularPrice;
-    String? salePrice;
-    bool? onSale;
-    bool? purchasable;
-    int? totalSales;
-    bool? manageStock;
-    int? stockQuantity;
-    int? parentId;
-    List<Category>? categories;
-    List<Image>? images;
-    List<Attribute>? attributes;
-    List<int>? relatedIds;
+  int? id;
+  String? name;
+  String? slug;
+  String? permalink;
+  DateTime? dateCreated;
+  String? type;
+  String? status;
+  String? description;
+  String? shortDescription;
+  String? sku;
+  String? price;
+  String? regularPrice;
+  String? salePrice;
+  bool? onSale;
+  bool? purchasable;
+  int? totalSales;
+  bool? manageStock;
+  int? stockQuantity;
+  int? parentId;
+  List<Category>? categories;
+  List<Image>? images;
+  List<Attribute>? attributes;
+  List<int>? relatedIds;
 
-    factory Producto.fromJson(Map<String, dynamic> json) => Producto(
+  factory Producto.fromJson(Map<String, dynamic> json) => Producto(
         id: json["id"],
         name: json["name"],
         slug: json["slug"],
@@ -67,8 +68,8 @@ class Producto {
         dateCreated: DateTime.parse(json["date_created"]),
         type: json["type"],
         status: json["status"],
-        description: Bidi.stripHtmlIfNeeded(json["description"]),
-        shortDescription: json["short_description"],
+        //description: Bidi.stripHtmlIfNeeded(json["description"]),
+        //shortDescription: json["short_description"],
         sku: json["sku"],
         price: json["price"],
         regularPrice: json["regular_price"],
@@ -79,13 +80,15 @@ class Producto {
         manageStock: json["manage_stock"],
         stockQuantity: json["stock_quantity"],
         parentId: json["parent_id"],
-        categories: List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
+        categories: List<Category>.from(
+            json["categories"].map((x) => Category.fromJson(x))),
         images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
-        attributes: List<Attribute>.from(json["attributes"].map((x) => Attribute.fromJson(x))),
+        attributes: List<Attribute>.from(
+            json["attributes"].map((x) => Attribute.fromJson(x))),
         relatedIds: List<int>.from(json["related_ids"].map((x) => x)),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "slug": slug,
@@ -109,29 +112,29 @@ class Producto {
         "images": List<dynamic>.from(images!.map((x) => x.toJson())),
         "attributes": List<dynamic>.from(attributes!.map((x) => x.toJson())),
         "related_ids": List<dynamic>.from(relatedIds!.map((x) => x)),
-    };
+      };
 }
 
 class Attribute {
-    Attribute({
-        this.id,
-        this.name,
-        this.position,
-        this.visible,
-        this.variation,
-        this.options,
-        this.optionIds,
-    });
+  Attribute({
+    this.id,
+    this.name,
+    this.position,
+    this.visible,
+    this.variation,
+    this.options,
+    this.optionIds,
+  });
 
-    int? id;
-    String? name;
-    int? position;
-    bool? visible;
-    bool? variation;
-    List<String>? options;
-    List<int>? optionIds;
+  int? id;
+  String? name;
+  int? position;
+  bool? visible;
+  bool? variation;
+  List<String>? options;
+  List<int>? optionIds;
 
-    factory Attribute.fromJson(Map<String, dynamic> json) => Attribute(
+  factory Attribute.fromJson(Map<String, dynamic> json) => Attribute(
         id: json["id"],
         name: json["name"],
         position: json["position"],
@@ -139,9 +142,9 @@ class Attribute {
         variation: json["variation"],
         options: List<String>.from(json["options"].map((x) => x)),
         optionIds: List<int>.from(json["option_ids"].map((x) => x)),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "position": position,
@@ -149,50 +152,49 @@ class Attribute {
         "variation": variation,
         "options": List<dynamic>.from(options!.map((x) => x)),
         "option_ids": List<dynamic>.from(optionIds!.map((x) => x)),
-    };
+      };
 }
 
 class Category {
-    Category({
-        this.id,
-        this.name,
-        this.slug,
-    });
+  Category({
+    this.id,
+    this.name,
+    this.slug,
+  });
 
-    int? id;
-    String? name;
-    String? slug;
+  int? id;
+  String? name;
+  String? slug;
 
-    factory Category.fromJson(Map<String, dynamic> json) => Category(
+  factory Category.fromJson(Map<String, dynamic> json) => Category(
         id: json["id"],
         name: json["name"],
         slug: json["slug"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "slug": slug,
-    };
+      };
 }
 
 class Image {
-    Image({
-        this.id,
-        this.src,
-    });
+  Image({
+    this.id,
+    this.src,
+  });
 
-    int? id;
-    String? src;
+  int? id;
+  String? src;
 
-    factory Image.fromJson(Map<String, dynamic> json) => Image(
+  factory Image.fromJson(Map<String, dynamic> json) => Image(
         id: json["id"],
         src: json["src"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "src": src,
-    };
+      };
 }
-
