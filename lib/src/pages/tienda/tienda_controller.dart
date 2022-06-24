@@ -28,7 +28,7 @@ class TiendaPageController extends GetxController {
     listaCategorias =
         categories.map((item) => Categoria.fromJson(item)).toList();
 
-    //print(listaCategorias);
+    print(listaCategorias);
     return categories;
   }
 
