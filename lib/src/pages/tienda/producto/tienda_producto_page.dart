@@ -163,30 +163,33 @@ Widget _buttonsAddToBag() {
 
 Widget _imageSlideshow(BuildContext context, Producto product) {
   return ImageSlideshow(
-    width: double.infinity,
-    height: MediaQuery.of(context).size.height * 0.4,
-    initialPage: 0,
-    indicatorColor: Colors.amber,
-    indicatorBackgroundColor: Colors.grey,
-    children: List.generate(product.images!.length, (index) => FadeInImage(
-             fit: BoxFit.cover,
-             fadeInDuration: const Duration(milliseconds: 50),
-             placeholder: const AssetImage('assets/img/no-image.png'),
-             image: NetworkImage(product.images![index].src!)
-             //    : const AssetImage('assets/img/no-image.png') as ImageProvider,
-           ),)
-    
-    // children: [ 
-    //   product.images.forEach((element) => FadeInImage(
-    //         fit: BoxFit.cover,
-    //         fadeInDuration: const Duration(milliseconds: 50),
-    //         placeholder: const AssetImage('assets/img/no-image.png'),
-    //         image: AssetImage('assets/img/no-image.png') as ImageProvider,
-    //         //image: product!.image1 != null
-    //         //    ? NetworkImage(product!.image1!)
-    //         //    : const AssetImage('assets/img/no-image.png') as ImageProvider,
-    //       ),
-    //   )
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height * 0.4,
+      initialPage: 0,
+      indicatorColor: Colors.amber,
+      indicatorBackgroundColor: Colors.grey,
+      children: List.generate(
+        product.images!.length,
+        (index) => FadeInImage(
+            fit: BoxFit.cover,
+            fadeInDuration: const Duration(milliseconds: 50),
+            placeholder: const AssetImage('assets/img/no-image.png'),
+            image: NetworkImage(product.images![index].src!)
+            //    : const AssetImage('assets/img/no-image.png') as ImageProvider,
+            ),
+      )
+
+      // children: [
+      //   product.images.forEach((element) => FadeInImage(
+      //         fit: BoxFit.cover,
+      //         fadeInDuration: const Duration(milliseconds: 50),
+      //         placeholder: const AssetImage('assets/img/no-image.png'),
+      //         image: AssetImage('assets/img/no-image.png') as ImageProvider,
+      //         //image: product!.image1 != null
+      //         //    ? NetworkImage(product!.image1!)
+      //         //    : const AssetImage('assets/img/no-image.png') as ImageProvider,
+      //       ),
+      //   )
       // FadeInImage(
       //   fit: BoxFit.cover,
       //   fadeInDuration: const Duration(milliseconds: 50),
@@ -214,6 +217,6 @@ Widget _imageSlideshow(BuildContext context, Producto product) {
       //   //     ? NetworkImage(product!.image3!)
       //   //     : const AssetImage('assets/img/no-image.png') as ImageProvider,
       // )
-    
-  );
+
+      );
 }
