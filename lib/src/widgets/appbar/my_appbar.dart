@@ -8,22 +8,22 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget{
   @override
   Widget build(BuildContext context) {
     return AppBar(
-    centerTitle: true,
-    title: const Text('Nutrición Canarias', style: TextStyle(color: Colors.white),),
-    leading: IconButton(
-      onPressed: () => con.goToHomePage(),
-      icon: const Icon(Icons.home, color: Colors.white,),
-    ),
-    actions: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.shopping_cart_checkout, color: Colors.white,),
-        ),
-        IconButton(
-          onPressed: () => con.signOut(),
-          icon: const Icon(Icons.logout, color: Colors.white,),
-        ),
-      ],
+      centerTitle: true,
+      title: const Text('Nutrición Canarias', style: TextStyle(color: Colors.white),),
+      leading: IconButton(
+        onPressed: () => con.goToHomePage(),
+        icon: const Icon(Icons.home, color: Colors.white,),
+      ),
+      actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.shopping_cart_checkout, color: Colors.white,),
+          ),
+          IconButton(
+            onPressed: () => con.signOut(),
+            icon: const Icon(Icons.logout, color: Colors.white,),
+          ),
+        ],
     );
   }
   @override

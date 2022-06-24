@@ -1,3 +1,4 @@
+import 'package:animate_icons/animate_icons.dart';
 import 'package:eltriodigital_flutter/src/models/categoria.dart';
 import 'package:eltriodigital_flutter/src/pages/tienda/tienda_controller.dart';
 import 'package:eltriodigital_flutter/src/widgets/appbar/my_appbar.dart';
@@ -11,9 +12,11 @@ import 'package:scroll_navigation/scroll_navigation.dart';
 class TiendaPage extends StatelessWidget {
   TiendaPageController con = Get.put(TiendaPageController());
   MyAppBarController conAppBar = Get.put(MyAppBarController());
+  late AnimateIconController controller;
 
   @override
   Widget build(BuildContext context) {
+    controller = AnimateIconController();
     return FutureBuilder(
       future: con.obtenerCategorias(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -69,38 +72,56 @@ class TiendaPage extends StatelessWidget {
                                             return ListTile(
                                               leading: CircleAvatar(
                                                 child: Image.network(
-                                                    snapshot.data[index]["images"]
-                                                        [0]["src"]),
+                                                    snapshot.data[index].images
+                                                        [0].src),
                                               ),
                                               title: GestureDetector(
-                                                onTap: () => con.goToProductoPage(snapshot.data[index]["id"]),
+                                                onTap: () => con.goToProductoPage(snapshot.data[index].id),
                                                 child: Text(
-                                                    snapshot.data[index]["name"]),
+                                                    snapshot.data[index].name),
                                               ),
                                               subtitle: Row(children: [
-                                                snapshot.data[index]["on_sale"] == true
+                                                snapshot.data[index].onSale == true
                                                   ? Row(children: [
-                                                    snapshot.data[index]["regular_price"] == ''
-                                                    ? Text('')
-                                                    : Text('${snapshot.data[index]["regular_price"]} €', style: const TextStyle(
+                                                    snapshot.data[index].regularPrice == ''
+                                                    ? const Text('')
+                                                    : Text('${snapshot.data[index].regularPrice} €', style: const TextStyle(
                                                           color: Colors.red,
                                                           decoration: TextDecoration.lineThrough,
-                                                          decorationColor: const Color(0xff000000),
+                                                          decorationColor: Color(0xff000000),
                                                           fontSize: 14.0,
                                                         ),
                                                     ),
                                                     const SizedBox(width: 10,),
                                                     const Text('En oferta', style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold),),
                                                     const SizedBox(width: 10,),
-                                                    Text('${snapshot.data[index]["price"]} €', style: TextStyle(color: Colors.green, fontWeight: FontWeight.w500, fontSize: 16),),
+                                                    Text('${snapshot.data[index].price} €', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w500, fontSize: 16),),
                                                   ],)
-                                                  : Text('${snapshot.data[index]["price"]} €'),
+                                                  : Text('${snapshot.data[index].price} €'),
                                                 ]
                                                     ),
-                                              trailing: GestureDetector(
-                                                onTap:() => {},
-                                                child: Icon(Icons.shopping_cart_checkout_outlined)),
-                                            );
+                                              trailing: AnimateIcons(
+                                                startIcon: Icons.shopping_cart_checkout,
+                                                endIcon: Icons.add_shopping_cart,
+                                                size: 24.0,
+                                                controller: controller,
+                                                // add this tooltip for the start icon
+                                                startTooltip: 'Icons.add_circle',
+                                                // add this tooltip for the end icon
+                                                endTooltip: 'Icons.add_circle_outline',
+                                                onStartIconPress: () {
+                                                    conAppBar.addProductoCarrito(snapshot.data[index]);
+                                                    return true;
+                                                },
+                                                onEndIconPress: () {
+                                                    print("Clicked on Close Icon");
+                                                    return true;
+                                                },
+                                                duration: const Duration(milliseconds: 500),
+                                                startIconColor: Colors.deepPurple,
+                                                endIconColor: Colors.deepOrange,
+                                                clockwise: false,
+                                            ));
                                           },
                                         );
                                       }
