@@ -20,7 +20,6 @@ class TiendaPageController extends GetxController {
         url: "https://www.nutricioncanarias.com/",
         consumerKey: "ck_d00e8de97d2957fd5d021380681c3e7d7444b1c1",
         consumerSecret: "cs_71abbf9e1641d1b44ee06c777c8ab202cd97a0b7");
-    //var products = await wooCommerceAPI.getAsync("products");
     var categories = await wooCommerceAPI
         .getAsync("products/categories?per_page=20") as List;
 
@@ -28,7 +27,6 @@ class TiendaPageController extends GetxController {
     listaCategorias =
         categories.map((item) => Categoria.fromJson(item)).toList();
 
-    print(listaCategorias);
     return categories;
   }
 

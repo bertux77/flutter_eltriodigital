@@ -8,18 +8,18 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:get/get.dart';
 
 class TiendaProductoPage extends StatelessWidget {
-  TiendaProductoController con = Get.put(TiendaProductoController());
-//Product? product = Product();
-  //late ClientProductsDetailController con;
-  var counter = 0.obs;
+  //TiendaProductoController con = Get.put(TiendaProductoController());
+  Producto? product = Producto();
+  late TiendaProductoController con;
+  var counter = 1.obs;
   var price = 0.0.obs;
-
-  // ClientProductsDetailPage({required this.product}) {
-  //   con = Get.put(ClientProductsDetailController());
-  // }
+  TiendaProductoPage(){
+    con = Get.put(TiendaProductoController());
+  }
 
   @override
   Widget build(BuildContext context) {
+    
     return FutureBuilder(
         future: con.obtenerProducto(),
         builder: (context, AsyncSnapshot snapshot) {
@@ -31,9 +31,10 @@ class TiendaProductoPage extends StatelessWidget {
             );
           } else {
             Producto product = snapshot.data;
+            price.value = double.parse(product.price ?? '');
             return Scaffold(
                 bottomNavigationBar:
-                    Container(height: 100, child: _buttonsAddToBag()),
+                    Container(height: 100, child: _buttonsAddToBag(product)),
                 body: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -47,9 +48,10 @@ class TiendaProductoPage extends StatelessWidget {
           }
         });
   }
-}
+
 
 Widget _textNameProduct(Producto product) {
+  
   return Container(
     alignment: Alignment.centerLeft,
     margin: const EdgeInsets.only(top: 30, left: 30, right: 30),
@@ -79,29 +81,27 @@ Widget _textPriceProduct(Producto product) {
   return Container(
     alignment: Alignment.centerLeft,
     margin: const EdgeInsets.only(top: 15, left: 30, right: 30),
-    child: Text(
-      //'${product!.price.toString()} €',
-      '35.95 €',
-      style: const TextStyle(
+    child:  Text(
+      '${product.price.toString()} €',
+      style: TextStyle(
           fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
     ),
   );
 }
 
-Widget _buttonsAddToBag() {
-  return Column(
+Widget _buttonsAddToBag(Producto product) {
+  return Obx(() => Column(
     children: [
       Divider(
         height: 1,
         color: Colors.grey[400],
       ),
       Container(
-        margin: EdgeInsets.only(left: 10, right: 10, top: 30),
+        margin: const EdgeInsets.only(left: 10, right: 10, top: 30),
         child: Row(
           children: [
             ElevatedButton(
-              // onPressed: () => con.removeItem(product!, price, counter),
-              onPressed: () => {},
+              onPressed: () => con.removeItem(product!, price, counter),
               child: const Text(
                 '-',
                 style: TextStyle(color: Colors.black, fontSize: 18),
@@ -118,23 +118,21 @@ Widget _buttonsAddToBag() {
             ElevatedButton(
               onPressed: () {},
               child: Text(
-                //'${counter.value}',
-                '0',
-                style: TextStyle(color: Colors.black, fontSize: 18),
+                '${counter.value}',
+                style: const TextStyle(color: Colors.black, fontSize: 18),
               ),
               style: ElevatedButton.styleFrom(
                   primary: Colors.white, minimumSize: const Size(40, 37)),
             ),
             ElevatedButton(
-              //onPressed: () => con.addItem(product!, price, counter),
-              onPressed: () => {},
+              onPressed: () => con.addItem(product, price, counter),
               child: const Text(
                 '+',
                 style: TextStyle(color: Colors.black, fontSize: 18),
               ),
               style: ElevatedButton.styleFrom(
                   primary: Colors.white,
-                  minimumSize: Size(45, 37),
+                  minimumSize: const Size(45, 37),
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
                           topRight: Radius.circular(25),
@@ -142,12 +140,10 @@ Widget _buttonsAddToBag() {
             ),
             Spacer(),
             ElevatedButton(
-              //onPressed: () => con.addToBag(product!, price, counter),
-              onPressed: () => {},
+              onPressed: () => con.addToBag(product!, price, counter),
               child: Text(
-                //'AGREGAR ${price.value}€',
-                'Agregar 34.95€',
-                style: TextStyle(color: Colors.black, fontSize: 14),
+                'AGREGAR ${price.value.toStringAsFixed(2)}€',
+                style: const TextStyle(color: Colors.black, fontSize: 14),
               ),
               style: ElevatedButton.styleFrom(
                   primary: Colors.amber,
@@ -158,7 +154,7 @@ Widget _buttonsAddToBag() {
         ),
       )
     ],
-  );
+  ));
 }
 
 Widget _imageSlideshow(BuildContext context, Producto product) {
@@ -177,46 +173,7 @@ Widget _imageSlideshow(BuildContext context, Producto product) {
             image: NetworkImage(product.images![index].src!)
             //    : const AssetImage('assets/img/no-image.png') as ImageProvider,
             ),
-      )
-
-      // children: [
-      //   product.images.forEach((element) => FadeInImage(
-      //         fit: BoxFit.cover,
-      //         fadeInDuration: const Duration(milliseconds: 50),
-      //         placeholder: const AssetImage('assets/img/no-image.png'),
-      //         image: AssetImage('assets/img/no-image.png') as ImageProvider,
-      //         //image: product!.image1 != null
-      //         //    ? NetworkImage(product!.image1!)
-      //         //    : const AssetImage('assets/img/no-image.png') as ImageProvider,
-      //       ),
-      //   )
-      // FadeInImage(
-      //   fit: BoxFit.cover,
-      //   fadeInDuration: const Duration(milliseconds: 50),
-      //   placeholder: const AssetImage('assets/img/no-image.png'),
-      //   image: AssetImage('assets/img/no-image.png') as ImageProvider,
-      //   //image: product!.image1 != null
-      //   //    ? NetworkImage(product!.image1!)
-      //   //    : const AssetImage('assets/img/no-image.png') as ImageProvider,
-      // ),
-      // FadeInImage(
-      //   fit: BoxFit.cover,
-      //   fadeInDuration: const Duration(milliseconds: 50),
-      //   placeholder: const AssetImage('assets/img/no-image.png'),
-      //   image: AssetImage('assets/img/no-image.png') as ImageProvider,
-      //   // image: product!.image2 != null
-      //   //     ? NetworkImage(product!.image2!)
-      //   //     : const AssetImage('assets/img/no-image.png') as ImageProvider,
-      // ),
-      // FadeInImage(
-      //   fit: BoxFit.cover,
-      //   fadeInDuration: const Duration(milliseconds: 50),
-      //   placeholder: const AssetImage('assets/img/no-image.png'),
-      //   image: AssetImage('assets/img/no-image.png') as ImageProvider,
-      //   // image: product!.image3 != null
-      //   //     ? NetworkImage(product!.image3!)
-      //   //     : const AssetImage('assets/img/no-image.png') as ImageProvider,
-      // )
-
+        )
       );
+  }
 }
