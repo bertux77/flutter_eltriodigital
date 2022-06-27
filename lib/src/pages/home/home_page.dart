@@ -6,17 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
-   
   HomeController con = Get.put(HomeController());
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: MyAppBar(title: 'Nutrición Canarias'),
       bottomNavigationBar: MyBottomNavigationBar(),
-      body: const Center(
-         child: Text('Home Page')
-      ),
+      body: const Center(child: Text('Home Page')),
     );
   }
 }

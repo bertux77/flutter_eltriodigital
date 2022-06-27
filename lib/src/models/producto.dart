@@ -18,8 +18,6 @@ class Producto {
     this.dateCreated,
     this.type,
     this.status,
-    this.description,
-    this.shortDescription,
     this.sku,
     this.price,
     this.regularPrice,
@@ -30,6 +28,9 @@ class Producto {
     this.manageStock,
     this.stockQuantity,
     this.parentId,
+    this.quantity,
+    this.description,
+    this.shortDescription,
     this.categories,
     this.images,
     this.attributes,
@@ -43,8 +44,6 @@ class Producto {
   DateTime? dateCreated;
   String? type;
   String? status;
-  String? description;
-  String? shortDescription;
   String? sku;
   String? price;
   String? regularPrice;
@@ -55,6 +54,9 @@ class Producto {
   bool? manageStock;
   int? stockQuantity;
   int? parentId;
+  int? quantity;
+  String? description;
+  String? shortDescription;
   List<Category>? categories;
   List<Image>? images;
   List<Attribute>? attributes;
@@ -80,6 +82,7 @@ class Producto {
         manageStock: json["manage_stock"],
         stockQuantity: json["stock_quantity"],
         parentId: json["parent_id"],
+        quantity: json["quantity"],
         categories: List<Category>.from(
             json["categories"].map((x) => Category.fromJson(x))),
         images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
@@ -87,6 +90,16 @@ class Producto {
             json["attributes"].map((x) => Attribute.fromJson(x))),
         relatedIds: List<int>.from(json["related_ids"].map((x) => x)),
       );
+
+  static List<Producto> fromJsonList(List<dynamic> jsonList) {
+    List<Producto> toList = [];
+    jsonList.forEach((item) {
+      Producto product = Producto.fromJson(item);
+      toList.add(product);
+    });
+
+    return toList;
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -107,6 +120,7 @@ class Producto {
         "total_sales": totalSales,
         "manage_stock": manageStock,
         "stock_quantity": stockQuantity,
+        "quantity": quantity,
         "parent_id": parentId,
         "categories": List<dynamic>.from(categories!.map((x) => x.toJson())),
         "images": List<dynamic>.from(images!.map((x) => x.toJson())),

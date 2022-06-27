@@ -1,0 +1,195 @@
+import 'package:eltriodigital_flutter/src/models/producto.dart';
+import 'package:eltriodigital_flutter/src/pages/tienda/carrito/tienda_carrito_controller.dart';
+import 'package:eltriodigital_flutter/src/widgets/appbar/my_appbar.dart';
+import 'package:eltriodigital_flutter/src/widgets/varios/no_data_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class TiendaCarritoPage extends StatelessWidget {
+  TiendaCarritoController con = Get.put(TiendaCarritoController());
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => Scaffold(
+        bottomNavigationBar: Container(
+          color: const Color.fromRGBO(245, 245, 245, 1),
+          height: 100,
+          child: _totalToPay(context),
+        ),
+        appBar: MyAppBar(title: 'Carrito'),
+        body: con.selectedProducts.isNotEmpty
+            ? ListView(
+                children: con.selectedProducts.map((Producto product) {
+                  if (product.quantity == null) {
+                    product.quantity == 1;
+                    print('es nulo joder: ${product.quantity}');
+                  }
+                  return _cardProduct(context, product);
+                }).toList(),
+              )
+            : Center(
+                child: NoDataWidget(
+                  text: 'Carrito vacio',
+                ),
+              )));
+  }
+
+  Widget _totalToPay(BuildContext context) {
+    return Column(
+      children: [
+        Divider(
+          height: 1,
+          color: Colors.grey[300],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          margin: const EdgeInsets.only(left: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  const Text(
+                    'TOTAL:',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  Text('${con.total.value.toStringAsFixed(2)} €',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 14))
+                ],
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                width: MediaQuery.of(context).size.width * 0.60,
+                child: ElevatedButton(
+                  //onPressed: () => con.goToAddressList(),
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(15)),
+                  child: const Text(
+                    'CONFIRMAR PEDIDO',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _cardProduct(BuildContext context, Producto product) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Row(
+        children: [
+          _imageProduct(product),
+          const SizedBox(
+            width: 15,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.45,
+                child: Text(
+                  product.name ?? '',
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              _buttonsAddOrRemove(product)
+            ],
+          ),
+          const Spacer(),
+          Column(
+            children: [_textPrice(product), _iconDelete(product)],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _iconDelete(Producto product) {
+    return IconButton(
+      onPressed: () => con.deleteItem(product),
+      //onPressed: () {},
+      icon: const Icon(
+        Icons.delete,
+        color: Colors.red,
+      ),
+    );
+  }
+
+  Widget _textPrice(Producto product) {
+    return Container(
+      margin: const EdgeInsets.only(top: 4),
+      child: Text(
+        '${(double.parse(product.price!) * product.quantity!).toStringAsFixed(2)}€',
+        style: const TextStyle(
+            fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _buttonsAddOrRemove(Producto product) {
+    return Row(
+      children: [
+        GestureDetector(
+          //onTap: () => con.removeItem(product),
+          onTap: () => {},
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
+            ),
+            child: const Text('-'),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          color: Colors.grey[200],
+          child: Text('${product.quantity ?? 0}'),
+        ),
+        GestureDetector(
+          //onTap: () => con.addItem(product),
+          onTap: () => {},
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8)),
+            ),
+            child: const Text('+'),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _imageProduct(Producto product) {
+    return Container(
+      height: 70,
+      width: 70,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: FadeInImage(
+          image: product.images![0].src != null
+              ? NetworkImage(product.images![0].src!)
+              : AssetImage('assets/img/no-image.png') as ImageProvider,
+          fit: BoxFit.cover,
+          fadeInDuration: Duration(milliseconds: 50),
+          placeholder: AssetImage('assets/img/no-image.png'),
+        ),
+      ),
+    );
+  }
+}

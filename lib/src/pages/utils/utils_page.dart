@@ -3,17 +3,16 @@ import 'package:eltriodigital_flutter/src/widgets/bottomNavigationBar/My_bottom_
 import 'package:flutter/material.dart';
 
 class UtilsPage extends StatelessWidget {
-   
   const UtilsPage({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
-      bottomNavigationBar: MyBottomNavigationBar(),
-      body: const Center(
-         child: Text('Utils Page')
+      appBar: MyAppBar(
+        title: 'Utils',
       ),
+      bottomNavigationBar: MyBottomNavigationBar(),
+      body: const Center(child: Text('Utils Page')),
     );
   }
 }

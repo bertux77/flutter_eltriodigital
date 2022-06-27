@@ -11,7 +11,7 @@ class PerfilPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: MyAppBar(title: 'Tu perfil'),
       bottomNavigationBar: MyBottomNavigationBar(),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),

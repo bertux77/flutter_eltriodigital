@@ -21,15 +21,20 @@ class TiendaPage extends StatelessWidget {
       future: con.obtenerCategorias(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(top: 20),
-            child: const Center(child: CircularProgressIndicator()),
+          return Scaffold(
+            appBar: MyAppBar(title: 'Tienda'),
+            bottomNavigationBar: MyBottomNavigationBar(),
+            body: Container(
+              color: Colors.white,
+              padding: EdgeInsets.only(top: 20),
+              child: const Center(child: CircularProgressIndicator()),
+            ),
           );
         } else {
           //print(con.listaCategorias.length);
           return Scaffold(
-            appBar: MyAppBar(),
+            appBar: MyAppBar(title: 'Tienda'),
+            bottomNavigationBar: MyBottomNavigationBar(),
             body: DefaultTabController(
               length: con.listaCategorias.length,
               child: Scaffold(
@@ -62,68 +67,131 @@ class TiendaPage extends StatelessWidget {
                                           color: Colors.white,
                                           padding: EdgeInsets.only(top: 20),
                                           child: const Center(
-                                              child: CircularProgressIndicator()),
+                                              child:
+                                                  CircularProgressIndicator()),
                                         );
                                       } else {
-                                        return ListView.builder(
-                                          itemCount: snapshot.data.length,
-                                          itemBuilder:
-                                              (BuildContext context, int index) {
-                                            return ListTile(
-                                              leading: CircleAvatar(
-                                                child: Image.network(
-                                                    snapshot.data[index].images
-                                                        [0].src),
-                                              ),
-                                              title: GestureDetector(
-                                                onTap: () => con.goToProductoPage(snapshot.data[index].id),
-                                                child: Text(
-                                                    snapshot.data[index].name),
-                                              ),
-                                              subtitle: Row(children: [
-                                                snapshot.data[index].onSale == true
-                                                  ? Row(children: [
-                                                    snapshot.data[index].regularPrice == ''
-                                                    ? const Text('')
-                                                    : Text('${snapshot.data[index].regularPrice} €', style: const TextStyle(
-                                                          color: Colors.red,
-                                                          decoration: TextDecoration.lineThrough,
-                                                          decorationColor: Color(0xff000000),
-                                                          fontSize: 14.0,
-                                                        ),
-                                                    ),
-                                                    const SizedBox(width: 10,),
-                                                    const Text('En oferta', style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold),),
-                                                    const SizedBox(width: 10,),
-                                                    Text('${snapshot.data[index].price} €', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w500, fontSize: 16),),
-                                                  ],)
-                                                  : Text('${snapshot.data[index].price} €'),
-                                                ]
-                                                    ),
-                                              trailing: AnimateIcons(
-                                                startIcon: Icons.shopping_cart_checkout,
-                                                endIcon: Icons.add_shopping_cart,
-                                                size: 24.0,
-                                                controller: controller,
-                                                // add this tooltip for the start icon
-                                                startTooltip: 'Icons.add_circle',
-                                                // add this tooltip for the end icon
-                                                endTooltip: 'Icons.add_circle_outline',
-                                                onStartIconPress: () {
-                                                    conAppBar.addProductoCarrito(snapshot.data[index]);
-                                                    return true;
-                                                },
-                                                onEndIconPress: () {
-                                                    print("Clicked on Close Icon");
-                                                    return true;
-                                                },
-                                                duration: const Duration(milliseconds: 500),
-                                                startIconColor: Colors.deepPurple,
-                                                endIconColor: Colors.deepOrange,
-                                                clockwise: false,
-                                            ));
-                                          },
-                                        );
+                                        if (snapshot.data.length == 0) {
+                                          return NoDataWidget(
+                                            text: 'No hay productos',
+                                          );
+                                        } else {
+                                          return ListView.builder(
+                                            itemCount: snapshot.data.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return ListTile(
+                                                  leading: CircleAvatar(
+                                                    child: Image.network(
+                                                        snapshot.data[index]
+                                                            .images[0].src),
+                                                  ),
+                                                  title: GestureDetector(
+                                                    onTap: () =>
+                                                        con.goToProductoPage(
+                                                            snapshot.data[index]
+                                                                .id),
+                                                    child: Text(snapshot
+                                                        .data[index].name),
+                                                  ),
+                                                  subtitle: Row(children: [
+                                                    snapshot.data[index]
+                                                                .onSale ==
+                                                            true
+                                                        ? Row(
+                                                            children: [
+                                                              snapshot.data[index]
+                                                                          .regularPrice ==
+                                                                      ''
+                                                                  ? const Text('')
+                                                                  : Text(
+                                                                      '${snapshot.data[index].regularPrice} €',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: Colors
+                                                                            .red,
+                                                                        decoration:
+                                                                            TextDecoration.lineThrough,
+                                                                        decorationColor:
+                                                                            Color(0xff000000),
+                                                                        fontSize:
+                                                                            14.0,
+                                                                      ),
+                                                                    ),
+                                                              const SizedBox(
+                                                                width: 10,
+                                                              ),
+                                                              const Text(
+                                                                'En oferta',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .red,
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 5,
+                                                              ),
+                                                              Text(
+                                                                '${snapshot.data[index].price} €',
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .green,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    fontSize:
+                                                                        14),
+                                                              ),
+                                                            ],
+                                                          )
+                                                        : Text(
+                                                            '${snapshot.data[index].price} €'),
+                                                  ]),
+                                                  trailing: AnimateIcons(
+                                                    startIcon: Icons
+                                                        .shopping_cart_checkout,
+                                                    endIcon:
+                                                        Icons.add_shopping_cart,
+                                                    size: 24.0,
+                                                    controller: controller,
+                                                    // add this tooltip for the start icon
+                                                    startTooltip:
+                                                        'Icons.add_circle',
+                                                    // add this tooltip for the end icon
+                                                    endTooltip:
+                                                        'Icons.add_circle_outline',
+                                                    // onStartIconPress: () {
+                                                    //   conAppBar
+                                                    //       .addProductoCarrito(
+                                                    //           snapshot
+                                                    //               .data[index]);
+                                                    //   return true;
+                                                    // },
+                                                    onStartIconPress: () {
+                                                      print(
+                                                          "Clicked on Close Icon");
+                                                      return true;
+                                                    },
+                                                    onEndIconPress: () {
+                                                      print(
+                                                          "Clicked on Close Icon");
+                                                      return true;
+                                                    },
+                                                    duration: const Duration(
+                                                        milliseconds: 500),
+                                                    startIconColor:
+                                                        Colors.deepPurple,
+                                                    endIconColor:
+                                                        Colors.deepOrange,
+                                                    clockwise: false,
+                                                  ));
+                                            },
+                                          );
+                                        }
                                       }
                                     }))))
                   ],
@@ -164,66 +232,66 @@ class TiendaPage extends StatelessWidget {
     );
   }
 
-  Widget _cardProduct(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.only(top: 15, left: 20, right: 20),
-            child: ListTile(
-              title: Text('product.name ?? ' ''),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    'product.description ?? ' '',
-                    maxLines: 2,
-                    style: const TextStyle(fontSize: 13),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'product.price',
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ),
-              trailing: Container(
-                height: 70,
-                width: 60,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: FadeInImage(
-                    // image: product.image1 != null
-                    //     ? NetworkImage(product.image1!)
-                    //     : AssetImage('assets/img/no-image.png')
-                    //         as ImageProvider,
-                    image: AssetImage('assets/img/no-image.png'),
-                    fit: BoxFit.cover,
-                    fadeInDuration: Duration(milliseconds: 50),
-                    placeholder: AssetImage('assets/img/no-image.png'),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Divider(
-            height: 2,
-            color: Colors.grey[400],
-            indent: 35,
-            endIndent: 35,
-          )
-        ],
-      ),
-    );
-  }
+  // Widget _cardProduct(BuildContext context) {
+  //   return GestureDetector(
+  //     onTap: () {},
+  //     child: Column(
+  //       children: [
+  //         Container(
+  //           margin: EdgeInsets.only(top: 15, left: 20, right: 20),
+  //           child: ListTile(
+  //             title: Text('product.name ?? ' ''),
+  //             subtitle: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 const SizedBox(
+  //                   height: 5,
+  //                 ),
+  //                 Text(
+  //                   'product.description ?? ' '',
+  //                   maxLines: 2,
+  //                   style: const TextStyle(fontSize: 13),
+  //                 ),
+  //                 const SizedBox(
+  //                   height: 10,
+  //                 ),
+  //                 Text(
+  //                   'product.price',
+  //                   style: TextStyle(
+  //                       color: Colors.black, fontWeight: FontWeight.bold),
+  //                 ),
+  //                 const SizedBox(
+  //                   height: 20,
+  //                 ),
+  //               ],
+  //             ),
+  //             trailing: Container(
+  //               height: 70,
+  //               width: 60,
+  //               child: ClipRRect(
+  //                 borderRadius: BorderRadius.circular(15),
+  //                 child: FadeInImage(
+  //                   // image: product.image1 != null
+  //                   //     ? NetworkImage(product.image1!)
+  //                   //     : AssetImage('assets/img/no-image.png')
+  //                   //         as ImageProvider,
+  //                   image: AssetImage('assets/img/no-image.png'),
+  //                   fit: BoxFit.cover,
+  //                   fadeInDuration: Duration(milliseconds: 50),
+  //                   placeholder: AssetImage('assets/img/no-image.png'),
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //         Divider(
+  //           height: 2,
+  //           color: Colors.grey[400],
+  //           indent: 35,
+  //           endIndent: 35,
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 }
