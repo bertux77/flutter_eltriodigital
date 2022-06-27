@@ -7,52 +7,59 @@ import 'package:logger/logger.dart';
 import 'package:woocommerce_api/woocommerce_api.dart';
 
 class TiendaProductoController extends GetxController {
+  //RxList<Models> myList = <Models>[].obs;
   List<Producto> selectedProducts = [];
-  int id = Get.arguments['id'];
+  
+  var producto = Producto();
+  
+  var isLoading = true.obs;
 
   TiendaProductoController() {
-    var logger = Logger(
-      filter: null,
-      printer: PrettyPrinter(),
-      output: null,
-    );
-    print(
-        'cuando cargamos la pagina de producto Gestorage es: $selectedProducts');
-    selectedProducts.forEach((element) {
-      logger.d(element.toJson());
-    });
-    obtenerProducto();
+   
+   producto = Get.arguments['producto'];
+   update();
     if (GetStorage().read('shopping_bag') != null) {
-      var result = GetStorage().read('shopping_bag');
-      selectedProducts.clear();
-      selectedProducts.addAll(result);
-      // if (GetStorage().read('shopping_bag') is List<Producto>) {
-      //   // var result = GetStorage().read('shopping_bag');
-      //   // selectedProducts.clear();
-      //   // selectedProducts.addAll(result);
-      //   print('Pantalla producto if');
-      // } else {
-      //   print('pantalla producto else');
-      //   // var result = Producto.fromJsonList(GetStorage().read('shopping_bag'));
-      //   // selectedProducts.clear();
-      //   // selectedProducts.addAll(result);
-      // }
+       if (GetStorage().read('shopping_bag') is List<Producto>) {
+          var result = GetStorage().read('shopping_bag');
+          selectedProducts.clear();
+          selectedProducts.addAll(result);
+         print('Pantalla producto if');
+       } else {
+         print('pantalla producto else');
+          var result = Producto.fromJsonList(GetStorage().read('shopping_bag'));
+          selectedProducts.clear();
+          selectedProducts.addAll(result);
+       }
     }
+
+    // var logger = Logger(
+    //    filter: null,
+    //    printer: PrettyPrinter(),
+    //    output: null,
+    //  );
+    //  print(
+    //      'cuando cargamos la pagina de producto Gestorage es: $selectedProducts');
+    //  selectedProducts.forEach((element) {
+    //    logger.d(element.toJson());
+    //  });
   }
 
-  Future<Producto> obtenerProducto() async {
-    WooCommerceAPI wooCommerceAPI = WooCommerceAPI(
-        url: "https://www.nutricioncanarias.com/",
-        consumerKey: "ck_d00e8de97d2957fd5d021380681c3e7d7444b1c1",
-        consumerSecret: "cs_71abbf9e1641d1b44ee06c777c8ab202cd97a0b7");
+  // Future obtenerProducto(int id) async {
+ 
+  //   WooCommerceAPI wooCommerceAPI = WooCommerceAPI(
+  //       url: "https://www.nutricioncanarias.com/",
+  //       consumerKey: "ck_d00e8de97d2957fd5d021380681c3e7d7444b1c1",
+  //       consumerSecret: "cs_71abbf9e1641d1b44ee06c777c8ab202cd97a0b7");
 
-    var productoResp = await wooCommerceAPI.getAsync("products/$id");
+  //   var productoResp = await wooCommerceAPI.getAsync("products/$id");
 
-    // MAPEAMOS RESPUESTA
-    Producto producto = Producto.fromJson(productoResp);
-    //print('Producto recibido: ${producto.toJson()}');
-    return producto;
-  }
+  //   // MAPEAMOS RESPUESTA
+  //   producto.value = Producto.fromJson(productoResp);
+  //   //producto.refresh();
+  //   isLoading.value = false;
+  //   update();
+  //   //print('controller: ${producto.value}');
+  // }
 
   void addToBag(Producto product, var price, var counter) {
     if (counter.value > 0) {
@@ -72,21 +79,21 @@ class TiendaProductoController extends GetxController {
         selectedProducts[index].quantity = counter.value;
       }
 
-      print('antes de escribir el selectedProducts:');
-      var logger = Logger(
-        filter: null,
-        printer: PrettyPrinter(),
-        output: null,
-      );
+      // print('antes de escribir el selectedProducts:');
+      // var logger = Logger(
+      //   filter: null,
+      //   printer: PrettyPrinter(),
+      //   output: null,
+      // );
 
-      selectedProducts.forEach((element) {
-        logger.d(element.toJson());
-      });
+      // selectedProducts.forEach((element) {
+      //   logger.d(element.toJson());
+      // });
       // logger.d(selectedProducts[0].toJson());
 
       GetStorage().write('shopping_bag', selectedProducts);
       goToCarritoPage();
-      Utils.snackBarOk('Carrito', 'Producto agregado al carrito');
+      //Utils.snackBarOk('Carrito', 'Producto agregado al carrito');
     }
   }
 

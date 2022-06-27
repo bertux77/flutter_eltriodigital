@@ -90,7 +90,7 @@ class TiendaPage extends StatelessWidget {
                                                     onTap: () =>
                                                         con.goToProductoPage(
                                                             snapshot.data[index]
-                                                                .id),
+                                                          ),
                                                     child: Text(snapshot
                                                         .data[index].name),
                                                   ),

@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 class TiendaProductoPage extends StatelessWidget {
   TiendaProductoController con = Get.put(TiendaProductoController());
-  Producto? product = Producto();
+  //Producto? product = Producto();
   //late TiendaProductoController con;
   var counter = 1.obs;
   var price = 0.0.obs;
@@ -17,34 +17,51 @@ class TiendaProductoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: con.obtenerProducto(),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container(
-              color: Colors.white,
-              padding: const EdgeInsets.only(top: 20),
-              child: const Center(child: CircularProgressIndicator()),
-            );
-          } else {
-            Producto product = snapshot.data;
-            //print('en page: ${product.toString()}');
-            price.value = double.parse(product.price ?? '');
-            return Scaffold(
+
+    return GetBuilder<TiendaProductoController>( 
+      init: TiendaProductoController(), 
+      builder: (value) => Scaffold(
                 bottomNavigationBar:
-                    Container(height: 100, child: _buttonsAddToBag(product)),
+                    Container(height: 100, child: _buttonsAddToBag(value.producto)),
                 body: SingleChildScrollView(
                   child: Column(
                     children: [
-                      _imageSlideshow(context, product),
-                      _textNameProduct(product),
-                      _textDescriptionProduct(product),
-                      _textPriceProduct(product),
+                      _imageSlideshow(context, value.producto),
+                      _textNameProduct(value.producto),
+                      _textDescriptionProduct(value.producto),
+                      _textPriceProduct(value.producto),
                     ],
                   ),
-                ));
-          }
-        });
+                ))
+      );
+    // return FutureBuilder(
+    //     future: con.obtenerProducto(),
+    //     builder: (context, AsyncSnapshot snapshot) {
+    //       if (snapshot.connectionState == ConnectionState.waiting) {
+    //         return Container(
+    //           color: Colors.white,
+    //           padding: const EdgeInsets.only(top: 20),
+    //           child: const Center(child: CircularProgressIndicator()),
+    //         );
+    //       } else {
+    //         Producto product = snapshot.data;
+    //         //print('en page: ${product.toString()}');
+    //         price.value = double.parse(product.price ?? '');
+    //         return Scaffold(
+    //             bottomNavigationBar:
+    //                 Container(height: 100, child: _buttonsAddToBag(product)),
+    //             body: SingleChildScrollView(
+    //               child: Column(
+    //                 children: [
+    //                   _imageSlideshow(context, product),
+    //                   _textNameProduct(product),
+    //                   _textDescriptionProduct(product),
+    //                   _textPriceProduct(product),
+    //                 ],
+    //               ),
+    //             ));
+    //       }
+    //     });
   }
 
   Widget _textNameProduct(Producto product) {
@@ -86,6 +103,7 @@ class TiendaProductoPage extends StatelessWidget {
   }
 
   Widget _buttonsAddToBag(Producto product) {
+    price.value = double.parse(product.price ?? '');
     return Obx(() => Column(
           children: [
             Divider(
@@ -135,6 +153,7 @@ class TiendaProductoPage extends StatelessWidget {
                                 bottomRight: Radius.circular(25)))),
                   ),
                   const Spacer(),
+                  
                   ElevatedButton(
                     onPressed: () => con.addToBag(product, price, counter),
                     child: Text(

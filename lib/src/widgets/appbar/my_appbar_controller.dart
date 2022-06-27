@@ -53,7 +53,7 @@ class MyAppBarController extends GetxController {
   }
 
   void goToTiendaPage() {
-    Get.offNamed('/tienda');
+    Get.offAllNamed('/tienda');
   }
 
   void signOut() {

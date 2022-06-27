@@ -10,8 +10,8 @@ class TiendaPageController extends GetxController {
     obtenerCategorias();
   }
 
-  void goToProductoPage(id) {
-    Get.toNamed('/producto', arguments: {'id': id});
+  void goToProductoPage(producto) {
+    Get.toNamed('/producto', arguments: {'producto': producto});
   }
 
   Future obtenerCategorias() async {
