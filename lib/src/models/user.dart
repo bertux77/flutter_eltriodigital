@@ -40,7 +40,7 @@ class User {
         telefono: json["telefono"],
         direccion: json["direccion"],
         poblacion: json["poblacion"],
-        cp: json["cp"],
+        cp: json["cp"].toString(),
         provincia: json["provincia"],
         image: json["image"],
         email: json["email"],

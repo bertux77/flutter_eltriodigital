@@ -22,7 +22,6 @@ class TiendaCarritoPage extends StatelessWidget {
                 children: con.selectedProducts.map((Producto product) {
                   if (product.quantity == null) {
                     product.quantity == 1;
-                    print('es nulo joder: ${product.quantity}');
                   }
                   return _cardProduct(context, product);
                 }).toList(),
@@ -64,8 +63,7 @@ class TiendaCarritoPage extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 width: MediaQuery.of(context).size.width * 0.60,
                 child: ElevatedButton(
-                  //onPressed: () => con.goToAddressList(),
-                  onPressed: () {},
+                  onPressed: () => con.goToCheckout(),
                   style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(15)),
                   child: const Text(
@@ -107,17 +105,29 @@ class TiendaCarritoPage extends StatelessWidget {
           ),
           const Spacer(),
           Column(
-            children: [_textPrice(product), _iconDelete(product)],
+            children: [
+              _unidadesXPrecio(product),
+              _textPrice(product),
+              _iconDelete(product)
+            ],
           )
         ],
       ),
     );
   }
 
+  Widget _unidadesXPrecio(Producto product) {
+    return Container(
+        child: Text(
+      '${product.quantity} x ${product.price}',
+      style: const TextStyle(
+          fontSize: 10, color: Colors.grey, fontWeight: FontWeight.normal),
+    ));
+  }
+
   Widget _iconDelete(Producto product) {
     return IconButton(
       onPressed: () => con.deleteItem(product),
-      //onPressed: () {},
       icon: const Icon(
         Icons.delete,
         color: Colors.red,
@@ -140,8 +150,7 @@ class TiendaCarritoPage extends StatelessWidget {
     return Row(
       children: [
         GestureDetector(
-          //onTap: () => con.removeItem(product),
-          onTap: () => {},
+          onTap: () => con.removeItem(product),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             decoration: BoxDecoration(
@@ -149,26 +158,35 @@ class TiendaCarritoPage extends StatelessWidget {
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
             ),
-            child: const Text('-'),
+            child: const Text(
+              '-',
+              style: TextStyle(fontSize: 16),
+            ),
           ),
+        ),
+        const SizedBox(
+          width: 5,
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
           color: Colors.grey[200],
-          child: Text('${product.quantity ?? 0}'),
+          child:
+              Text('${product.quantity ?? 0}', style: TextStyle(fontSize: 16)),
+        ),
+        const SizedBox(
+          width: 5,
         ),
         GestureDetector(
-          //onTap: () => con.addItem(product),
-          onTap: () => {},
+          onTap: () => con.addItem(product),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             decoration: BoxDecoration(
               color: Colors.grey[200],
               borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
                   bottomRight: Radius.circular(8)),
             ),
-            child: const Text('+'),
+            child: const Text('+', style: TextStyle(fontSize: 16)),
           ),
         ),
       ],

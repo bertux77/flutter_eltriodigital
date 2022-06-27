@@ -1,36 +1,31 @@
 import 'package:eltriodigital_flutter/src/models/producto.dart';
-import 'package:eltriodigital_flutter/src/utils/utils.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:logger/logger.dart';
-import 'package:woocommerce_api/woocommerce_api.dart';
 
 class TiendaProductoController extends GetxController {
   //RxList<Models> myList = <Models>[].obs;
   List<Producto> selectedProducts = [];
-  
+
   var producto = Producto();
-  
+
   var isLoading = true.obs;
 
   TiendaProductoController() {
-   
-   producto = Get.arguments['producto'];
-   update();
+    producto = Get.arguments['producto'];
+    update();
     if (GetStorage().read('shopping_bag') != null) {
-       if (GetStorage().read('shopping_bag') is List<Producto>) {
-          // SIEMPRE ENTRA AQUI
-          var result = GetStorage().read('shopping_bag');
-          selectedProducts.clear();
-          selectedProducts.addAll(result);
-         print('Pantalla producto if'); 
-       } else {
-         print('pantalla producto else');
-          var result = Producto.fromJsonList(GetStorage().read('shopping_bag'));
-          selectedProducts.clear();
-          selectedProducts.addAll(result);
-       }
+      if (GetStorage().read('shopping_bag') is List<Producto>) {
+        // SIEMPRE ENTRA AQUI
+        var result = GetStorage().read('shopping_bag');
+        selectedProducts.clear();
+        selectedProducts.addAll(result);
+        print('Pantalla producto if');
+      } else {
+        print('pantalla producto else');
+        var result = Producto.fromJsonList(GetStorage().read('shopping_bag'));
+        selectedProducts.clear();
+        selectedProducts.addAll(result);
+      }
     }
 
     // var logger = Logger(
@@ -46,7 +41,7 @@ class TiendaProductoController extends GetxController {
   }
 
   // Future obtenerProducto(int id) async {
- 
+
   //   WooCommerceAPI wooCommerceAPI = WooCommerceAPI(
   //       url: "https://www.nutricioncanarias.com/",
   //       consumerKey: "ck_d00e8de97d2957fd5d021380681c3e7d7444b1c1",

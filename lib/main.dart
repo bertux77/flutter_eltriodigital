@@ -3,6 +3,7 @@ import 'package:eltriodigital_flutter/src/pages/perfil/info/perfil_info_page.dar
 import 'package:eltriodigital_flutter/src/pages/perfil/pedidos/perfil_pedidos_page.dart';
 import 'package:eltriodigital_flutter/src/pages/perfil/showqr/perfil_showqr_page.dart';
 import 'package:eltriodigital_flutter/src/pages/tienda/carrito/tienda_carrito_page.dart';
+import 'package:eltriodigital_flutter/src/pages/tienda/checkout/tienda_checkout_page.dart';
 import 'package:eltriodigital_flutter/src/pages/tienda/producto/tienda_producto_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,11 +42,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget build(BuildContext context) {
+    print('main user: ${userSession.id}');
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'El trio digital',
       initialRoute: userSession.id != null ? '/tienda' : '/',
-      //initialRoute: initialLink != null ? '/home' : '/scan',
+      //home: LoginPage(),
       getPages: [
         GetPage(name: '/', page: () => LoginPage()),
         GetPage(name: '/register', page: () => RegisterPage()),
@@ -58,6 +60,7 @@ class _MyAppState extends State<MyApp> {
         GetPage(name: '/perfil/showqr', page: () => PerfilShowQrPage()),
         GetPage(name: '/tienda', page: () => TiendaPage()),
         GetPage(name: '/tienda/carrito', page: () => TiendaCarritoPage()),
+        GetPage(name: '/tienda/checkout', page: () => TiendaCheckoutPage()),
         GetPage(name: '/producto', page: () => TiendaProductoPage()),
         GetPage(name: '/canjeo', page: () => TiendaPedidosCanjeoPage()),
         GetPage(
