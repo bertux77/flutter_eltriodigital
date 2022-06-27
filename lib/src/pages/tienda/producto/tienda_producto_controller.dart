@@ -20,10 +20,11 @@ class TiendaProductoController extends GetxController {
    update();
     if (GetStorage().read('shopping_bag') != null) {
        if (GetStorage().read('shopping_bag') is List<Producto>) {
+          // SIEMPRE ENTRA AQUI
           var result = GetStorage().read('shopping_bag');
           selectedProducts.clear();
           selectedProducts.addAll(result);
-         print('Pantalla producto if');
+         print('Pantalla producto if'); 
        } else {
          print('pantalla producto else');
           var result = Producto.fromJsonList(GetStorage().read('shopping_bag'));
