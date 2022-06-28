@@ -3,11 +3,29 @@ import 'package:eltriodigital_flutter/src/models/user.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+class MetodosDePago{
+    int? id;
+    String? name;
+    
+      
+    MetodosDePago({this.id, this.name});
+      // can also add 'required' keyword
+}
+
 class TiendaCheckoutController extends GetxController {
   List<Producto> selectedProducts = <Producto>[].obs;
   var total = 0.0.obs;
   User userSession = User();
   bool tieneDireccion = false;
+  var radioValue = 0.obs;
+
+  List<MetodosDePago> metodosDePago = [
+    MetodosDePago(id: 1, name: "Tarjeta"), // MUESTRA FORMULARIO Y CONFIRMAR VENTA
+    MetodosDePago(id: 2, name: "Pagar al recoger en tienda"), // CONFIRMAR VENTA
+    MetodosDePago(id: 3, name: "Transferencia Bancaria"), // MUESTRA DATOS Y CONFIRMAR VENTA
+    MetodosDePago(id: 4, name: "Contrarembolso"), // CONFIRMAR VENTA
+  ];
+
 
   TiendaCheckoutController() {
     //OBTENEMOS EL USUARIO DEL ESTORAGE
@@ -31,6 +49,13 @@ class TiendaCheckoutController extends GetxController {
       }
       getTotal();
     }
+  }
+
+  void handleRadioValueChange(int? value) {
+    radioValue.value = value!;
+    print('Valor seleccionado ${value}');
+    //GetStorage().write('address', address[value].toJson());
+    update();
   }
 
   void _comprobarDireccion(User user) {
