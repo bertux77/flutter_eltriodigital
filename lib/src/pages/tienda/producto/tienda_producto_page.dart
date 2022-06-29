@@ -17,51 +17,21 @@ class TiendaProductoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return GetBuilder<TiendaProductoController>( 
-      init: TiendaProductoController(), 
-      builder: (value) => Scaffold(
-                bottomNavigationBar:
-                    Container(height: 100, child: _buttonsAddToBag(value.producto)),
-                body: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _imageSlideshow(context, value.producto),
-                      _textNameProduct(value.producto),
-                      _textDescriptionProduct(value.producto),
-                      _textPriceProduct(value.producto),
-                    ],
-                  ),
-                ))
-      );
-    // return FutureBuilder(
-    //     future: con.obtenerProducto(),
-    //     builder: (context, AsyncSnapshot snapshot) {
-    //       if (snapshot.connectionState == ConnectionState.waiting) {
-    //         return Container(
-    //           color: Colors.white,
-    //           padding: const EdgeInsets.only(top: 20),
-    //           child: const Center(child: CircularProgressIndicator()),
-    //         );
-    //       } else {
-    //         Producto product = snapshot.data;
-    //         //print('en page: ${product.toString()}');
-    //         price.value = double.parse(product.price ?? '');
-    //         return Scaffold(
-    //             bottomNavigationBar:
-    //                 Container(height: 100, child: _buttonsAddToBag(product)),
-    //             body: SingleChildScrollView(
-    //               child: Column(
-    //                 children: [
-    //                   _imageSlideshow(context, product),
-    //                   _textNameProduct(product),
-    //                   _textDescriptionProduct(product),
-    //                   _textPriceProduct(product),
-    //                 ],
-    //               ),
-    //             ));
-    //       }
-    //     });
+    return GetBuilder<TiendaProductoController>(
+        init: TiendaProductoController(),
+        builder: (value) => Scaffold(
+            bottomNavigationBar:
+                Container(height: 100, child: _buttonsAddToBag(value.producto)),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _imageSlideshow(context, value.producto),
+                  _textNameProduct(value.producto),
+                  _textPriceProduct(value.producto),
+                  _textDescriptionProduct(value.producto),
+                ],
+              ),
+            )));
   }
 
   Widget _textNameProduct(Producto product) {
@@ -91,15 +61,49 @@ class TiendaProductoPage extends StatelessWidget {
   }
 
   Widget _textPriceProduct(Producto product) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      margin: const EdgeInsets.only(top: 15, left: 30, right: 30),
-      child: Text(
-        '${product.price.toString()} €',
-        style: const TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
-      ),
-    );
+    if (product.onSale == true) {
+      return Container(
+        alignment: Alignment.centerLeft,
+        margin: const EdgeInsets.only(top: 5, left: 30, right: 30),
+        child: Row(
+          children: [
+            Text(
+              '${product.regularPrice} €',
+              style: const TextStyle(
+                color: Colors.red,
+                decoration: TextDecoration.lineThrough,
+                decorationColor: Color(0xff000000),
+                fontSize: 14.0,
+              ),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            const Text(
+              'en oferta',
+              style: TextStyle(color: Colors.red),
+            ),
+            Text(
+              ' ${product.price.toString()} €',
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.black),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        alignment: Alignment.centerLeft,
+        margin: const EdgeInsets.only(top: 15, left: 30, right: 30),
+        child: Text(
+          '${product.price.toString()} €',
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
+        ),
+      );
+    }
   }
 
   Widget _buttonsAddToBag(Producto product) {
@@ -153,7 +157,6 @@ class TiendaProductoPage extends StatelessWidget {
                                 bottomRight: Radius.circular(25)))),
                   ),
                   const Spacer(),
-                  
                   ElevatedButton(
                     onPressed: () => con.addToBag(product, price, counter),
                     child: Text(

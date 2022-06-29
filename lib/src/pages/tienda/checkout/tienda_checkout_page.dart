@@ -36,35 +36,31 @@ class TiendaCheckoutPage extends StatelessWidget {
                   ),
                 ),
               ),
-              body: Column(
-                children: [
-                 
-                  _resumenPedidoTotal(value),
-                  
-                  
-                  
-                  //MetodosPago(),
-                  _metodosDePago(),
-
-                  con.radioValue.value != 1
-                  ? _direccionEntrega()
-                  : Container(),
-
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  con.tieneDireccion == true
-                      ? _btnConfirmarCompra(context)
-                      : _btnEditarPerfil(context)
-                ],
+              body: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    _resumenPedidoTotal(value),
+                    _metodosDePago(),
+                    con.radioValue.value != 1
+                        ? _direccionEntrega()
+                        : Container(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    con.tieneDireccion == true
+                        ? _btnConfirmarCompra(context)
+                        : _btnEditarPerfil(context)
+                  ],
+                ),
               ),
             ));
   }
 
   Widget _resumenPedidoTotal(TiendaCheckoutController value) {
-    return  Column(
+    return Column(
       children: [
-         const SizedBox(
+        const SizedBox(
           height: 10,
         ),
         const Text(
@@ -73,8 +69,7 @@ class TiendaCheckoutPage extends StatelessWidget {
         ),
         Text(
           'TOTAL: ${value.total}€',
-          style: const TextStyle(
-              fontSize: 16, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         const Divider(
           indent: 15, // donde empieza la linea
@@ -88,30 +83,63 @@ class TiendaCheckoutPage extends StatelessWidget {
     );
   }
 
-
-  Widget _metodosDePago(){
+  Widget _metodosDePago() {
     return Column(
       children: [
-        Text('Elegir metodo de pago'),
+        const Text('Elegir metodo de pago'),
         //SizedBox(height: 10,),
         ListView.builder(
           itemCount: 4,
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-           padding:
-               const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
           itemBuilder: (_, index) {
-            return _radioSelectorAddress(con.metodosDePago[index],index);
+            return _radioSelectorAddress(con.metodosDePago[index], index);
             //return Text('mandanga');
           },
         ),
+        _txtCondicionalMetodosPago(),
+        Divider(
+          color: Colors.grey[400],
+        )
       ],
     );
   }
 
+  Widget _txtCondicionalMetodosPago() {
+    switch (con.radioValue.value) {
+      case 0:
+        return const Text('Insertamos el plugin para la tarjeta');
+      case 1:
+        return const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            'Una vez completado el pedido podras pasar a recogerlo por la tienda',
+            style: TextStyle(color: Colors.red, fontStyle: FontStyle.italic),
+          ),
+        );
+      case 2:
+        return const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            'Haz el pago directamente a nuestra cuenta bancaria. Indica tu nombre y apellidos en las observaciones de la transferencia: ES66 0081 0541 7900 0150 6160',
+            style: TextStyle(color: Colors.red, fontStyle: FontStyle.italic),
+          ),
+        );
+      case 3:
+        return const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            'Realizar el pago directamente al transportista cuando te entreguen el pedido',
+            style: TextStyle(color: Colors.red, fontStyle: FontStyle.italic),
+          ),
+        );
+      default:
+        return const Text('');
+    }
+  }
 
-  
-Widget _radioSelectorAddress(MetodosDePago metodo, int index) {
+  Widget _radioSelectorAddress(MetodosDePago metodo, int index) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 0),
       child: Column(
@@ -126,87 +154,74 @@ Widget _radioSelectorAddress(MetodosDePago metodo, int index) {
               ),
               Text(
                 metodo.name ?? '',
-                style: const TextStyle(
-                    fontSize: 13, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
               ),
             ],
           ),
-          Divider(
-            color: Colors.grey[400],
-          )
+          // Divider(
+          //   color: Colors.grey[400],
+          // )
         ],
       ),
     );
   }
 
-  
-
- 
-
-
-    Widget _direccionEntrega() {
-
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
+  Widget _direccionEntrega() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: const [
+              Icon(Icons.add_location_alt),
+              Text(
+                ' Direccion de entrega',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 15),
+          child: Text(
+            con.userSession.name ?? '',
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
+        ListTile(
+          //leading: Icon(Icons.map),
+          title: Text(con.userSession.direccion ?? '',
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text(
+              "${con.userSession.cp} - ${con.userSession.poblacion} - ${con.userSession.provincia} "
+              "\n"
+              "Télefono: ${con.userSession.telefono}"),
+          isThreeLine: true,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              GestureDetector(
+                child: Column(
                   children: const [
-                    Icon(Icons.add_location_alt),
-                    Text(
-                      ' Direccion de entrega',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    Icon(
+                      Icons.edit,
+                      color: Colors.grey,
                     ),
+                    Text('editar')
                   ],
                 ),
+                onTap: () => con.goToEditarPerfil(),
               ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Text(
-              con.userSession.name ?? '',
-              style: const TextStyle(fontSize: 16),
-            ),
+            ],
           ),
-          ListTile(
-            //leading: Icon(Icons.map),
-            title: Text(con.userSession.direccion ?? '',
-                style: const TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text(
-                "${con.userSession.cp} - ${con.userSession.poblacion} - ${con.userSession.provincia} "
-                "\n"
-                "Télefono: ${con.userSession.telefono}"),
-            isThreeLine: true,
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                GestureDetector(
-                  child: Column(
-                    children: const [
-                      Icon(
-                        Icons.edit,
-                        color: Colors.grey,
-                      ),
-                      Text('editar')
-                    ],
-                  ),
-                  onTap: () => con.goToEditarPerfil(),
-                ),
-              ],
-            ),
-            onTap: () {},
-          ),
-        ],
-      );
-    
+          onTap: () {},
+        ),
+      ],
+    );
   }
-
 }
-
-
-
-
-
 
 class _listadoPedido extends StatelessWidget {
   final TiendaCheckoutController value;

@@ -1,6 +1,7 @@
 import 'package:eltriodigital_flutter/src/models/producto.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:woocommerce_api/woocommerce_api.dart';
 
 class TiendaProductoController extends GetxController {
   //RxList<Models> myList = <Models>[].obs;
@@ -12,6 +13,10 @@ class TiendaProductoController extends GetxController {
 
   TiendaProductoController() {
     producto = Get.arguments['producto'];
+    if (producto.type == "variable") {
+      // llamada a la api para obtener las variaciones
+
+    }
     update();
     if (GetStorage().read('shopping_bag') != null) {
       if (GetStorage().read('shopping_bag') is List<Producto>) {
@@ -19,9 +24,7 @@ class TiendaProductoController extends GetxController {
         var result = GetStorage().read('shopping_bag');
         selectedProducts.clear();
         selectedProducts.addAll(result);
-        print('Pantalla producto if');
       } else {
-        print('pantalla producto else');
         var result = Producto.fromJsonList(GetStorage().read('shopping_bag'));
         selectedProducts.clear();
         selectedProducts.addAll(result);
@@ -40,16 +43,16 @@ class TiendaProductoController extends GetxController {
     //  });
   }
 
-  // Future obtenerProducto(int id) async {
+  Future obtenerVariaciones() async {
+    int id = producto.id!;
+     WooCommerceAPI wooCommerceAPI = WooCommerceAPI(
+         url: "https://www.nutricioncanarias.com/",
+         consumerKey: "ck_d00e8de97d2957fd5d021380681c3e7d7444b1c1",
+         consumerSecret: "cs_71abbf9e1641d1b44ee06c777c8ab202cd97a0b7");
 
-  //   WooCommerceAPI wooCommerceAPI = WooCommerceAPI(
-  //       url: "https://www.nutricioncanarias.com/",
-  //       consumerKey: "ck_d00e8de97d2957fd5d021380681c3e7d7444b1c1",
-  //       consumerSecret: "cs_71abbf9e1641d1b44ee06c777c8ab202cd97a0b7");
+     var variaciones = await wooCommerceAPI.getAsync("products/${id}/variations");
 
-  //   var productoResp = await wooCommerceAPI.getAsync("products/$id");
-
-  //   // MAPEAMOS RESPUESTA
+     // MAPEAMOS RESPUESTA
   //   producto.value = Producto.fromJson(productoResp);
   //   //producto.refresh();
   //   isLoading.value = false;

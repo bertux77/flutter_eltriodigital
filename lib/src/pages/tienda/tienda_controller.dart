@@ -36,13 +36,12 @@ class TiendaPageController extends GetxController {
         consumerKey: "ck_d00e8de97d2957fd5d021380681c3e7d7444b1c1",
         consumerSecret: "cs_71abbf9e1641d1b44ee06c777c8ab202cd97a0b7");
 
-    var productos = await wooCommerceAPI
-        .getAsync("products?in_stock=true&category=${idCategory}&per_page=50") as List;
+    var productos = await wooCommerceAPI.getAsync(
+        "products?in_stock=true&category=${idCategory}&per_page=50") as List;
 
     // MAPEAMOS RESPUESTA
-    listaProductos =
-      productos.map((item) => Producto.fromJson(item)).toList();
-     // print('listaProducts: $listaProductos');
+    listaProductos = productos.map((item) => Producto.fromJson(item)).toList();
+    // print('listaProducts: $listaProductos');
     return listaProductos;
   }
 }
