@@ -60,7 +60,7 @@ class ProductoVariaciones {
         "manage_stock": manageStock,
         "stock_quantity": stockQuantity,
         "stock_status": stockStatus,
-        "attributes": List<dynamic>.from(attributes.map((x) => x.toJson())),
+        "attributes": List<dynamic>.from(attributes!.map((x) => x.toJson())),
       };
 }
 

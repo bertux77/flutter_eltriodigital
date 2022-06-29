@@ -27,6 +27,8 @@ class TiendaProductoPage extends StatelessWidget {
                 children: [
                   _imageSlideshow(context, value.producto),
                   _textNameProduct(value.producto),
+                  _productoVariacion(value.producto),
+                  
                   _textPriceProduct(value.producto),
                   _textDescriptionProduct(value.producto),
                 ],
@@ -45,6 +47,54 @@ class TiendaProductoPage extends StatelessWidget {
             fontWeight: FontWeight.bold, fontSize: 22, color: Colors.black),
       ),
     );
+  }
+
+   Widget _productoVariacion(Producto product) {
+
+    
+    Future.delayed(const Duration(seconds: 3), () {
+
+      // Here you can write your code
+
+      List<String> items = List.generate(con.opciones.length, (index) => '${con.opciones[0]![index].name}');
+      print('listado items: $items');
+
+    });
+
+    
+    if(product.type == "variable"){
+      return Column(
+        children: [
+          // DropdownButton<String>(
+          //       hint: Text('Elegir Sabor'),
+          //       items:  ['Fresa', 'Chocolate', 'Vainilla'].map((String value) {
+          //       return DropdownMenuItem<String>(
+          //         value: value,
+          //         child: Text(value),
+          //       );
+          //     }).toList(),
+          //     onChanged: (_) {
+          //       print(_);
+          //     },
+          //   ),
+            // DropdownButton<String>(
+            //     hint: Text('Elegir Tamaño'),
+            //     //items:  ['1kg', '2kg'].map((String value) {
+            //     items:  List.generate(con., (index) => null) {
+            //     return DropdownMenuItem<String>(
+            //       value: value,
+            //       child: Text(value),
+            //     );
+            //   }).toList(),
+            //   onChanged: (_) {
+            //     print(_);
+            //   },
+            // ),
+        ],
+      );
+    }else {
+      return Text('${product.type}');
+    }
   }
 
   Widget _textDescriptionProduct(Producto product) {
