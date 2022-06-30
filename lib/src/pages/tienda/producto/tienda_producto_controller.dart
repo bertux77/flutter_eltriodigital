@@ -7,6 +7,19 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:woocommerce_api/woocommerce_api.dart';
 
+//CLASE DONDE GUARDAREMOS LAS VARIACIONES DEL PRODUCTO VARIABLE
+class SelectVariaciones {
+  int id;
+  String name;
+  bool variation;
+  List<String> options;
+  SelectVariaciones(
+      {required this.id,
+      required this.name,
+      required this.variation,
+      required this.options});
+}
+
 class TiendaProductoController extends GetxController {
   //RxList<Models> myList = <Models>[].obs;
   List<p.Producto> selectedProducts = [];
@@ -16,12 +29,27 @@ class TiendaProductoController extends GetxController {
   List<Attribute> atributos = [];
   Map<int?, List<Attribute>> opciones = {};
 
+  List<SelectVariaciones> selectVariaciones = [];
+
   TiendaProductoController() {
     producto = Get.arguments['producto'];
-    print('Producto id: ${producto.id}');
+    //print('Producto id: ${producto.id}');
     if (producto.type == "variable") {
-      // llamada a la api para obtener las variaciones
-      obtenerVariaciones();
+      // Mapeamos los atributos que sirven para generar variacioens, ejemplo:Sabor, tamaño,etc.
+
+      for (var atributo in producto.attributes!) {
+        //El atributo se utiliza para generar variaciones
+        if (atributo.variation == true) {
+          //MAPEAMOS EL SELECTVARIACIONES
+          selectVariaciones.add(SelectVariaciones(
+              id: atributo.id!,
+              name: atributo.name!,
+              variation: atributo.variation!,
+              options: atributo.options!));
+        }
+      }
+      print('Select variaciones: $selectVariaciones');
+      //obtenerVariaciones();
     }
     update();
     if (GetStorage().read('shopping_bag') != null) {
@@ -52,23 +80,25 @@ class TiendaProductoController extends GetxController {
   Future obtenerVariaciones() async {
     int id = producto.id!;
     WooCommerceAPI wooCommerceAPI = WooCommerceAPI(
-         url: "https://www.nutricioncanarias.com/",
-         consumerKey: "ck_d00e8de97d2957fd5d021380681c3e7d7444b1c1",
-         consumerSecret: "cs_71abbf9e1641d1b44ee06c777c8ab202cd97a0b7");
+        url: "https://www.nutricioncanarias.com/",
+        consumerKey: "ck_d00e8de97d2957fd5d021380681c3e7d7444b1c1",
+        consumerSecret: "cs_71abbf9e1641d1b44ee06c777c8ab202cd97a0b7");
 
-    var variacionesResp = await wooCommerceAPI.getAsync("products/${id}/variations") as List;
+    var variacionesResp =
+        await wooCommerceAPI.getAsync("products/${id}/variations") as List;
 
-     // MAPEAMOS RESPUESTA
-    variaciones = variacionesResp.map((item) => ProductoVariaciones.fromJson(item)).toList();
-    
-   
-    variaciones.forEach((variacion) { 
-      variacion.attributes?.forEach((element) { 
+    // MAPEAMOS RESPUESTA
+    variaciones = variacionesResp
+        .map((item) => ProductoVariaciones.fromJson(item))
+        .toList();
+
+    variaciones.forEach((variacion) {
+      variacion.attributes?.forEach((element) {
         atributos.add(element);
       });
     });
 
-    // atributos.forEach((element) { 
+    // atributos.forEach((element) {
     //   print('atributo: ${element.toJson()}');
     // });
 
@@ -77,21 +107,38 @@ class TiendaProductoController extends GetxController {
     // });
     //  final ids = Set();
     //  atributos.retainWhere((x) => ids.add(x.id));
-     //print('ids: $ids');
+    //print('ids: $ids');
 
-     opciones = groupBy(atributos, (Attribute e) {
-        return e.id;
-      });
-    
-    
-    
-    
-    
-  //   //producto.refresh();
-  //   isLoading.value = false;
-  //   update();
-  //   //print('controller: ${producto.value}');
-   }
+    opciones = groupBy(atributos, (Attribute e) {
+      return e.id;
+    });
+
+    print('opciones:  $opciones');
+
+    // opciones.forEach((key, value) {
+    //   print('key: ${key}: value: ${value[1].toJson()}');
+    // });
+
+    // opciones.map((val) {
+    //   String idx = opciones.indexOf(val);
+    //   return something;
+    // }
+
+    // var newMap = groupBy(atributos, (Map obj) => obj['release_date'])
+    //     .map((k, v) => MapEntry(
+    //         k,
+    //         v.map((item) {
+    //           item.remove('release_date');
+    //           return item;
+    //         }).toList()));
+    // List<String> items = List.generate(
+    //     opciones.length, (index) => '${opciones[0][index].name}');
+
+    //   //producto.refresh();
+    //   isLoading.value = false;
+    //   update();
+    //   //print('controller: ${producto.value}');
+  }
 
   void addToBag(p.Producto product, var price, var counter) {
     if (counter.value > 0) {

@@ -28,7 +28,6 @@ class TiendaProductoPage extends StatelessWidget {
                   _imageSlideshow(context, value.producto),
                   _textNameProduct(value.producto),
                   _productoVariacion(value.producto),
-                  
                   _textPriceProduct(value.producto),
                   _textDescriptionProduct(value.producto),
                 ],
@@ -49,51 +48,48 @@ class TiendaProductoPage extends StatelessWidget {
     );
   }
 
-   Widget _productoVariacion(Producto product) {
-
-    
-    Future.delayed(const Duration(seconds: 3), () {
-
-      // Here you can write your code
-
-      List<String> items = List.generate(con.opciones.length, (index) => '${con.opciones[0]![index].name}');
-      print('listado items: $items');
-
-    });
-
-    
-    if(product.type == "variable"){
-      return Column(
-        children: [
-          // DropdownButton<String>(
-          //       hint: Text('Elegir Sabor'),
-          //       items:  ['Fresa', 'Chocolate', 'Vainilla'].map((String value) {
-          //       return DropdownMenuItem<String>(
-          //         value: value,
-          //         child: Text(value),
-          //       );
-          //     }).toList(),
-          //     onChanged: (_) {
-          //       print(_);
-          //     },
-          //   ),
-            // DropdownButton<String>(
-            //     hint: Text('Elegir Tamaño'),
-            //     //items:  ['1kg', '2kg'].map((String value) {
-            //     items:  List.generate(con., (index) => null) {
-            //     return DropdownMenuItem<String>(
-            //       value: value,
-            //       child: Text(value),
-            //     );
-            //   }).toList(),
-            //   onChanged: (_) {
-            //     print(_);
-            //   },
-            // ),
-        ],
-      );
-    }else {
-      return Text('${product.type}');
+  Widget _productoVariacion(Producto product) {
+    List<String> items = [];
+    String option = '';
+    if (product.type == "variable") {
+      return FutureBuilder(
+          future: con.obtenerVariaciones(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container();
+            } else {
+              return Column(
+                  children: List.generate(
+                      con.selectVariaciones.length,
+                      (index) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: Row(
+                              children: [
+                                Text(
+                                  '${con.selectVariaciones[index].name} : ',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                DropdownButton<String>(
+                                  hint: const Text('Seleccionar opción'),
+                                  items: con.selectVariaciones[index].options
+                                      .map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (_) {
+                                    print(_);
+                                  },
+                                ),
+                              ],
+                            ),
+                          )));
+            }
+          });
+    } else {
+      return Container();
     }
   }
 
