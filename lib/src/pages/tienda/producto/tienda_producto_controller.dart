@@ -13,14 +13,13 @@ class SelectVariaciones {
   String name;
   bool variation;
   List<String> options;
-  List? disponibles;
+  List<Map<String, List<String>>>? disponibles;
   SelectVariaciones(
       {required this.id,
       required this.name,
       required this.variation,
       required this.options,
-      this.disponibles
-      });
+      this.disponibles});
 }
 
 class TiendaProductoController extends GetxController {
@@ -32,11 +31,51 @@ class TiendaProductoController extends GetxController {
   List<Attribute> atributos = [];
   Map<int?, List<Attribute>> opciones = {};
 
-  List<SelectVariaciones> selectVariaciones = [];
+  // VAMOS A INTENTAR CONSTRUIR EL RESULTADO FANIL PARA PONERLO A PRUEBA
+  // It is mandatory initialize with one value from listType
+
+  Map<int, String> selectValue = {
+    0: "Selecciona una opción",
+    1: "Selecciona una opción"
+  };
+  List<SelectVariaciones> selectVariaciones = [
+    SelectVariaciones(id: 1, name: "Sabor", variation: true, options: [
+      "Fresa",
+      "Chocolate",
+      "Vainilla",
+    ], disponibles: [
+      {
+        'Fresa': ["1 kg"]
+      },
+      {
+        'Chocolate': ["1 Kg", "2 Kg"]
+      },
+      {
+        'Vainilla': ["2 Kg"]
+      },
+    ]),
+    SelectVariaciones(
+        id: 2, // id del atributo
+        name: "Tamaño",
+        variation: true,
+        options: [
+          "1 Kg",
+          "2 Kg",
+        ],
+        disponibles: [
+          {
+            '1 Kg': ["Fresa", "Chocolate"]
+          },
+          {
+            '2 Kg': ["Vainilla", "Chocolate"]
+          },
+        ]),
+  ];
 
   TiendaProductoController() {
+    //print('Mandanga: $selectVariaciones');
     producto = Get.arguments['producto'];
-    print('Producto: ${producto.toJson()}');
+    //print('Producto: ${producto.toJson()}');
     if (producto.type == "variable") {
       obtenerVariaciones();
     }
@@ -66,6 +105,12 @@ class TiendaProductoController extends GetxController {
     //  });
   }
 
+  void cambiarVariaciones(String value, int index) {
+    print('controllador value: $value');
+    selectValue[index] = value;
+    update();
+  }
+
   Future obtenerVariaciones() async {
     int id = producto.id!;
     WooCommerceAPI wooCommerceAPI = WooCommerceAPI(
@@ -78,47 +123,42 @@ class TiendaProductoController extends GetxController {
 
     // MAPEAMOS RESPUESTA DE LAS VARIACIONES
     variaciones = variacionesResp
-      .map((item) => ProductoVariaciones.fromJson(item))
-      .toList();
-      
+        .map((item) => ProductoVariaciones.fromJson(item))
+        .toList();
 
     // RESPUESTA API VARIACIONES:
     //HAY QUE OBTENER LOS VALORES DISPONIBLES EN LOS TAMAÑOS Y EN LOS SABORES
-    
-      // DE AQUI DEBERIA SALIR UN ARRAY ASOCIATIVO 
-      // [
-      //    "1KG": ["FRESA", "CHOCOLATE"]
-      //    "2KG": ["FRESA"]
-      //    "CHOCOLATE": ["1KG, 2KG"]
-      //    "FRESA": ["2KG"]
-      
-      //MAPEMOS DEL PRODUCTO INICIAL
-      for (var atributo in producto.attributes!) {
-        //El atributo se utiliza para generar variaciones
-        if (atributo.variation == true) {
-          
-          List disponibles = [];
-          //API
-          variaciones.forEach((variacion) {
-            variacion.attributes?.forEach((variacion) {
-              if(variacion.id == atributo.id){
-                //print('variacion: ${variacion.name} - ')
-              }
-            });
-          }); 
 
-          //MAPEAMOS EL SELECTVARIACIONES
-          selectVariaciones.add(SelectVariaciones(
-              id: atributo.id!,
-              name: atributo.name!,
-              variation: atributo.variation!,
-              options: atributo.options!
-              ));
-        }
+    // DE AQUI DEBERIA SALIR UN ARRAY ASOCIATIVO
+    // [
+    //    "1KG": ["FRESA", "CHOCOLATE"]
+    //    "2KG": ["FRESA"]
+    //    "CHOCOLATE": ["1KG, 2KG"]
+    //    "FRESA": ["2KG"]
+
+    //MAPEMOS DEL PRODUCTO INICIAL
+    for (var atributo in producto.attributes!) {
+      //El atributo se utiliza para generar variaciones
+      if (atributo.variation == true) {
+        List disponibles = [];
+        //API
+        variaciones.forEach((variacion) {
+          variacion.attributes?.forEach((variacion) {
+            if (variacion.id == atributo.id) {
+              //print('variacion: ${variacion.name} - ')
+            }
+          });
+        });
+
+        //MAPEAMOS EL SELECTVARIACIONES
+        // selectVariaciones.add(SelectVariaciones(
+        //     id: atributo.id!,
+        //     name: atributo.name!,
+        //     variation: atributo.variation!,
+        //     options: atributo.options!));
       }
-      //print('Select variaciones: $selectVariaciones');
-
-    
+    }
+    //print('Select variaciones: $selectVariaciones');
 
     // atributos.forEach((element) {
     //   print('atributo: ${element.toJson()}');

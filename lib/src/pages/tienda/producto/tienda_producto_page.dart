@@ -4,6 +4,7 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class TiendaProductoPage extends StatelessWidget {
   TiendaProductoController con = Get.put(TiendaProductoController());
@@ -49,45 +50,77 @@ class TiendaProductoPage extends StatelessWidget {
   }
 
   Widget _productoVariacion(Producto product) {
-    List<String> items = [];
-    String option = '';
+    //print('length: ${con.selectVariaciones.length}');
+    // List<String> items = [];
+    // String option = '';
     if (product.type == "variable") {
-      return FutureBuilder(
-          future: con.obtenerVariaciones(),
-          builder: (context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Container();
-            } else {
-              return Column(
-                  children: List.generate(
-                      con.selectVariaciones.length,
-                      (index) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30),
-                            child: Row(
-                              children: [
-                                Text(
-                                  '${con.selectVariaciones[index].name} : ',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                DropdownButton<String>(
-                                  hint: const Text('Seleccionar opción'),
-                                  items: con.selectVariaciones[index].options
-                                      .map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  onChanged: (_) {
-                                    print(_);
-                                  },
-                                ),
-                              ],
+      return GetBuilder<TiendaProductoController>(
+          init: TiendaProductoController(), // intialize with the Controller
+          builder: (value) => Column(
+              children: List.generate(
+                  con.selectVariaciones.length,
+                  (index) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Row(
+                          children: [
+                            Text(
+                              '${con.selectVariaciones[index].name} : ',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
-                          )));
-            }
-          });
+                            DropdownButton<String>(
+                              hint: Text('${con.selectValue[index]}'),
+                              elevation: 3,
+                              //isExpanded: true,
+                              items: con.selectVariaciones[index].options
+                                  .map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                con.cambiarVariaciones(value ?? '', index);
+                                print('value en pagina: $value');
+                              },
+                            ),
+                            // DropdownButton<String>(
+                            //   hint: Text("Seleccionar opción"),
+                            //   value: con.selectValue.value,
+                            //   isDense: true,
+                            //   onChanged: (newValue) {
+                            //     // setState(() {
+                            //     //   currentSelectedValue = newValue;
+                            //     // });
+                            //     con.cambiarVariaciones(newValue ?? '');
+                            //   },
+                            //   items: con.selectVariaciones[index].options
+                            //       .map((String value) {
+                            //     return DropdownMenuItem<String>(
+                            //       value: value,
+                            //       child: Text(value),
+                            //     );
+                            //   }).toList(),
+                            // ),
+                            // DropdownButton<String>(
+                            //   hint: Text('Selecciona una opción'),
+                            //   elevation: 3,
+                            //   //isExpanded: true,
+                            //   items: con.selectVariaciones[index].options
+                            //       .map((String value) {
+                            //     return DropdownMenuItem<String>(
+                            //       value: value,
+                            //       child: Text(con.selectValue.value ? null : ),
+                            //     );
+                            //   }).toList(),
+                            //   onChanged: (value) {
+                            //     //con.cambiarVariaciones(value ?? '');
+                            //     print('value en pagina: $value');
+                            //   },
+                            // ),
+                          ],
+                        ),
+                      ))));
     } else {
       return Container();
     }
