@@ -39,19 +39,24 @@ class TiendaProductoController extends GetxController {
     1: "Selecciona una opción"
   };
   List<SelectVariaciones> selectVariaciones = [
-    SelectVariaciones(id: 1, name: "Sabor", variation: true, options: [
+    SelectVariaciones(
+      id: 1, 
+      name: "Sabor", 
+      variation: true, 
+      options: [
       "Fresa",
       "Chocolate",
       "Vainilla",
-    ], disponibles: [
+      ], 
+    disponibles: [
       {
-        'Fresa': ["1 kg"]
+        'Fresa': ["Selecciona una opción","1 kg"]
       },
       {
-        'Chocolate': ["1 Kg", "2 Kg"]
+        'Chocolate': ["Selecciona una opción", "1 Kg", "2 Kg"]
       },
       {
-        'Vainilla': ["2 Kg"]
+        'Vainilla': ["Selecciona una opción","2 Kg"]
       },
     ]),
     SelectVariaciones(
@@ -64,10 +69,10 @@ class TiendaProductoController extends GetxController {
         ],
         disponibles: [
           {
-            '1 Kg': ["Fresa", "Chocolate"]
+            '1 Kg': ["Selecciona una opción","Fresa", "Chocolate"]
           },
           {
-            '2 Kg': ["Vainilla", "Chocolate"]
+            '2 Kg': ["Selecciona una opción","Vainilla", "Chocolate"]
           },
         ]),
   ];
@@ -106,8 +111,24 @@ class TiendaProductoController extends GetxController {
   }
 
   void cambiarVariaciones(String value, int index) {
-    print('controllador value: $value');
     selectValue[index] = value;
+    int indiceDropAlternativo;
+    // cambiar el selectVariaciones del indix anterior o posterior
+    if(index == 0){
+      indiceDropAlternativo = 1;
+    }else {
+      indiceDropAlternativo = 0;
+    }
+
+    selectVariaciones[index].disponibles?.forEach((element) {
+
+        //print(element["$value"]);
+      if(element["$value"] != null){
+        print(element["$value"]);
+        selectVariaciones[indiceDropAlternativo].options = element["$value"]!;
+      }
+    });
+
     update();
   }
 

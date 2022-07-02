@@ -50,9 +50,6 @@ class TiendaProductoPage extends StatelessWidget {
   }
 
   Widget _productoVariacion(Producto product) {
-    //print('length: ${con.selectVariaciones.length}');
-    // List<String> items = [];
-    // String option = '';
     if (product.type == "variable") {
       return GetBuilder<TiendaProductoController>(
           init: TiendaProductoController(), // intialize with the Controller
@@ -71,7 +68,6 @@ class TiendaProductoPage extends StatelessWidget {
                             DropdownButton<String>(
                               hint: Text('${con.selectValue[index]}'),
                               elevation: 3,
-                              //isExpanded: true,
                               items: con.selectVariaciones[index].options
                                   .map((String value) {
                                 return DropdownMenuItem<String>(
@@ -81,7 +77,7 @@ class TiendaProductoPage extends StatelessWidget {
                               }).toList(),
                               onChanged: (value) {
                                 con.cambiarVariaciones(value ?? '', index);
-                                print('value en pagina: $value');
+                                //print('index: ${index}');
                               },
                             ),
                             // DropdownButton<String>(
