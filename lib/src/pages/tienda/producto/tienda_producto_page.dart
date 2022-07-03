@@ -29,7 +29,7 @@ class TiendaProductoPage extends StatelessWidget {
                   _imageSlideshow(context, value.producto),
                   _textNameProduct(value.producto),
                   _productoVariacion(value.producto),
-                  _textPriceProduct(value.producto),
+                  //_textPriceProduct(value.producto),
                   _textDescriptionProduct(value.producto),
                 ],
               ),
@@ -53,72 +53,37 @@ class TiendaProductoPage extends StatelessWidget {
     if (product.type == "variable") {
       return GetBuilder<TiendaProductoController>(
           init: TiendaProductoController(), // intialize with the Controller
-          builder: (value) => Column(
-              children: List.generate(
-                  con.selectVariaciones.length,
-                  (index) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Row(
-                          children: [
-                            Text(
-                              '${con.selectVariaciones[index].name} : ',
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            DropdownButton<String>(
-                              hint: Text('${con.selectValue[index]}'),
-                              elevation: 3,
-                              items: con.selectVariaciones[index].options
-                                  .map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                con.cambiarVariaciones(value ?? '', index);
-                                //print('index: ${index}');
-                              },
-                            ),
-                            // DropdownButton<String>(
-                            //   hint: Text("Seleccionar opción"),
-                            //   value: con.selectValue.value,
-                            //   isDense: true,
-                            //   onChanged: (newValue) {
-                            //     // setState(() {
-                            //     //   currentSelectedValue = newValue;
-                            //     // });
-                            //     con.cambiarVariaciones(newValue ?? '');
-                            //   },
-                            //   items: con.selectVariaciones[index].options
-                            //       .map((String value) {
-                            //     return DropdownMenuItem<String>(
-                            //       value: value,
-                            //       child: Text(value),
-                            //     );
-                            //   }).toList(),
-                            // ),
-                            // DropdownButton<String>(
-                            //   hint: Text('Selecciona una opción'),
-                            //   elevation: 3,
-                            //   //isExpanded: true,
-                            //   items: con.selectVariaciones[index].options
-                            //       .map((String value) {
-                            //     return DropdownMenuItem<String>(
-                            //       value: value,
-                            //       child: Text(con.selectValue.value ? null : ),
-                            //     );
-                            //   }).toList(),
-                            //   onChanged: (value) {
-                            //     //con.cambiarVariaciones(value ?? '');
-                            //     print('value en pagina: $value');
-                            //   },
-                            // ),
-                          ],
-                        ),
-                      ))));
+          builder: (value) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Row(
+                  children: [
+                    // const Text(
+                    //   'Selecciona una opción : ',
+                    //   style: TextStyle(fontWeight: FontWeight.bold),
+                    // ),
+                    Container(
+                      width: 250,
+                      child: DropdownButton<String>(
+                        hint: Text('${con.selectValue}'),
+                        isExpanded: true,
+                        elevation: 3,
+                        items: con.selectVariaciones.map((value) {
+                          return DropdownMenuItem<String>(
+                            value: value.name,
+                            child: Text(value.name),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          con.cambiarVariaciones(value ?? '');
+                          //print('mandanga');
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ));
     } else {
-      return Container();
+      return _textPriceProduct(product);
     }
   }
 

@@ -10,77 +10,43 @@ import 'package:woocommerce_api/woocommerce_api.dart';
 //CLASE DONDE GUARDAREMOS LAS VARIACIONES DEL PRODUCTO VARIABLE
 class SelectVariaciones {
   int id;
+  String? sku;
+  String price;
+  String? regularPrice;
+  String? salePrice;
+  bool onSale;
+  bool? manageStock;
+  int? stockQuantity;
   String name;
-  bool variation;
-  List<String> options;
-  List<Map<String, List<String>>>? disponibles;
+
   SelectVariaciones(
       {required this.id,
-      required this.name,
-      required this.variation,
-      required this.options,
-      this.disponibles});
+      this.sku,
+      required this.price,
+      this.regularPrice,
+      this.salePrice,
+      required this.onSale,
+      this.manageStock,
+      this.stockQuantity,
+      required this.name});
 }
 
 class TiendaProductoController extends GetxController {
-  //RxList<Models> myList = <Models>[].obs;
   List<p.Producto> selectedProducts = [];
   List<ProductoVariaciones> variaciones = <ProductoVariaciones>[].obs;
   var producto = p.Producto();
   var isLoading = true.obs;
   List<Attribute> atributos = [];
   Map<int?, List<Attribute>> opciones = {};
+  List<SelectVariaciones> disponibles = [];
+  List<String> opcionesDisponible = [];
+  String selectValue = "Selecciona una opción";
 
-  // VAMOS A INTENTAR CONSTRUIR EL RESULTADO FANIL PARA PONERLO A PRUEBA
-  // It is mandatory initialize with one value from listType
-
-  Map<int, String> selectValue = {
-    0: "Selecciona una opción",
-    1: "Selecciona una opción"
-  };
-  List<SelectVariaciones> selectVariaciones = [
-    SelectVariaciones(
-      id: 1, 
-      name: "Sabor", 
-      variation: true, 
-      options: [
-      "Fresa",
-      "Chocolate",
-      "Vainilla",
-      ], 
-    disponibles: [
-      {
-        'Fresa': ["Selecciona una opción","1 kg"]
-      },
-      {
-        'Chocolate': ["Selecciona una opción", "1 Kg", "2 Kg"]
-      },
-      {
-        'Vainilla': ["Selecciona una opción","2 Kg"]
-      },
-    ]),
-    SelectVariaciones(
-        id: 2, // id del atributo
-        name: "Tamaño",
-        variation: true,
-        options: [
-          "1 Kg",
-          "2 Kg",
-        ],
-        disponibles: [
-          {
-            '1 Kg': ["Selecciona una opción","Fresa", "Chocolate"]
-          },
-          {
-            '2 Kg': ["Selecciona una opción","Vainilla", "Chocolate"]
-          },
-        ]),
-  ];
+  List<SelectVariaciones> selectVariaciones = [];
 
   TiendaProductoController() {
-    //print('Mandanga: $selectVariaciones');
     producto = Get.arguments['producto'];
-    //print('Producto: ${producto.toJson()}');
+    //print('producto id: ${producto.id}');
     if (producto.type == "variable") {
       obtenerVariaciones();
     }
@@ -97,39 +63,51 @@ class TiendaProductoController extends GetxController {
         selectedProducts.addAll(result);
       }
     }
-
-    // var logger = Logger(
-    //    filter: null,
-    //    printer: PrettyPrinter(),
-    //    output: null,
-    //  );
-    //  print(
-    //      'cuando cargamos la pagina de producto Gestorage es: $selectedProducts');
-    //  selectedProducts.forEach((element) {
-    //    logger.d(element.toJson());
-    //  });
   }
 
-  void cambiarVariaciones(String value, int index) {
-    selectValue[index] = value;
-    int indiceDropAlternativo;
-    // cambiar el selectVariaciones del indix anterior o posterior
-    if(index == 0){
-      indiceDropAlternativo = 1;
-    }else {
-      indiceDropAlternativo = 0;
-    }
-
-    selectVariaciones[index].disponibles?.forEach((element) {
-
-        //print(element["$value"]);
-      if(element["$value"] != null){
-        print(element["$value"]);
-        selectVariaciones[indiceDropAlternativo].options = element["$value"]!;
-      }
-    });
-
+  void cambiarVariaciones(String value) {
+    //print('Cuantos dropdown hay: ${selectVariaciones.length}');
+    selectValue = value;
     update();
+    // int indiceDropAlternativo;
+    // cambiar el selectVariaciones del indix anterior o posterior
+
+    // if (selectVariaciones.length == 1) {
+    //   // SOLO HAY UN DROPDOWN
+    //   selectVariaciones[index].options = disponibles1;
+    // } else if (selectVariaciones.length == 2) {
+    //   // HAY 2
+    //   List<String> resultado = [];
+    //   // BUSCAMOS EL INDICE DEL DROPDOWN SIGUIENTE
+    //   // Y BUSCAMOS DENTRO DE DISPONIBLES2 LAS OPCIONES QUE COINCIDEN
+    //   if (index == 0) {
+    //     // EL DROPDOWN SELECCIONADO ES EL PRIMERO(TAMAÑO) POR LO QUE HAY QUE BUSCAR SUS OPCIONES EN EL SEGUNDO(SABOR)
+    //     indiceDropAlternativo = 1;
+    //     disponibles2.forEach((element) {
+    //       if (element["$value"] != null) {
+    //         String? valor = element["$value"];
+    //         resultado.add(valor!);
+    //       }
+    //     });
+    //     selectVariaciones[indiceDropAlternativo].options = resultado;
+    //   } else {
+    //     indiceDropAlternativo = 0;
+    //     disponibles2.forEach((element) {
+    //       if(element[] == );
+    //     });
+    //   }
+
+    //print('disponibles 2: ${disponibles2}');
+    //print('value: ${value}');
+
+    // selectVariaciones[indiceDropAlternativo].options?.forEach((element) {
+    //   if (element["$value"] != null) {
+    //     selectVariaciones[indiceDropAlternativo].options = element["$value"]!;
+    //   }
+    // });
+    // }
+
+    // update();
   }
 
   Future obtenerVariaciones() async {
@@ -142,85 +120,58 @@ class TiendaProductoController extends GetxController {
     var variacionesResp =
         await wooCommerceAPI.getAsync("products/${id}/variations") as List;
 
-    // MAPEAMOS RESPUESTA DE LAS VARIACIONES
+    // API MAPEAMOS RESPUESTA DE LAS VARIACIONES
     variaciones = variacionesResp
         .map((item) => ProductoVariaciones.fromJson(item))
         .toList();
 
     // RESPUESTA API VARIACIONES:
     //HAY QUE OBTENER LOS VALORES DISPONIBLES EN LOS TAMAÑOS Y EN LOS SABORES
+    variaciones.forEach((variacion) {
+      // UTILIZAREMOS EL KEY VALUE PARA CREAR EL MAPA EN LOS DISPONIBLES 2
+      var key = '';
+      var value = '';
+      String linea = '';
+      variacion.attributes?.forEach((atributo) {
+        // PASA 1 o 2 VECES: 1 TAMAÑO: 2KG, OTRA SABOR: CHOCOLATE
+        // ATRIBUTOS [{id:1, name:"tamaño", option:"1 Kg"}, {id:2, name:"sabor", option:"chocolate"}]
+        if (variacion.attributes!.length == 1) {
+          // UNA OPCION
+          //disponibles.add('${atributo.option});
+          linea = '${atributo.option}';
+        } else {
+          // DE AQUI TENEMOS QUE SALIR CON UNA LINEA POR VARIACION, LA LINEA QUEDARIA ASI:
+          //{"1KG": "CHOCOLATE"}
+          if (key == '') {
+            key = '${atributo.option}';
+          } else {
+            value = '${atributo.option}';
+            linea = '$key : $value';
+            //opcionesDisponible.add(linea);
+          }
+        }
+      });
 
-    // DE AQUI DEBERIA SALIR UN ARRAY ASOCIATIVO
-    // [
-    //    "1KG": ["FRESA", "CHOCOLATE"]
-    //    "2KG": ["FRESA"]
-    //    "CHOCOLATE": ["1KG, 2KG"]
-    //    "FRESA": ["2KG"]
+      //opcionesDisponible.sort();
+      //opcionesDisponible.insert(0, "Selecciona una opción");
 
-    //MAPEMOS DEL PRODUCTO INICIAL
-    for (var atributo in producto.attributes!) {
-      //El atributo se utiliza para generar variaciones
-      if (atributo.variation == true) {
-        List disponibles = [];
-        //API
-        variaciones.forEach((variacion) {
-          variacion.attributes?.forEach((variacion) {
-            if (variacion.id == atributo.id) {
-              //print('variacion: ${variacion.name} - ')
-            }
-          });
-        });
+      //MAPEAMOS LA RESPUESTA CORRECTA
+      selectVariaciones.add(SelectVariaciones(
+        id: variacion.id!,
+        sku: variacion.sku,
+        price: variacion.price ?? '',
+        regularPrice: variacion.regularPrice,
+        salePrice: variacion.salePrice,
+        onSale: variacion.onSale ?? false,
+        manageStock: variacion.manageStock,
+        stockQuantity: variacion.stockQuantity,
+        name: linea,
+      ));
+    });
 
-        //MAPEAMOS EL SELECTVARIACIONES
-        // selectVariaciones.add(SelectVariaciones(
-        //     id: atributo.id!,
-        //     name: atributo.name!,
-        //     variation: atributo.variation!,
-        //     options: atributo.options!));
-      }
-    }
-    //print('Select variaciones: $selectVariaciones');
-
-    // atributos.forEach((element) {
-    //   print('atributo: ${element.toJson()}');
-    // });
-
-    // variaciones.forEach((element) {
-    //   print(element.toJson());
-    // });
-    //  final ids = Set();
-    //  atributos.retainWhere((x) => ids.add(x.id));
-    //print('ids: $ids');
-
-    // opciones = groupBy(atributos, (Attribute e) {
-    //   return e.id;
-    // });
-
-    // print('opciones:  $opciones');
-
-    // opciones.forEach((key, value) {
-    //   print('key: ${key}: value: ${value[1].toJson()}');
-    // });
-
-    // opciones.map((val) {
-    //   String idx = opciones.indexOf(val);
-    //   return something;
-    // }
-
-    // var newMap = groupBy(atributos, (Map obj) => obj['release_date'])
-    //     .map((k, v) => MapEntry(
-    //         k,
-    //         v.map((item) {
-    //           item.remove('release_date');
-    //           return item;
-    //         }).toList()));
-    // List<String> items = List.generate(
-    //     opciones.length, (index) => '${opciones[0][index].name}');
-
-    //   //producto.refresh();
-    //   isLoading.value = false;
-    //   update();
-    //   //print('controller: ${producto.value}');
+    // ORDENAR
+    selectVariaciones.sort((a, b) => a.name.compareTo(b.name));
+    update();
   }
 
   void addToBag(p.Producto product, var price, var counter) {

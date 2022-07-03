@@ -23,3 +23,14 @@ MAPAS
 Map<Llave,valor> mapa = {};
 se accede mapa['llave']
 
+// LOGGER
+// var logger = Logger(
+//    filter: null,
+//    printer: PrettyPrinter(),
+//    output: null,
+//  );
+//  print(
+//      'cuando cargamos la pagina de producto Gestorage es: $selectedProducts');
+//  selectedProducts.forEach((element) {
+//    logger.d(element.toJson());
+//  });

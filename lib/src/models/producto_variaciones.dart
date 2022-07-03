@@ -43,7 +43,7 @@ class ProductoVariaciones {
         regularPrice: json["regular_price"],
         salePrice: json["sale_price"],
         onSale: json["on_sale"],
-        manageStock: json["manage_stock"],
+        //manageStock: json["manage_stock"],
         stockQuantity: json["stock_quantity"],
         stockStatus: json["stock_status"],
         attributes: List<Attribute>.from(
