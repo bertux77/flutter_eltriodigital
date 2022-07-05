@@ -38,7 +38,7 @@ class ProductoCarrito {
     int? stockQuantity;
     int? parentId;
     int? quantity;
-    List<Image>? image;
+    String? image;
     Variacion? variacion;
 
     factory ProductoCarrito.fromJson(Map<String, dynamic> json) => ProductoCarrito(
@@ -54,9 +54,19 @@ class ProductoCarrito {
         stockQuantity: json["stockQuantity"],
         parentId: json["parentId"],
         quantity: json["quantity"],
-        image: List<Image>.from(json["image"].map((x) => Image.fromJson(x))),
+        image: json["image"],
         variacion: Variacion.fromJson(json["variacion"]),
     );
+
+    static List<ProductoCarrito> fromJsonList(List<dynamic> jsonList) {
+      List<ProductoCarrito> toList = [];
+      jsonList.forEach((item) {
+        ProductoCarrito product = ProductoCarrito.fromJson(item);
+        toList.add(product);
+      });
+
+      return toList;
+    }
 
     Map<String, dynamic> toJson() => {
         "id": id,
@@ -71,7 +81,7 @@ class ProductoCarrito {
         "stockQuantity": stockQuantity,
         "parentId": parentId,
         "quantity": quantity,
-        "image": List<dynamic>.from(image!.map((x) => x.toJson())),
+        "image": image,
         "variacion": variacion?.toJson(),
     };
 }

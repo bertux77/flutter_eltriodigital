@@ -1,4 +1,5 @@
 import 'package:eltriodigital_flutter/src/models/producto.dart';
+import 'package:eltriodigital_flutter/src/models/producto_carrito.dart';
 import 'package:eltriodigital_flutter/src/pages/tienda/carrito/tienda_carrito_controller.dart';
 import 'package:eltriodigital_flutter/src/widgets/appbar/my_appbar.dart';
 import 'package:eltriodigital_flutter/src/widgets/varios/no_data_widget.dart';
@@ -19,7 +20,7 @@ class TiendaCarritoPage extends StatelessWidget {
         appBar: MyAppBar(title: 'Carrito'),
         body: con.selectedProducts.isNotEmpty
             ? ListView(
-                children: con.selectedProducts.map((Producto product) {
+                children: con.selectedProducts.map((ProductoCarrito product) {
                   if (product.quantity == null) {
                     product.quantity == 1;
                   }
@@ -79,7 +80,7 @@ class TiendaCarritoPage extends StatelessWidget {
     );
   }
 
-  Widget _cardProduct(BuildContext context, Producto product) {
+  Widget _cardProduct(BuildContext context, ProductoCarrito product) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Row(
@@ -116,7 +117,7 @@ class TiendaCarritoPage extends StatelessWidget {
     );
   }
 
-  Widget _unidadesXPrecio(Producto product) {
+  Widget _unidadesXPrecio(ProductoCarrito product) {
     return Container(
         child: Text(
       '${product.quantity} x ${product.price}',
@@ -125,7 +126,7 @@ class TiendaCarritoPage extends StatelessWidget {
     ));
   }
 
-  Widget _iconDelete(Producto product) {
+  Widget _iconDelete(ProductoCarrito product) {
     return IconButton(
       onPressed: () => con.deleteItem(product),
       icon: const Icon(
@@ -135,7 +136,7 @@ class TiendaCarritoPage extends StatelessWidget {
     );
   }
 
-  Widget _textPrice(Producto product) {
+  Widget _textPrice(ProductoCarrito product) {
     return Container(
       margin: const EdgeInsets.only(top: 4),
       child: Text(
@@ -146,7 +147,7 @@ class TiendaCarritoPage extends StatelessWidget {
     );
   }
 
-  Widget _buttonsAddOrRemove(Producto product) {
+  Widget _buttonsAddOrRemove(ProductoCarrito product) {
     return Row(
       children: [
         GestureDetector(
@@ -193,15 +194,15 @@ class TiendaCarritoPage extends StatelessWidget {
     );
   }
 
-  Widget _imageProduct(Producto product) {
+  Widget _imageProduct(ProductoCarrito product) {
     return Container(
       height: 70,
       width: 70,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: FadeInImage(
-          image: product.images![0].src != null
-              ? NetworkImage(product.images![0].src!)
+          image: product.image != null
+              ? NetworkImage(product.image!)
               : AssetImage('assets/img/no-image.png') as ImageProvider,
           fit: BoxFit.cover,
           fadeInDuration: Duration(milliseconds: 50),

@@ -1,5 +1,7 @@
 import 'package:eltriodigital_flutter/src/models/producto.dart' as p;
+import 'package:eltriodigital_flutter/src/models/producto_carrito.dart';
 import 'package:eltriodigital_flutter/src/models/producto_variaciones.dart';
+import 'package:eltriodigital_flutter/src/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:woocommerce_api/woocommerce_api.dart';
@@ -29,7 +31,7 @@ class SelectVariaciones {
 }
 
 class TiendaProductoController extends GetxController {
-  List<p.Producto> selectedProducts = []; // GESTORAGE CARRITO
+  List<ProductoCarrito> selectedProducts = []; // GESTORAGE CARRITO
   List<ProductoVariaciones> variaciones = <ProductoVariaciones>[].obs;
   var producto = p.Producto();
   var isLoading = true.obs;
@@ -50,13 +52,13 @@ class TiendaProductoController extends GetxController {
     }
     update();
     if (GetStorage().read('shopping_bag') != null) {
-      if (GetStorage().read('shopping_bag') is List<p.Producto>) {
+      if (GetStorage().read('shopping_bag') is List<ProductoCarrito>) {
         // SIEMPRE ENTRA AQUI
         var result = GetStorage().read('shopping_bag');
         selectedProducts.clear();
         selectedProducts.addAll(result);
       } else {
-        var result = p.Producto.fromJsonList(GetStorage().read('shopping_bag'));
+        var result = ProductoCarrito.fromJsonList(GetStorage().read('shopping_bag'));
         selectedProducts.clear();
         selectedProducts.addAll(result);
       }
@@ -64,49 +66,10 @@ class TiendaProductoController extends GetxController {
   }
 
   void cambiarVariaciones(SelectVariaciones value) {
-    selectValue = value.name;
-    seleccionado = value;
-    price.value = double.parse(value.price) * counter.value;
+    selectValue = value.name; // nombre seleccionado, Limon
+    seleccionado = value; // cargamos el modelo entero en el seleccionado
+    price.value = double.parse(value.price) * counter.value; // modificamos su precio
     update();
-    // int indiceDropAlternativo;
-    // cambiar el selectVariaciones del indix anterior o posterior
-
-    // if (selectVariaciones.length == 1) {
-    //   // SOLO HAY UN DROPDOWN
-    //   selectVariaciones[index].options = disponibles1;
-    // } else if (selectVariaciones.length == 2) {
-    //   // HAY 2
-    //   List<String> resultado = [];
-    //   // BUSCAMOS EL INDICE DEL DROPDOWN SIGUIENTE
-    //   // Y BUSCAMOS DENTRO DE DISPONIBLES2 LAS OPCIONES QUE COINCIDEN
-    //   if (index == 0) {
-    //     // EL DROPDOWN SELECCIONADO ES EL PRIMERO(TAMAÑO) POR LO QUE HAY QUE BUSCAR SUS OPCIONES EN EL SEGUNDO(SABOR)
-    //     indiceDropAlternativo = 1;
-    //     disponibles2.forEach((element) {
-    //       if (element["$value"] != null) {
-    //         String? valor = element["$value"];
-    //         resultado.add(valor!);
-    //       }
-    //     });
-    //     selectVariaciones[indiceDropAlternativo].options = resultado;
-    //   } else {
-    //     indiceDropAlternativo = 0;
-    //     disponibles2.forEach((element) {
-    //       if(element[] == );
-    //     });
-    //   }
-
-    //print('disponibles 2: ${disponibles2}');
-    //print('value: ${value}');
-
-    // selectVariaciones[indiceDropAlternativo].options?.forEach((element) {
-    //   if (element["$value"] != null) {
-    //     selectVariaciones[indiceDropAlternativo].options = element["$value"]!;
-    //   }
-    // });
-    // }
-
-    // update();
   }
 
   Future obtenerVariaciones() async {
@@ -173,7 +136,10 @@ class TiendaProductoController extends GetxController {
     update();
   }
 
-  void addToBag(p.Producto product, SelectVariaciones? variacion) {
+  void addToBag(p.Producto product, SelectVariaciones? variacionEnviada) {
+    // if(product.type == "variable" && variacionEnviada == null){
+    //   Utils.snackBarError('Carrito', 'Debes seleccionar una opci');
+    // }
     if (counter.value > 0) {
       //validar si el producto ya estaba en el carrito
       int index = selectedProducts.indexWhere((p) => p.id == product.id);
@@ -185,13 +151,45 @@ class TiendaProductoController extends GetxController {
           product.quantity = 1;
         }
 
-        selectedProducts.add(product);
+        //MAPEAMOS EL PRODUCTO Y SU VARIACION EN PRODUCTOCARRITO PARA AGREGAR AL LISTADO DEL STORAGE
+        Variacion variacion = Variacion();
+        if(variacionEnviada != null){
+          variacion = Variacion(
+            id: variacionEnviada.id,
+            sku: variacionEnviada.sku, 
+            price: variacionEnviada.price,
+            regularPrice: variacionEnviada.regularPrice,
+            salePrice: variacionEnviada.salePrice,
+            name: variacionEnviada.name,
+            quantity: counter.value,
+            onSale: variacionEnviada.onSale
+          );
+        } 
+        
+
+        ProductoCarrito productoCarrito = ProductoCarrito(
+          id: product.id,
+          name: product.name,
+          type: product.type,
+          status: product.status,
+          sku: product.sku,
+          price: product.price,
+          regularPrice: product.regularPrice,
+          salePrice: product.salePrice,
+          onSale: product.onSale,
+          stockQuantity: product.stockQuantity,
+          parentId: product.parentId,
+          quantity: product.quantity,
+          image: product.images![0].src,
+          variacion: variacion,
+        );
+        selectedProducts.add(productoCarrito);
       } else {
         //EL PRODUCTO YA ESTA EN ESTORAGE
         selectedProducts[index].quantity = counter.value;
       }
       GetStorage().write('shopping_bag', selectedProducts);
-      goToCarritoPage();
+      //goToCarritoPage();
       //Utils.snackBarOk('Carrito', 'Producto agregado al carrito');
     }
   }
