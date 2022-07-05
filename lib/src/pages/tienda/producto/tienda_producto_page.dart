@@ -21,15 +21,18 @@ class TiendaProductoPage extends StatelessWidget {
     return GetBuilder<TiendaProductoController>(
         init: TiendaProductoController(),
         builder: (value) => Scaffold(
-            bottomNavigationBar:
-                Container(height: 100, child: _buttonsAddToBag(value.producto)),
+            bottomNavigationBar: Container(
+              height: 100,
+              child: value.producto.type == "variable"
+                  ? _buttonsAddToBagVariable(value.seleccionado)
+                  : _buttonsAddToBag(value.producto),
+            ),
             body: SingleChildScrollView(
               child: Column(
                 children: [
                   _imageSlideshow(context, value.producto),
                   _textNameProduct(value.producto),
                   _productoVariacion(value.producto),
-                  //_textPriceProduct(value.producto),
                   _textDescriptionProduct(value.producto),
                 ],
               ),
@@ -53,37 +56,85 @@ class TiendaProductoPage extends StatelessWidget {
     if (product.type == "variable") {
       return GetBuilder<TiendaProductoController>(
           init: TiendaProductoController(), // intialize with the Controller
-          builder: (value) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Row(
-                  children: [
-                    // const Text(
-                    //   'Selecciona una opción : ',
-                    //   style: TextStyle(fontWeight: FontWeight.bold),
-                    // ),
-                    Container(
-                      width: 250,
-                      child: DropdownButton<String>(
-                        hint: Text('${con.selectValue}'),
-                        isExpanded: true,
-                        elevation: 3,
-                        items: con.selectVariaciones.map((value) {
-                          return DropdownMenuItem<String>(
-                            value: value.name,
-                            child: Text(value.name),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          con.cambiarVariaciones(value ?? '');
-                          //print('mandanga');
-                        },
-                      ),
+          builder: (value) => Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 250,
+                          child: DropdownButton<SelectVariaciones>(
+                            hint: Text('${con.selectValue}'),
+                            isExpanded: true,
+                            elevation: 3,
+                            items: con.selectVariaciones.map((value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(value.name),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              con.cambiarVariaciones(value!);
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  con.seleccionado != null
+                      ? _textPriceProductVariaciones(con.seleccionado!)
+                      : Container()
+                ],
               ));
     } else {
       return _textPriceProduct(product);
+    }
+  }
+
+  Widget _textPriceProductVariaciones(SelectVariaciones variacion) {
+    if (variacion.onSale == true) {
+      return Container(
+        alignment: Alignment.centerLeft,
+        margin: const EdgeInsets.only(top: 5, left: 30, right: 30),
+        child: Row(
+          children: [
+            Text(
+              '${variacion.regularPrice} €',
+              style: const TextStyle(
+                color: Colors.red,
+                decoration: TextDecoration.lineThrough,
+                decorationColor: Color(0xff000000),
+                fontSize: 14.0,
+              ),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            const Text(
+              'en oferta',
+              style: TextStyle(color: Colors.red),
+            ),
+            Text(
+              ' ${variacion.price.toString()} €',
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.black),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        alignment: Alignment.centerLeft,
+        margin: const EdgeInsets.only(top: 15, left: 30, right: 30),
+        child: Text(
+          '${variacion.price.toString()} €',
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
+        ),
+      );
     }
   }
 
@@ -143,6 +194,85 @@ class TiendaProductoPage extends StatelessWidget {
               fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
         ),
       );
+    }
+  }
+
+  Widget _buttonsAddToBagVariable(SelectVariaciones? variacion) {
+    if (variacion != null) {
+      price.value = double.parse(variacion.price);
+      return Obx(() => Column(
+            children: [
+              Divider(
+                height: 1,
+                color: Colors.grey[400],
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 10, right: 10, top: 30),
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      //onPressed: () => con.removeItem(product, price, counter),
+                      child: const Text(
+                        '-',
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                        minimumSize: Size(45, 37),
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(25),
+                                bottomLeft: Radius.circular(25))),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        '${counter.value}',
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 18),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          minimumSize: const Size(40, 37)),
+                    ),
+                    ElevatedButton(
+                      //onPressed: () => con.addItem(product, price, counter),
+                      onPressed: () {},
+                      child: const Text(
+                        '+',
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          minimumSize: const Size(45, 37),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(25),
+                                  bottomRight: Radius.circular(25)))),
+                    ),
+                    const Spacer(),
+                    ElevatedButton(
+                      //onPressed: () => con.addToBag(product, price, counter),
+                      onPressed: () {},
+                      child: Text(
+                        'AGREGAR ${price.value.toStringAsFixed(2)}€',
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 14),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.amber,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25))),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ));
+    } else {
+      return Text('selecciona una opción');
     }
   }
 

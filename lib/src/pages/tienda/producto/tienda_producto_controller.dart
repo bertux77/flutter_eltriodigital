@@ -1,8 +1,5 @@
-import 'package:collection/collection.dart';
-import 'package:eltriodigital_flutter/src/models/atributo.dart';
 import 'package:eltriodigital_flutter/src/models/producto.dart' as p;
 import 'package:eltriodigital_flutter/src/models/producto_variaciones.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:woocommerce_api/woocommerce_api.dart';
@@ -36,12 +33,12 @@ class TiendaProductoController extends GetxController {
   List<ProductoVariaciones> variaciones = <ProductoVariaciones>[].obs;
   var producto = p.Producto();
   var isLoading = true.obs;
-  List<Attribute> atributos = [];
-  Map<int?, List<Attribute>> opciones = {};
+  //List<Attribute> atributos = [];
+  //Map<int?, List<Attribute>> opciones = {};
   List<SelectVariaciones> disponibles = [];
   List<String> opcionesDisponible = [];
   String selectValue = "Selecciona una opción";
-
+  SelectVariaciones? seleccionado;
   List<SelectVariaciones> selectVariaciones = [];
 
   TiendaProductoController() {
@@ -65,9 +62,9 @@ class TiendaProductoController extends GetxController {
     }
   }
 
-  void cambiarVariaciones(String value) {
-    //print('Cuantos dropdown hay: ${selectVariaciones.length}');
-    selectValue = value;
+  void cambiarVariaciones(SelectVariaciones value) {
+    selectValue = value.name;
+    seleccionado = value;
     update();
     // int indiceDropAlternativo;
     // cambiar el selectVariaciones del indix anterior o posterior
