@@ -29,12 +29,12 @@ class SelectVariaciones {
 }
 
 class TiendaProductoController extends GetxController {
-  List<p.Producto> selectedProducts = [];
+  List<p.Producto> selectedProducts = []; // GESTORAGE CARRITO
   List<ProductoVariaciones> variaciones = <ProductoVariaciones>[].obs;
   var producto = p.Producto();
   var isLoading = true.obs;
-  //List<Attribute> atributos = [];
-  //Map<int?, List<Attribute>> opciones = {};
+  var price = 0.0.obs;
+  var counter = 1.obs;
   List<SelectVariaciones> disponibles = [];
   List<String> opcionesDisponible = [];
   String selectValue = "Selecciona una opción";
@@ -43,6 +43,7 @@ class TiendaProductoController extends GetxController {
 
   TiendaProductoController() {
     producto = Get.arguments['producto'];
+    price.value = double.parse(producto.price ?? '');
     //print('producto id: ${producto.id}');
     if (producto.type == "variable") {
       obtenerVariaciones();
@@ -65,6 +66,7 @@ class TiendaProductoController extends GetxController {
   void cambiarVariaciones(SelectVariaciones value) {
     selectValue = value.name;
     seleccionado = value;
+    price.value = double.parse(value.price) * counter.value;
     update();
     // int indiceDropAlternativo;
     // cambiar el selectVariaciones del indix anterior o posterior
@@ -171,7 +173,7 @@ class TiendaProductoController extends GetxController {
     update();
   }
 
-  void addToBag(p.Producto product, var price, var counter) {
+  void addToBag(p.Producto product, SelectVariaciones? variacion) {
     if (counter.value > 0) {
       //validar si el producto ya estaba en el carrito
       int index = selectedProducts.indexWhere((p) => p.id == product.id);
@@ -188,19 +190,6 @@ class TiendaProductoController extends GetxController {
         //EL PRODUCTO YA ESTA EN ESTORAGE
         selectedProducts[index].quantity = counter.value;
       }
-
-      // print('antes de escribir el selectedProducts:');
-      // var logger = Logger(
-      //   filter: null,
-      //   printer: PrettyPrinter(),
-      //   output: null,
-      // );
-
-      // selectedProducts.forEach((element) {
-      //   logger.d(element.toJson());
-      // });
-      // logger.d(selectedProducts[0].toJson());
-
       GetStorage().write('shopping_bag', selectedProducts);
       goToCarritoPage();
       //Utils.snackBarOk('Carrito', 'Producto agregado al carrito');
@@ -211,16 +200,18 @@ class TiendaProductoController extends GetxController {
     Get.toNamed('tienda/carrito');
   }
 
-  void addItem(p.Producto product, var price, var counter) {
+  void addItem(precioRecibido) {
     counter.value = counter.value + 1;
-    price.value = double.parse(product.price!) * counter.value;
-    //print('valor: ${product.toJson()}');
+    price.value = double.parse(precioRecibido!) * counter.value;
+    update();
   }
 
-  void removeItem(p.Producto product, var price, var counter) {
+  void removeItem(precioRecibido) {
     if (counter.value > 1) {
       counter.value = counter.value - 1;
-      price.value = double.parse(product.price!) * counter.value;
+      price.value = double.parse(precioRecibido!) * counter.value;
     }
+    //print('valor: ${price.value}');
+    update();
   }
 }

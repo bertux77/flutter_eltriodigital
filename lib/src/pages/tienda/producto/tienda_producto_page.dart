@@ -10,8 +10,8 @@ class TiendaProductoPage extends StatelessWidget {
   TiendaProductoController con = Get.put(TiendaProductoController());
   //Producto? product = Producto();
   //late TiendaProductoController con;
-  var counter = 1.obs;
-  var price = 0.0.obs;
+  //var counter = 1.obs;
+  //var price = 0.0.obs;
   // TiendaProductoPage() {
   //   con = Get.put(TiendaProductoController());
   // }
@@ -199,7 +199,7 @@ class TiendaProductoPage extends StatelessWidget {
 
   Widget _buttonsAddToBagVariable(SelectVariaciones? variacion) {
     if (variacion != null) {
-      price.value = double.parse(variacion.price);
+      //price.value = double.parse(variacion.price);
       return Obx(() => Column(
             children: [
               Divider(
@@ -211,8 +211,7 @@ class TiendaProductoPage extends StatelessWidget {
                 child: Row(
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
-                      //onPressed: () => con.removeItem(product, price, counter),
+                      onPressed: () => con.removeItem(variacion.price),
                       child: const Text(
                         '-',
                         style: TextStyle(color: Colors.black, fontSize: 18),
@@ -229,7 +228,7 @@ class TiendaProductoPage extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {},
                       child: Text(
-                        '${counter.value}',
+                        '${con.counter.value}',
                         style:
                             const TextStyle(color: Colors.black, fontSize: 18),
                       ),
@@ -238,8 +237,7 @@ class TiendaProductoPage extends StatelessWidget {
                           minimumSize: const Size(40, 37)),
                     ),
                     ElevatedButton(
-                      //onPressed: () => con.addItem(product, price, counter),
-                      onPressed: () {},
+                      onPressed: () => con.addItem(variacion.price),
                       child: const Text(
                         '+',
                         style: TextStyle(color: Colors.black, fontSize: 18),
@@ -254,10 +252,10 @@ class TiendaProductoPage extends StatelessWidget {
                     ),
                     const Spacer(),
                     ElevatedButton(
-                      //onPressed: () => con.addToBag(product, price, counter),
-                      onPressed: () {},
+                      onPressed: () => con.addToBag(con.producto, variacion),
+                      //onPressed: () {},
                       child: Text(
-                        'AGREGAR ${price.value.toStringAsFixed(2)}€',
+                        'AGREGAR ${con.price.value.toStringAsFixed(2)}€',
                         style:
                             const TextStyle(color: Colors.black, fontSize: 14),
                       ),
@@ -272,12 +270,12 @@ class TiendaProductoPage extends StatelessWidget {
             ],
           ));
     } else {
-      return Text('selecciona una opción');
+      return Container();
     }
   }
 
   Widget _buttonsAddToBag(Producto product) {
-    price.value = double.parse(product.price ?? '');
+    //price.value = double.parse(product.price ?? '');
     return Obx(() => Column(
           children: [
             Divider(
@@ -289,7 +287,7 @@ class TiendaProductoPage extends StatelessWidget {
               child: Row(
                 children: [
                   ElevatedButton(
-                    onPressed: () => con.removeItem(product, price, counter),
+                    onPressed: () => con.removeItem(product.price),
                     child: const Text(
                       '-',
                       style: TextStyle(color: Colors.black, fontSize: 18),
@@ -306,14 +304,14 @@ class TiendaProductoPage extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {},
                     child: Text(
-                      '${counter.value}',
+                      '${con.counter.value}',
                       style: const TextStyle(color: Colors.black, fontSize: 18),
                     ),
                     style: ElevatedButton.styleFrom(
                         primary: Colors.white, minimumSize: const Size(40, 37)),
                   ),
                   ElevatedButton(
-                    onPressed: () => con.addItem(product, price, counter),
+                    onPressed: () => con.addItem(product.price),
                     child: const Text(
                       '+',
                       style: TextStyle(color: Colors.black, fontSize: 18),
@@ -328,9 +326,9 @@ class TiendaProductoPage extends StatelessWidget {
                   ),
                   const Spacer(),
                   ElevatedButton(
-                    onPressed: () => con.addToBag(product, price, counter),
+                    onPressed: () => con.addToBag(product, null),
                     child: Text(
-                      'AGREGAR ${price.value.toStringAsFixed(2)}€',
+                      'AGREGAR ${con.price.value.toStringAsFixed(2)}€',
                       style: const TextStyle(color: Colors.black, fontSize: 14),
                     ),
                     style: ElevatedButton.styleFrom(
