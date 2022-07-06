@@ -29,6 +29,7 @@ class Producto {
     this.stockQuantity,
     this.parentId,
     this.quantity,
+    this.purchasePrice,
     this.description,
     this.shortDescription,
     this.categories,
@@ -55,6 +56,7 @@ class Producto {
   int? stockQuantity;
   int? parentId;
   int? quantity;
+  double? purchasePrice;
   String? description;
   String? shortDescription;
   List<Category>? categories;
@@ -83,6 +85,7 @@ class Producto {
         stockQuantity: json["stock_quantity"],
         parentId: json["parent_id"],
         quantity: json["quantity"],
+        purchasePrice: json["purchase_price"],
         categories: List<Category>.from(
             json["categories"].map((x) => Category.fromJson(x))),
         images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
@@ -121,6 +124,7 @@ class Producto {
         "manage_stock": manageStock,
         "stock_quantity": stockQuantity,
         "quantity": quantity,
+        "purchase_price": purchasePrice,
         "parent_id": parentId,
         "categories": List<dynamic>.from(categories!.map((x) => x.toJson())),
         "images": List<dynamic>.from(images!.map((x) => x.toJson())),

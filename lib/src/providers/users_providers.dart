@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:eltriodigital_flutter/src/environment/environment.dart';
+import 'package:eltriodigital_flutter/src/models/producto_carrito.dart';
 import 'package:eltriodigital_flutter/src/models/response_api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,14 +13,48 @@ class UsersProvider extends GetConnect {
   String url = Environment.API_URL + 'api';
   User user = User.fromJson(GetStorage().read('user') ?? {});
 
-  //String url6 =
-  // 'https://b4d2-2-141-235-177.eu.ngrok.io/eltriodigital/public/api/prueba';
-
+  
   Future<Response> prueba() async {
     Response response =
         await get(url, headers: {'Content-type': 'application/json'});
     return response;
   }
+
+  Future<ResponseApi> nuevoPedido(List<ProductoCarrito> productosVendidos, String metodoDePago) async {
+
+    Map valoresApasar={'pedido': productosVendidos,'metodoDePago': metodoDePago};
+    //print('antes de llamar a la api: ${user.sessionToken}');
+    
+    Response response = await post(
+        '${url}/nuevo-pedido', jsonEncode(valoresApasar),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${user.sessionToken}'
+        });
+
+    if (response.body == null) {
+      Get.snackbar('Error', 'No se pudo actualizar la información');
+      return ResponseApi();
+    }
+
+    if (response.body is String) {
+      Get.snackbar('Error', 'No se ha podido actualizar los datos',
+          icon: const Icon(Icons.dangerous, color: Colors.red),
+          snackPosition: SnackPosition.TOP,
+          colorText: Colors.red,
+          backgroundColor: Colors.white);
+      return ResponseApi();
+    }
+
+    if (response.statusCode == 401) {
+      Get.snackbar('Error', 'No estas autorizado');
+      return ResponseApi();
+    }
+
+    ResponseApi responseApi = ResponseApi.fromJson(response.body);
+    return responseApi;
+  }
+
 
   // SIN FOTO
   Future<ResponseApi> actualizarPerfilSinImagen(User user) async {

@@ -46,7 +46,7 @@ class TiendaProductoController extends GetxController {
   TiendaProductoController() {
     producto = Get.arguments['producto'];
     price.value = double.parse(producto.price ?? '');
-    //print('producto id: ${producto.id}');
+    print('producto coste: ${producto.purchasePrice}');
     if (producto.type == "variable") {
       obtenerVariaciones();
     }

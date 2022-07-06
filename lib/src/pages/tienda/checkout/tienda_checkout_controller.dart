@@ -1,6 +1,8 @@
 import 'package:eltriodigital_flutter/src/models/producto.dart';
 import 'package:eltriodigital_flutter/src/models/producto_carrito.dart';
+import 'package:eltriodigital_flutter/src/models/response_api.dart';
 import 'package:eltriodigital_flutter/src/models/user.dart';
+import 'package:eltriodigital_flutter/src/providers/users_providers.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -16,7 +18,8 @@ class TiendaCheckoutController extends GetxController {
   User userSession = User();
   bool tieneDireccion = false;
   var radioValue = 0.obs;
-
+  UsersProvider usersProvider = UsersProvider();
+    
   List<MetodosDePago> metodosDePago = [
     MetodosDePago(
         id: 1, name: "Tarjeta"), // MUESTRA FORMULARIO Y CONFIRMAR VENTA
@@ -52,12 +55,31 @@ class TiendaCheckoutController extends GetxController {
     }
   }
 
-  void confirmarCompra() {
+  void confirmarCompra() async{
     // CONFIRMAMOS METODO DE PAGO
-
+    
     // CONFIRMAMOS DIRECCION
 
     // ENVIAMOS LA PETICION DE COMPRA A LA API
+    //BUSCAMOS EL METODO DE PAGO SELECCIONADO Y LO ASIGNAMOS
+    String metodoDepagoSeleccionado = "";
+    metodosDePago.forEach((element) {
+      if(element.id == radioValue.value +1){
+        metodoDepagoSeleccionado = element.name ?? '';
+      }
+    });
+     
+    ResponseApi responseApi =
+        await usersProvider.nuevoPedido(selectedProducts, metodoDepagoSeleccionado);
+        print('responseApi: ${responseApi.toJson()}');
+    if (responseApi.success == true) {
+      
+      print(responseApi.message);
+    
+    } else {
+      Get.snackbar('ERROR', responseApi.message ?? '');
+    }
+      
 
     // BORRAMOS EL GETSTORAGE
 

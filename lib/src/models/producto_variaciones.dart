@@ -20,6 +20,7 @@ class ProductoVariaciones {
     this.onSale,
     this.manageStock,
     this.stockQuantity,
+    this.purchasePrice,
     this.stockStatus,
     this.attributes,
   });
@@ -33,6 +34,7 @@ class ProductoVariaciones {
   bool? manageStock;
   int? stockQuantity;
   String? stockStatus;
+  double? purchasePrice;
   List<Attribute>? attributes;
 
   factory ProductoVariaciones.fromJson(Map<String, dynamic> json) =>
@@ -43,9 +45,10 @@ class ProductoVariaciones {
         regularPrice: json["regular_price"],
         salePrice: json["sale_price"],
         onSale: json["on_sale"],
-        //manageStock: json["manage_stock"],
+        manageStock: json["manage_stock"],
         stockQuantity: json["stock_quantity"],
         stockStatus: json["stock_status"],
+        purchasePrice: json["purchase_price"],
         attributes: List<Attribute>.from(
             json["attributes"].map((x) => Attribute.fromJson(x))),
       );
@@ -60,6 +63,7 @@ class ProductoVariaciones {
         "manage_stock": manageStock,
         "stock_quantity": stockQuantity,
         "stock_status": stockStatus,
+        "purchase_price": purchasePrice,
         "attributes": List<dynamic>.from(attributes!.map((x) => x.toJson())),
       };
 }

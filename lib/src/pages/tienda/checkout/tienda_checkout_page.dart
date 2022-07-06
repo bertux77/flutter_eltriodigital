@@ -51,8 +51,22 @@ class TiendaCheckoutPage extends StatelessWidget {
                 ),
               ),
             ));
+            
   }
-
+Widget _btnConfirmarCompra(BuildContext context) {
+  return Container(
+    margin: const EdgeInsets.symmetric(horizontal: 20),
+    width: MediaQuery.of(context).size.width * 0.60,
+    child: ElevatedButton(
+      onPressed: () => con.confirmarCompra(),
+      style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(15)),
+      child: const Text(
+        'REALIZAR COMPRA',
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
+  );
+}
   Widget _resumenPedidoTotal(TiendaCheckoutController value) {
     return Column(
       children: [
@@ -266,17 +280,4 @@ Widget _btnEditarPerfil(BuildContext context) {
   );
 }
 
-Widget _btnConfirmarCompra(BuildContext context) {
-  return Container(
-    margin: const EdgeInsets.symmetric(horizontal: 20),
-    width: MediaQuery.of(context).size.width * 0.60,
-    child: ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(15)),
-      child: const Text(
-        'REALIZAR COMPRA',
-        style: TextStyle(color: Colors.white),
-      ),
-    ),
-  );
-}
+
