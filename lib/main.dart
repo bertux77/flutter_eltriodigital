@@ -42,12 +42,11 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget build(BuildContext context) {
-    print('main user: ${userSession.id}');
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'El trio digital',
-      initialRoute: userSession.id != null ? '/tienda' : '/',
-      //home: LoginPage(),
+      //initialRoute: userSession.id != null ? '/tienda' : '/',
+      home: _paginadeIncio(),
       getPages: [
         GetPage(name: '/', page: () => LoginPage()),
         GetPage(name: '/register', page: () => RegisterPage()),
@@ -83,5 +82,13 @@ class _MyAppState extends State<MyApp> {
               onSecondary: Colors.grey)),
       navigatorKey: Get.key,
     );
+  }
+
+  Widget _paginadeIncio() {
+    if (userSession.id == 'null') {
+      return LoginPage();
+    } else {
+      return TiendaPage();
+    }
   }
 }

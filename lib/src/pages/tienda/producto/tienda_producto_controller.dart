@@ -58,7 +58,8 @@ class TiendaProductoController extends GetxController {
         selectedProducts.clear();
         selectedProducts.addAll(result);
       } else {
-        var result = ProductoCarrito.fromJsonList(GetStorage().read('shopping_bag'));
+        var result =
+            ProductoCarrito.fromJsonList(GetStorage().read('shopping_bag'));
         selectedProducts.clear();
         selectedProducts.addAll(result);
       }
@@ -68,7 +69,8 @@ class TiendaProductoController extends GetxController {
   void cambiarVariaciones(SelectVariaciones value) {
     selectValue = value.name; // nombre seleccionado, Limon
     seleccionado = value; // cargamos el modelo entero en el seleccionado
-    price.value = double.parse(value.price) * counter.value; // modificamos su precio
+    price.value =
+        double.parse(value.price) * counter.value; // modificamos su precio
     update();
   }
 
@@ -153,19 +155,17 @@ class TiendaProductoController extends GetxController {
 
         //MAPEAMOS EL PRODUCTO Y SU VARIACION EN PRODUCTOCARRITO PARA AGREGAR AL LISTADO DEL STORAGE
         Variacion variacion = Variacion();
-        if(variacionEnviada != null){
+        if (variacionEnviada != null) {
           variacion = Variacion(
-            id: variacionEnviada.id,
-            sku: variacionEnviada.sku, 
-            price: variacionEnviada.price,
-            regularPrice: variacionEnviada.regularPrice,
-            salePrice: variacionEnviada.salePrice,
-            name: variacionEnviada.name,
-            quantity: counter.value,
-            onSale: variacionEnviada.onSale
-          );
-        } 
-        
+              id: variacionEnviada.id,
+              sku: variacionEnviada.sku,
+              price: variacionEnviada.price,
+              regularPrice: variacionEnviada.regularPrice,
+              salePrice: variacionEnviada.salePrice,
+              name: variacionEnviada.name,
+              quantity: counter.value,
+              onSale: variacionEnviada.onSale);
+        }
 
         ProductoCarrito productoCarrito = ProductoCarrito(
           id: product.id,
@@ -189,7 +189,7 @@ class TiendaProductoController extends GetxController {
         selectedProducts[index].quantity = counter.value;
       }
       GetStorage().write('shopping_bag', selectedProducts);
-      //goToCarritoPage();
+      goToCarritoPage();
       //Utils.snackBarOk('Carrito', 'Producto agregado al carrito');
     }
   }

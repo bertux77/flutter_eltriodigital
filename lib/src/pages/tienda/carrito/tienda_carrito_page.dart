@@ -1,4 +1,3 @@
-import 'package:eltriodigital_flutter/src/models/producto.dart';
 import 'package:eltriodigital_flutter/src/models/producto_carrito.dart';
 import 'package:eltriodigital_flutter/src/pages/tienda/carrito/tienda_carrito_controller.dart';
 import 'package:eltriodigital_flutter/src/widgets/appbar/my_appbar.dart';
@@ -81,6 +80,7 @@ class TiendaCarritoPage extends StatelessWidget {
   }
 
   Widget _cardProduct(BuildContext context, ProductoCarrito product) {
+    String variacion = product.variacion?.name ?? '';
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Row(
@@ -94,8 +94,17 @@ class TiendaCarritoPage extends StatelessWidget {
             children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.45,
-                child: Text(
-                  product.name ?? '',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.name ?? '',
+                    ),
+                    Text(
+                      variacion,
+                      style: const TextStyle(fontSize: 11),
+                    )
+                  ],
                 ),
               ),
               const SizedBox(

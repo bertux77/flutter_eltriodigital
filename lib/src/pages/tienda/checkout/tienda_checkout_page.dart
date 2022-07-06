@@ -1,8 +1,4 @@
-import 'package:eltriodigital_flutter/main.dart';
-import 'package:eltriodigital_flutter/src/models/producto.dart';
 import 'package:eltriodigital_flutter/src/pages/tienda/checkout/tienda_checkout_controller.dart';
-import 'package:eltriodigital_flutter/src/widgets/appbar/my_appbar.dart';
-import 'package:eltriodigital_flutter/src/widgets/varios/metodos_pago.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

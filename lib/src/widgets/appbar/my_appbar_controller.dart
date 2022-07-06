@@ -1,10 +1,11 @@
 import 'package:eltriodigital_flutter/src/models/producto.dart';
+import 'package:eltriodigital_flutter/src/models/producto_carrito.dart';
 import 'package:eltriodigital_flutter/src/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class MyAppBarController extends GetxController {
-  List<Producto> selectedProducts = <Producto>[];
+  List<ProductoCarrito> selectedProducts = <ProductoCarrito>[];
   var items = 0;
 
   MyAppBarController() {
@@ -13,14 +14,15 @@ class MyAppBarController extends GetxController {
 
   Future cargarCarrito() async {
     if (GetStorage().read('shopping_bag') != null) {
-      if (GetStorage().read('shopping_bag') is List<Producto>) {
+      if (GetStorage().read('shopping_bag') is List<ProductoCarrito>) {
         var result = GetStorage().read('shopping_bag');
         selectedProducts.clear();
         selectedProducts.addAll(result);
         // result.forEach(
         //     (element) => print('${element.name} - ${element.quantity} '));
       } else {
-        var result = Producto.fromJsonList(GetStorage().read('shopping_bag'));
+        var result =
+            ProductoCarrito.fromJsonList(GetStorage().read('shopping_bag'));
         // result.forEach(
         //     (element) => print('${element.name} - ${element.quantity} '));
         selectedProducts.clear();

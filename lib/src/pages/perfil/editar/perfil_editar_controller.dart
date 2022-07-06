@@ -23,6 +23,7 @@ class PerfilEditarController extends GetxController {
   TextEditingController telefonoController = TextEditingController();
 
   //IMAGE PICKER
+
   ImagePicker picker = ImagePicker();
   File? imageFile;
 

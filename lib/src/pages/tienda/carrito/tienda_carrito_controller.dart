@@ -1,4 +1,3 @@
-import 'package:eltriodigital_flutter/src/models/producto.dart';
 import 'package:eltriodigital_flutter/src/models/producto_carrito.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -24,7 +23,8 @@ class TiendaCarritoController extends GetxController {
         // result.forEach(
         //     (element) => print('if: ${element.name} - ${element.quantity} '));
       } else {
-        var result = ProductoCarrito.fromJsonList(GetStorage().read('shopping_bag'));
+        var result =
+            ProductoCarrito.fromJsonList(GetStorage().read('shopping_bag'));
         // result.forEach(
         //     (element) => print('else: ${element.name} - ${element.quantity} '));
         selectedProducts.clear();
