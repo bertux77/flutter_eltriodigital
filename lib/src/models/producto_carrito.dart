@@ -4,44 +4,49 @@
 
 import 'dart:convert';
 
-ProductoCarrito productoCarritoFromJson(String str) => ProductoCarrito.fromJson(json.decode(str));
+ProductoCarrito productoCarritoFromJson(String str) =>
+    ProductoCarrito.fromJson(json.decode(str));
 
-String productoCarritoToJson(ProductoCarrito data) => json.encode(data.toJson());
+String productoCarritoToJson(ProductoCarrito data) =>
+    json.encode(data.toJson());
 
 class ProductoCarrito {
-    ProductoCarrito({
-        this.id,
-        this.name,
-        this.type,
-        this.status,
-        this.sku,
-        this.price,
-        this.regularPrice,
-        this.salePrice,
-        this.onSale,
-        this.stockQuantity,
-        this.parentId,
-        this.quantity,
-        this.image,
-        this.variacion,
-    });
+  ProductoCarrito({
+    this.id,
+    this.name,
+    this.type,
+    this.status,
+    this.sku,
+    this.price,
+    this.regularPrice,
+    this.salePrice,
+    this.purchasePrice,
+    this.onSale,
+    this.stockQuantity,
+    this.parentId,
+    this.quantity,
+    this.image,
+    this.variacion,
+  });
 
-    int? id;
-    String? name;
-    String? type;
-    String? status;
-    String? sku;
-    String? price;
-    String? regularPrice;
-    String? salePrice;
-    bool? onSale;
-    int? stockQuantity;
-    int? parentId;
-    int? quantity;
-    String? image;
-    Variacion? variacion;
+  int? id;
+  String? name;
+  String? type;
+  String? status;
+  String? sku;
+  String? price;
+  String? regularPrice;
+  String? salePrice;
+  String? purchasePrice;
+  bool? onSale;
+  int? stockQuantity;
+  int? parentId;
+  int? quantity;
+  String? image;
+  Variacion? variacion;
 
-    factory ProductoCarrito.fromJson(Map<String, dynamic> json) => ProductoCarrito(
+  factory ProductoCarrito.fromJson(Map<String, dynamic> json) =>
+      ProductoCarrito(
         id: json["id"],
         name: json["name"],
         type: json["type"],
@@ -50,25 +55,26 @@ class ProductoCarrito {
         price: json["price"],
         regularPrice: json["regularPrice"],
         salePrice: json["salePrice"],
+        purchasePrice: json["purchasePrice"],
         onSale: json["onSale"],
         stockQuantity: json["stockQuantity"],
         parentId: json["parentId"],
         quantity: json["quantity"],
         image: json["image"],
         variacion: Variacion.fromJson(json["variacion"]),
-    );
+      );
 
-    static List<ProductoCarrito> fromJsonList(List<dynamic> jsonList) {
-      List<ProductoCarrito> toList = [];
-      jsonList.forEach((item) {
-        ProductoCarrito product = ProductoCarrito.fromJson(item);
-        toList.add(product);
-      });
+  static List<ProductoCarrito> fromJsonList(List<dynamic> jsonList) {
+    List<ProductoCarrito> toList = [];
+    jsonList.forEach((item) {
+      ProductoCarrito product = ProductoCarrito.fromJson(item);
+      toList.add(product);
+    });
 
-      return toList;
-    }
+    return toList;
+  }
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "type": type,
@@ -77,67 +83,67 @@ class ProductoCarrito {
         "price": price,
         "regularPrice": regularPrice,
         "salePrice": salePrice,
+        "purchasePrice": purchasePrice,
         "onSale": onSale,
         "stockQuantity": stockQuantity,
         "parentId": parentId,
         "quantity": quantity,
         "image": image,
         "variacion": variacion?.toJson(),
-    };
+      };
 }
 
 class Image {
-    Image({
-        this.id,
-        this.src,
-        this.name,
-        this.alt,
-    });
+  Image({
+    this.id,
+    this.src,
+    this.name,
+    this.alt,
+  });
 
-    int? id;
-    String? src;
-    String? name;
-    String? alt;
+  int? id;
+  String? src;
+  String? name;
+  String? alt;
 
-    factory Image.fromJson(Map<String, dynamic> json) => Image(
+  factory Image.fromJson(Map<String, dynamic> json) => Image(
         id: json["id"],
         src: json["src"],
         name: json["name"],
         alt: json["alt"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "src": src,
         "name": name,
         "alt": alt,
-    };
+      };
 }
 
 class Variacion {
-    Variacion({
-        this.id,
-        this.sku,
-        this.price,
-        this.regularPrice,
-        this.salePrice,
-        this.name,
-        this.quantity,
-        this.onSale,
-        this.purchasePrice
-    });
+  Variacion(
+      {this.id,
+      this.sku,
+      this.price,
+      this.regularPrice,
+      this.salePrice,
+      this.name,
+      this.quantity,
+      this.onSale,
+      this.purchasePrice});
 
-    int? id;
-    String? sku;
-    String? price;
-    String? regularPrice;
-    String? salePrice;
-    String? name;
-    int? quantity;
-    bool? onSale;
-    double? purchasePrice;
+  int? id;
+  String? sku;
+  String? price;
+  String? regularPrice;
+  String? salePrice;
+  String? name;
+  int? quantity;
+  bool? onSale;
+  String? purchasePrice;
 
-    factory Variacion.fromJson(Map<String, dynamic> json) => Variacion(
+  factory Variacion.fromJson(Map<String, dynamic> json) => Variacion(
         id: json["id"],
         sku: json["sku"],
         price: json["price"],
@@ -146,10 +152,10 @@ class Variacion {
         name: json["name"],
         quantity: json["quantity"],
         onSale: json["onSale"],
-        purchasePrice: json["purchase_price"],
-    );
+        purchasePrice: json["purchasePrice"],
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "sku": sku,
         "price": price,
@@ -159,5 +165,5 @@ class Variacion {
         "quantity": quantity,
         "onSale": onSale,
         "purchasePrice": purchasePrice
-    };
+      };
 }

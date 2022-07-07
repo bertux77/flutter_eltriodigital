@@ -13,24 +13,26 @@ class UsersProvider extends GetConnect {
   String url = Environment.API_URL + 'api';
   User user = User.fromJson(GetStorage().read('user') ?? {});
 
-  
   Future<Response> prueba() async {
     Response response =
         await get(url, headers: {'Content-type': 'application/json'});
     return response;
   }
 
-  Future<ResponseApi> nuevoPedido(List<ProductoCarrito> productosVendidos, String metodoDePago) async {
-
-    Map valoresApasar={'pedido': productosVendidos,'metodoDePago': metodoDePago};
+  Future<ResponseApi> nuevoPedido(List<ProductoCarrito> productosVendidos,
+      String metodoDePago, double total) async {
+    Map valoresApasar = {
+      'pedido': productosVendidos,
+      'metodoDePago': metodoDePago,
+      'total_pago': total
+    };
     //print('antes de llamar a la api: ${user.sessionToken}');
-    
-    Response response = await post(
-        '${url}/nuevo-pedido', jsonEncode(valoresApasar),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${user.sessionToken}'
-        });
+
+    Response response =
+        await post('${url}/nuevo-pedido', jsonEncode(valoresApasar), headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${user.sessionToken}'
+    });
 
     if (response.body == null) {
       Get.snackbar('Error', 'No se pudo actualizar la información');
@@ -54,7 +56,6 @@ class UsersProvider extends GetConnect {
     ResponseApi responseApi = ResponseApi.fromJson(response.body);
     return responseApi;
   }
-
 
   // SIN FOTO
   Future<ResponseApi> actualizarPerfilSinImagen(User user) async {
@@ -203,6 +204,15 @@ class UsersProvider extends GetConnect {
 
     if (response.body == null) {
       Get.snackbar('Error', 'No se ha podido ejecutar la petición',
+          icon: const Icon(Icons.dangerous, color: Colors.red),
+          snackPosition: SnackPosition.TOP,
+          colorText: Colors.red,
+          backgroundColor: Colors.white);
+      return ResponseApi();
+    }
+
+    if (response.body is String) {
+      Get.snackbar('Error', 'No se ha podido ejecutar la peticion',
           icon: const Icon(Icons.dangerous, color: Colors.red),
           snackPosition: SnackPosition.TOP,
           colorText: Colors.red,

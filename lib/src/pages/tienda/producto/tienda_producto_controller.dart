@@ -13,6 +13,7 @@ class SelectVariaciones {
   String price;
   String? regularPrice;
   String? salePrice;
+  String? purchasePrice;
   bool onSale;
   bool? manageStock;
   int? stockQuantity;
@@ -24,6 +25,7 @@ class SelectVariaciones {
       required this.price,
       this.regularPrice,
       this.salePrice,
+      this.purchasePrice,
       required this.onSale,
       this.manageStock,
       this.stockQuantity,
@@ -164,7 +166,8 @@ class TiendaProductoController extends GetxController {
               salePrice: variacionEnviada.salePrice,
               name: variacionEnviada.name,
               quantity: counter.value,
-              onSale: variacionEnviada.onSale);
+              onSale: variacionEnviada.onSale,
+              purchasePrice: variacionEnviada.purchasePrice);
         }
 
         ProductoCarrito productoCarrito = ProductoCarrito(
@@ -176,6 +179,7 @@ class TiendaProductoController extends GetxController {
           price: product.price,
           regularPrice: product.regularPrice,
           salePrice: product.salePrice,
+          purchasePrice: product.purchasePrice,
           onSale: product.onSale,
           stockQuantity: product.stockQuantity,
           parentId: product.parentId,

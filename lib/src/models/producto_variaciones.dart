@@ -34,7 +34,7 @@ class ProductoVariaciones {
   bool? manageStock;
   int? stockQuantity;
   String? stockStatus;
-  double? purchasePrice;
+  String? purchasePrice;
   List<Attribute>? attributes;
 
   factory ProductoVariaciones.fromJson(Map<String, dynamic> json) =>
@@ -48,7 +48,7 @@ class ProductoVariaciones {
         manageStock: json["manage_stock"],
         stockQuantity: json["stock_quantity"],
         stockStatus: json["stock_status"],
-        purchasePrice: json["purchase_price"],
+        purchasePrice: json["purchase_price"].toString(),
         attributes: List<Attribute>.from(
             json["attributes"].map((x) => Attribute.fromJson(x))),
       );

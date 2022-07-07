@@ -1,4 +1,3 @@
-import 'package:eltriodigital_flutter/src/models/producto.dart';
 import 'package:eltriodigital_flutter/src/models/producto_carrito.dart';
 import 'package:eltriodigital_flutter/src/models/response_api.dart';
 import 'package:eltriodigital_flutter/src/models/user.dart';
@@ -19,7 +18,7 @@ class TiendaCheckoutController extends GetxController {
   bool tieneDireccion = false;
   var radioValue = 0.obs;
   UsersProvider usersProvider = UsersProvider();
-    
+
   List<MetodosDePago> metodosDePago = [
     MetodosDePago(
         id: 1, name: "Tarjeta"), // MUESTRA FORMULARIO Y CONFIRMAR VENTA
@@ -55,31 +54,28 @@ class TiendaCheckoutController extends GetxController {
     }
   }
 
-  void confirmarCompra() async{
+  void confirmarCompra() async {
     // CONFIRMAMOS METODO DE PAGO
-    
+
     // CONFIRMAMOS DIRECCION
 
     // ENVIAMOS LA PETICION DE COMPRA A LA API
     //BUSCAMOS EL METODO DE PAGO SELECCIONADO Y LO ASIGNAMOS
     String metodoDepagoSeleccionado = "";
     metodosDePago.forEach((element) {
-      if(element.id == radioValue.value +1){
+      if (element.id == radioValue.value + 1) {
         metodoDepagoSeleccionado = element.name ?? '';
       }
     });
-     
-    ResponseApi responseApi =
-        await usersProvider.nuevoPedido(selectedProducts, metodoDepagoSeleccionado);
-        print('responseApi: ${responseApi.toJson()}');
+
+    ResponseApi responseApi = await usersProvider.nuevoPedido(
+        selectedProducts, metodoDepagoSeleccionado, total.value);
+    print('responseApi: ${responseApi.toJson()}');
     if (responseApi.success == true) {
-      
       print(responseApi.message);
-    
     } else {
       Get.snackbar('ERROR', responseApi.message ?? '');
     }
-      
 
     // BORRAMOS EL GETSTORAGE
 
@@ -105,10 +101,21 @@ class TiendaCheckoutController extends GetxController {
 
   void getTotal() {
     total.value = 0.0;
+    double total_coste = 0.0;
     selectedProducts.forEach((product) {
+      print('Producto en carito: ${product.toJson()}');
       total.value = (total.value +
           (product.quantity! * double.parse(product.price ?? '')));
+      if (product.type == "variable") {
+        total_coste = (total_coste +
+            (product.quantity! *
+                double.parse(product.variacion?.purchasePrice ?? "0.0")));
+      } else {
+        total_coste = (total_coste +
+            (product.quantity! * double.parse(product.purchasePrice ?? "0.0")));
+      }
     });
+    print('total coste: $total_coste');
   }
 
   void goToEditarPerfil() {
