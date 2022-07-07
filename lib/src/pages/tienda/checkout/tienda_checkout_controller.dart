@@ -14,6 +14,7 @@ class MetodosDePago {
 class TiendaCheckoutController extends GetxController {
   List<ProductoCarrito> selectedProducts = <ProductoCarrito>[].obs;
   var total = 0.0.obs;
+  double total_coste = 0.0;
   User userSession = User();
   bool tieneDireccion = false;
   var radioValue = 0.obs;
@@ -69,10 +70,11 @@ class TiendaCheckoutController extends GetxController {
     });
 
     ResponseApi responseApi = await usersProvider.nuevoPedido(
-        selectedProducts, metodoDepagoSeleccionado, total.value);
+        selectedProducts, metodoDepagoSeleccionado,total_coste, total.value);
     print('responseApi: ${responseApi.toJson()}');
     if (responseApi.success == true) {
-      print(responseApi.message);
+      // BORRAMOS EL STORAGE
+      // REDIRIGIMOS A PAGINA DE CONFIRMACION VENTA.
     } else {
       Get.snackbar('ERROR', responseApi.message ?? '');
     }
@@ -101,9 +103,8 @@ class TiendaCheckoutController extends GetxController {
 
   void getTotal() {
     total.value = 0.0;
-    double total_coste = 0.0;
+    total_coste = 0.0;
     selectedProducts.forEach((product) {
-      print('Producto en carito: ${product.toJson()}');
       total.value = (total.value +
           (product.quantity! * double.parse(product.price ?? '')));
       if (product.type == "variable") {
@@ -115,7 +116,6 @@ class TiendaCheckoutController extends GetxController {
             (product.quantity! * double.parse(product.purchasePrice ?? "0.0")));
       }
     });
-    print('total coste: $total_coste');
   }
 
   void goToEditarPerfil() {

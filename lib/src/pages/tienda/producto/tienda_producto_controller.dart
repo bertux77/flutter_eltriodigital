@@ -128,6 +128,7 @@ class TiendaProductoController extends GetxController {
         price: variacion.price ?? '',
         regularPrice: variacion.regularPrice,
         salePrice: variacion.salePrice,
+        purchasePrice: variacion.purchasePrice,
         onSale: variacion.onSale ?? false,
         manageStock: variacion.manageStock,
         stockQuantity: variacion.stockQuantity,
@@ -141,19 +142,19 @@ class TiendaProductoController extends GetxController {
   }
 
   void addToBag(p.Producto product, SelectVariaciones? variacionEnviada) {
-    // if(product.type == "variable" && variacionEnviada == null){
-    //   Utils.snackBarError('Carrito', 'Debes seleccionar una opci');
-    // }
-    if (counter.value > 0) {
-      //validar si el producto ya estaba en el carrito
-      int index = selectedProducts.indexWhere((p) => p.id == product.id);
+    
+    
+      //validar si el producto ya estaba en el carrito y si esta devuelve el indice
+      int index = selectedProducts.indexWhere((p) => p.id == product.id && p.variacion?.id == variacionEnviada?.id);
+      
+     
       if (index == -1) {
-        //NO ESTABA AGREGADO
-        if (counter.value > 0) {
-          product.quantity = counter.value;
-        } else {
-          product.quantity = 1;
-        }
+        //NO ESTABA AGREGADO, SE AGREGA
+         if (counter.value > 0) {
+           product.quantity = counter.value;
+         } else {
+           product.quantity = 1;
+         }
 
         //MAPEAMOS EL PRODUCTO Y SU VARIACION EN PRODUCTOCARRITO PARA AGREGAR AL LISTADO DEL STORAGE
         Variacion variacion = Variacion();
@@ -189,13 +190,13 @@ class TiendaProductoController extends GetxController {
         );
         selectedProducts.add(productoCarrito);
       } else {
-        //EL PRODUCTO YA ESTA EN ESTORAGE
-        selectedProducts[index].quantity = counter.value;
+        //EL PRODUCTO YA ESTA EN ESTORAGE, simplemente se agrega el contador nuevo que haya indicado
+         selectedProducts[index].quantity = counter.value;
       }
       GetStorage().write('shopping_bag', selectedProducts);
       goToCarritoPage();
       //Utils.snackBarOk('Carrito', 'Producto agregado al carrito');
-    }
+    
   }
 
   void goToCarritoPage() {

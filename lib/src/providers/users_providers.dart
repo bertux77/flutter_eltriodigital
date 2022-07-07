@@ -20,11 +20,12 @@ class UsersProvider extends GetConnect {
   }
 
   Future<ResponseApi> nuevoPedido(List<ProductoCarrito> productosVendidos,
-      String metodoDePago, double total) async {
+      String metodoDePago, double coste, double total) async {
     Map valoresApasar = {
       'pedido': productosVendidos,
       'metodoDePago': metodoDePago,
-      'total_pago': total
+      'total_pago': total,
+      'total_coste': coste
     };
     //print('antes de llamar a la api: ${user.sessionToken}');
 

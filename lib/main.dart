@@ -4,6 +4,7 @@ import 'package:eltriodigital_flutter/src/pages/perfil/pedidos/perfil_pedidos_pa
 import 'package:eltriodigital_flutter/src/pages/perfil/showqr/perfil_showqr_page.dart';
 import 'package:eltriodigital_flutter/src/pages/tienda/carrito/tienda_carrito_page.dart';
 import 'package:eltriodigital_flutter/src/pages/tienda/checkout/tienda_checkout_page.dart';
+import 'package:eltriodigital_flutter/src/pages/tienda/pedidos/confirmacion/tienda_pedidos_confirmacion_page.dart';
 import 'package:eltriodigital_flutter/src/pages/tienda/producto/tienda_producto_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -60,6 +61,7 @@ class _MyAppState extends State<MyApp> {
         GetPage(name: '/tienda', page: () => TiendaPage()),
         GetPage(name: '/tienda/carrito', page: () => TiendaCarritoPage()),
         GetPage(name: '/tienda/checkout', page: () => TiendaCheckoutPage()),
+        GetPage(name: '/tienda/confirmacion', page: () => TiendaPedidosConfirmacionPage()),
         GetPage(name: '/producto', page: () => TiendaProductoPage()),
         GetPage(name: '/canjeo', page: () => TiendaPedidosCanjeoPage()),
         GetPage(
@@ -86,9 +88,11 @@ class _MyAppState extends State<MyApp> {
 
   Widget _paginadeIncio() {
     if (userSession.id == 'null') {
-      return LoginPage();
+      //return LoginPage();
+      return TiendaPedidosConfirmacionPage();
     } else {
-      return TiendaPage();
+      //return TiendaPage();
+      return TiendaPedidosConfirmacionPage();
     }
   }
 }
