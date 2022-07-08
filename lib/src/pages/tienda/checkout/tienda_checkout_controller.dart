@@ -19,6 +19,7 @@ class TiendaCheckoutController extends GetxController {
   bool tieneDireccion = false;
   var radioValue = 0.obs;
   UsersProvider usersProvider = UsersProvider();
+  var isLoading = false.obs;
 
   List<MetodosDePago> metodosDePago = [
     MetodosDePago(
@@ -56,20 +57,17 @@ class TiendaCheckoutController extends GetxController {
   }
 
   void confirmarCompra() async {
+    isLoading.value = true;
     // CONFIRMAMOS METODO DE PAGO
 
     // CONFIRMAMOS DIRECCION
 
     //BUSCAMOS EL METODO DE PAGO SELECCIONADO Y LO ASIGNAMOS
-    String metodoDepagoSeleccionado = "";
+    int metodoDepagoSeleccionado = 1;
     metodosDePago.forEach((element) {
       if (element.id == radioValue.value + 1) {
-        metodoDepagoSeleccionado = element.name ?? '';
+        metodoDepagoSeleccionado = element.id!;
       }
-    });
-    print('parent id en el checkout');
-    selectedProducts.forEach((element) {
-      print(element.parentId);
     });
     // ENVIAMOS LA PETICION DE COMPRA A LA API
     ResponseApi responseApi = await usersProvider.nuevoPedido(
@@ -79,14 +77,15 @@ class TiendaCheckoutController extends GetxController {
       // BORRAMOS EL STORAGE
       GetStorage().remove('shopping_bag');
       // REDIRIGIMOS A PAGINA DE CONFIRMACION VENTA.
-      goToConfirmacionPage();
+      //print(responseApi.da);
+     goToConfirmacionPage(responseApi.data);
     } else {
       Get.snackbar('ERROR', responseApi.message ?? '');
     }
   }
 
-  void goToConfirmacionPage() {
-    Get.offAllNamed('tienda/confirmacion');
+  void goToConfirmacionPage(data) {
+    Get.offAllNamed('tienda/confirmacion', arguments: {'pedido': data});
   }
 
   void handleRadioValueChange(int? value) {

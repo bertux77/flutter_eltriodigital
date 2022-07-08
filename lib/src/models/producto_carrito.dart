@@ -23,7 +23,6 @@ class ProductoCarrito {
     this.purchasePrice,
     this.onSale,
     this.stockQuantity,
-    this.parentId,
     this.quantity,
     this.image,
     this.variacion,
@@ -40,7 +39,6 @@ class ProductoCarrito {
   String? purchasePrice;
   bool? onSale;
   int? stockQuantity;
-  int? parentId;
   int? quantity;
   String? image;
   Variacion? variacion;
@@ -58,7 +56,6 @@ class ProductoCarrito {
         purchasePrice: json["purchasePrice"],
         onSale: json["onSale"],
         stockQuantity: json["stockQuantity"],
-        parentId: json["parentId"],
         quantity: json["quantity"],
         image: json["image"],
         variacion: Variacion.fromJson(json["variacion"]),
@@ -86,7 +83,6 @@ class ProductoCarrito {
         "purchasePrice": purchasePrice,
         "onSale": onSale,
         "stockQuantity": stockQuantity,
-        "parentId": parentId,
         "quantity": quantity,
         "image": image,
         "variacion": variacion?.toJson(),
@@ -130,6 +126,7 @@ class Variacion {
       this.salePrice,
       this.name,
       this.quantity,
+      this.stockQuantity,
       this.onSale,
       this.purchasePrice,
       this.parentId});
@@ -141,6 +138,7 @@ class Variacion {
   String? salePrice;
   String? name;
   int? quantity;
+  int? stockQuantity;
   bool? onSale;
   String? purchasePrice;
   int? parentId;
@@ -153,6 +151,7 @@ class Variacion {
         salePrice: json["salePrice"],
         name: json["name"],
         quantity: json["quantity"],
+        stockQuantity: json["stockQuantity"],
         onSale: json["onSale"],
         purchasePrice: json["purchasePrice"],
         parentId: json["parentId"],
@@ -166,6 +165,7 @@ class Variacion {
         "salePrice": salePrice,
         "name": name,
         "quantity": quantity,
+        "stockQuantity": stockQuantity,
         "onSale": onSale,
         "purchasePrice": purchasePrice,
         "parentId": parentId

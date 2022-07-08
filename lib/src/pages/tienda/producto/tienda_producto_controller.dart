@@ -170,10 +170,13 @@ class TiendaProductoController extends GetxController {
             salePrice: variacionEnviada.salePrice,
             name: variacionEnviada.name,
             quantity: counter.value,
+            stockQuantity: variacionEnviada.stockQuantity,
             onSale: variacionEnviada.onSale,
             purchasePrice: variacionEnviada.purchasePrice,
-            parentId: variacionEnviada.parentId);
+            parentId: product.id);
       }
+      // print(product.toJson());
+      // print('parent id: ${variacion.id}');
 
       ProductoCarrito productoCarrito = ProductoCarrito(
         id: product.id,
@@ -187,7 +190,6 @@ class TiendaProductoController extends GetxController {
         purchasePrice: product.purchasePrice,
         onSale: product.onSale,
         stockQuantity: product.stockQuantity,
-        parentId: product.parentId,
         quantity: product.quantity,
         image: product.images![0].src,
         variacion: variacion,

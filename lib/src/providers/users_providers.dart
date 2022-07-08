@@ -20,7 +20,7 @@ class UsersProvider extends GetConnect {
   }
 
   Future<ResponseApi> nuevoPedido(List<ProductoCarrito> productosVendidos,
-      String metodoDePago, double coste, double total) async {
+      int metodoDePago, double coste, double total) async {
     Map valoresApasar = {
       'pedido': productosVendidos,
       'metodoDePago': metodoDePago,

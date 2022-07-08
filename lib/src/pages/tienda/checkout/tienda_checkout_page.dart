@@ -54,18 +54,62 @@ class TiendaCheckoutPage extends StatelessWidget {
             
   }
 Widget _btnConfirmarCompra(BuildContext context) {
-  return Container(
-    margin: const EdgeInsets.symmetric(horizontal: 20),
-    width: MediaQuery.of(context).size.width * 0.60,
-    child: ElevatedButton(
-      onPressed: () => con.confirmarCompra(),
-      style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(15)),
-      child: const Text(
-        'REALIZAR COMPRA',
-        style: TextStyle(color: Colors.white),
-      ),
-    ),
-  );
+  // return Container(
+  //   margin: const EdgeInsets.symmetric(horizontal: 20),
+  //   width: MediaQuery.of(context).size.width * 0.60,
+  //   child: ElevatedButton(
+  //     onPressed: () => con.confirmarCompra(),
+  //     style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(15)),
+  //     child: const Text(
+  //       'REALIZAR COMPRA',
+  //       style: TextStyle(color: Colors.white),
+  //     ),
+  //   ),
+  // );
+
+  return Obx(() => ElevatedButton(
+        onPressed: (){},
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
+        child: con.isLoading.value
+            ? Padding(
+                padding: const EdgeInsets.all(5),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  width: MediaQuery.of(context).size.width * 0.60,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("PROCRESANDO...", style: TextStyle(color: Colors.white),),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Colors.white),
+                          backgroundColor:Theme.of(context).colorScheme.primary,
+                          strokeWidth: 3,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              )
+            : Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              width: MediaQuery.of(context).size.width * 0.60,
+              child: ElevatedButton(
+                onPressed: () => con.confirmarCompra(),
+                style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(15)),
+                child: const Text(
+                  'REALIZAR COMPRA',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )));
 }
   Widget _resumenPedidoTotal(TiendaCheckoutController value) {
     return Column(

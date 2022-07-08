@@ -33,15 +33,16 @@ class TiendaCarritoController extends GetxController {
       getTotal();
     }
 
-    print('parent id en el carrito');
-    selectedProducts.forEach((element) {
-      print(element.parentId);
-    });
+    //print('parent id en el carrito:');
+    // selectedProducts.forEach((element) {
+    //   //print(element.toJson());
+    //   print('regular: ${element.parentId}');
+    // });
   }
 
   void removeItem(ProductoCarrito product) {
     if (product.quantity! > 1) {
-      int index = selectedProducts.indexWhere((p) => p.id == product.id);
+      int index = selectedProducts.indexWhere((p) => p.id == product.id && p.variacion?.id == product.variacion?.id);
       selectedProducts.remove(product);
       product.quantity = product.quantity! - 1;
       selectedProducts.insert(index, product);
@@ -51,7 +52,7 @@ class TiendaCarritoController extends GetxController {
   }
 
   void addItem(ProductoCarrito product) {
-    int index = selectedProducts.indexWhere((p) => p.id == product.id);
+    int index = selectedProducts.indexWhere((p) => p.id == product.id && p.variacion?.id == product.variacion?.id);
     selectedProducts.remove(product);
     product.quantity = product.quantity! + 1;
     selectedProducts.insert(index, product);

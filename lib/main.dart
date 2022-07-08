@@ -90,11 +90,11 @@ class _MyAppState extends State<MyApp> {
 
   Widget _paginadeIncio() {
     if (userSession.id == 'null') {
-      //return LoginPage();
-      return TiendaPedidosConfirmacionPage();
+      return LoginPage();
+      //return TiendaPedidosConfirmacionPage();
     } else {
-      //return TiendaPage();
-      return TiendaPedidosConfirmacionPage();
+      return TiendaPage();
+      //return TiendaPedidosConfirmacionPage();
     }
   }
 }
