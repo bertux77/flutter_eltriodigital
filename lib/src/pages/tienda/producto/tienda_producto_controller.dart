@@ -18,6 +18,7 @@ class SelectVariaciones {
   bool? manageStock;
   int? stockQuantity;
   String name;
+  int? parentId;
 
   SelectVariaciones(
       {required this.id,
@@ -29,7 +30,8 @@ class SelectVariaciones {
       required this.onSale,
       this.manageStock,
       this.stockQuantity,
-      required this.name});
+      required this.name,
+      required this.parentId});
 }
 
 class TiendaProductoController extends GetxController {
@@ -49,7 +51,6 @@ class TiendaProductoController extends GetxController {
     producto = Get.arguments['producto'];
 
     price.value = double.parse(producto.price ?? '');
-    print('producto id: ${producto.id}');
     if (producto.type == "variable") {
       obtenerVariaciones();
     }
@@ -134,8 +135,11 @@ class TiendaProductoController extends GetxController {
         manageStock: variacion.manageStock,
         stockQuantity: variacion.stockQuantity,
         name: linea,
+        parentId: producto.id,
       ));
     });
+
+    //print('producto id : ${producto.id}');
 
     // ORDENAR
     selectVariaciones.sort((a, b) => a.name.compareTo(b.name));
@@ -167,7 +171,8 @@ class TiendaProductoController extends GetxController {
             name: variacionEnviada.name,
             quantity: counter.value,
             onSale: variacionEnviada.onSale,
-            purchasePrice: variacionEnviada.purchasePrice);
+            purchasePrice: variacionEnviada.purchasePrice,
+            parentId: variacionEnviada.parentId);
       }
 
       ProductoCarrito productoCarrito = ProductoCarrito(

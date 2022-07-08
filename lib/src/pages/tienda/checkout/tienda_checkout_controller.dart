@@ -60,7 +60,6 @@ class TiendaCheckoutController extends GetxController {
 
     // CONFIRMAMOS DIRECCION
 
-    // ENVIAMOS LA PETICION DE COMPRA A LA API
     //BUSCAMOS EL METODO DE PAGO SELECCIONADO Y LO ASIGNAMOS
     String metodoDepagoSeleccionado = "";
     metodosDePago.forEach((element) {
@@ -68,7 +67,11 @@ class TiendaCheckoutController extends GetxController {
         metodoDepagoSeleccionado = element.name ?? '';
       }
     });
-
+    print('parent id en el checkout');
+    selectedProducts.forEach((element) {
+      print(element.parentId);
+    });
+    // ENVIAMOS LA PETICION DE COMPRA A LA API
     ResponseApi responseApi = await usersProvider.nuevoPedido(
         selectedProducts, metodoDepagoSeleccionado, total_coste, total.value);
     print('responseApi: ${responseApi.toJson()}');
@@ -88,7 +91,7 @@ class TiendaCheckoutController extends GetxController {
 
   void handleRadioValueChange(int? value) {
     radioValue.value = value!;
-    print('Valor seleccionado ${value}');
+    //print('Valor seleccionado ${value}');
     //GetStorage().write('address', address[value].toJson());
     update();
   }

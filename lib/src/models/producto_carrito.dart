@@ -131,7 +131,8 @@ class Variacion {
       this.name,
       this.quantity,
       this.onSale,
-      this.purchasePrice});
+      this.purchasePrice,
+      this.parentId});
 
   int? id;
   String? sku;
@@ -142,6 +143,7 @@ class Variacion {
   int? quantity;
   bool? onSale;
   String? purchasePrice;
+  int? parentId;
 
   factory Variacion.fromJson(Map<String, dynamic> json) => Variacion(
         id: json["id"],
@@ -153,6 +155,7 @@ class Variacion {
         quantity: json["quantity"],
         onSale: json["onSale"],
         purchasePrice: json["purchasePrice"],
+        parentId: json["parentId"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -164,6 +167,7 @@ class Variacion {
         "name": name,
         "quantity": quantity,
         "onSale": onSale,
-        "purchasePrice": purchasePrice
+        "purchasePrice": purchasePrice,
+        "parentId": parentId
       };
 }

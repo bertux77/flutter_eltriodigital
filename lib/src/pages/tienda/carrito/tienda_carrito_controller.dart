@@ -32,6 +32,11 @@ class TiendaCarritoController extends GetxController {
       }
       getTotal();
     }
+
+    print('parent id en el carrito');
+    selectedProducts.forEach((element) {
+      print(element.parentId);
+    });
   }
 
   void removeItem(ProductoCarrito product) {

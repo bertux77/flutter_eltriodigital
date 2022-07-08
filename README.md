@@ -34,3 +34,8 @@ se accede mapa['llave']
 //  selectedProducts.forEach((element) {
 //    logger.d(element.toJson());
 //  });
+las variaciones no las descuenta del stock
+el parent_id tampoco lo graba en los productos vendidos
+en el carrito el sumar o restar productos si hay una variacion no funciona bien.
+desabilitar el btn de comprar cuando se hace click y agregar una animacion cargando...
+Listar las ventas online en la web
