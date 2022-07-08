@@ -47,8 +47,9 @@ class TiendaProductoController extends GetxController {
 
   TiendaProductoController() {
     producto = Get.arguments['producto'];
+
     price.value = double.parse(producto.price ?? '');
-    print('producto coste: ${producto.purchasePrice}');
+    print('producto id: ${producto.id}');
     if (producto.type == "variable") {
       obtenerVariaciones();
     }
@@ -142,61 +143,58 @@ class TiendaProductoController extends GetxController {
   }
 
   void addToBag(p.Producto product, SelectVariaciones? variacionEnviada) {
-    
-    
-      //validar si el producto ya estaba en el carrito y si esta devuelve el indice
-      int index = selectedProducts.indexWhere((p) => p.id == product.id && p.variacion?.id == variacionEnviada?.id);
-      
-     
-      if (index == -1) {
-        //NO ESTABA AGREGADO, SE AGREGA
-         if (counter.value > 0) {
-           product.quantity = counter.value;
-         } else {
-           product.quantity = 1;
-         }
+    //validar si el producto ya estaba en el carrito y si esta devuelve el indice
+    int index = selectedProducts.indexWhere(
+        (p) => p.id == product.id && p.variacion?.id == variacionEnviada?.id);
 
-        //MAPEAMOS EL PRODUCTO Y SU VARIACION EN PRODUCTOCARRITO PARA AGREGAR AL LISTADO DEL STORAGE
-        Variacion variacion = Variacion();
-        if (variacionEnviada != null) {
-          variacion = Variacion(
-              id: variacionEnviada.id,
-              sku: variacionEnviada.sku,
-              price: variacionEnviada.price,
-              regularPrice: variacionEnviada.regularPrice,
-              salePrice: variacionEnviada.salePrice,
-              name: variacionEnviada.name,
-              quantity: counter.value,
-              onSale: variacionEnviada.onSale,
-              purchasePrice: variacionEnviada.purchasePrice);
-        }
-
-        ProductoCarrito productoCarrito = ProductoCarrito(
-          id: product.id,
-          name: product.name,
-          type: product.type,
-          status: product.status,
-          sku: product.sku,
-          price: product.price,
-          regularPrice: product.regularPrice,
-          salePrice: product.salePrice,
-          purchasePrice: product.purchasePrice,
-          onSale: product.onSale,
-          stockQuantity: product.stockQuantity,
-          parentId: product.parentId,
-          quantity: product.quantity,
-          image: product.images![0].src,
-          variacion: variacion,
-        );
-        selectedProducts.add(productoCarrito);
+    if (index == -1) {
+      //NO ESTABA AGREGADO, SE AGREGA
+      if (counter.value > 0) {
+        product.quantity = counter.value;
       } else {
-        //EL PRODUCTO YA ESTA EN ESTORAGE, simplemente se agrega el contador nuevo que haya indicado
-         selectedProducts[index].quantity = counter.value;
+        product.quantity = 1;
       }
-      GetStorage().write('shopping_bag', selectedProducts);
-      goToCarritoPage();
-      //Utils.snackBarOk('Carrito', 'Producto agregado al carrito');
-    
+
+      //MAPEAMOS EL PRODUCTO Y SU VARIACION EN PRODUCTOCARRITO PARA AGREGAR AL LISTADO DEL STORAGE
+      Variacion variacion = Variacion();
+      if (variacionEnviada != null) {
+        variacion = Variacion(
+            id: variacionEnviada.id,
+            sku: variacionEnviada.sku,
+            price: variacionEnviada.price,
+            regularPrice: variacionEnviada.regularPrice,
+            salePrice: variacionEnviada.salePrice,
+            name: variacionEnviada.name,
+            quantity: counter.value,
+            onSale: variacionEnviada.onSale,
+            purchasePrice: variacionEnviada.purchasePrice);
+      }
+
+      ProductoCarrito productoCarrito = ProductoCarrito(
+        id: product.id,
+        name: product.name,
+        type: product.type,
+        status: product.status,
+        sku: product.sku,
+        price: product.price,
+        regularPrice: product.regularPrice,
+        salePrice: product.salePrice,
+        purchasePrice: product.purchasePrice,
+        onSale: product.onSale,
+        stockQuantity: product.stockQuantity,
+        parentId: product.parentId,
+        quantity: product.quantity,
+        image: product.images![0].src,
+        variacion: variacion,
+      );
+      selectedProducts.add(productoCarrito);
+    } else {
+      //EL PRODUCTO YA ESTA EN ESTORAGE, simplemente se agrega el contador nuevo que haya indicado
+      selectedProducts[index].quantity = counter.value;
+    }
+    GetStorage().write('shopping_bag', selectedProducts);
+    goToCarritoPage();
+    //Utils.snackBarOk('Carrito', 'Producto agregado al carrito');
   }
 
   void goToCarritoPage() {

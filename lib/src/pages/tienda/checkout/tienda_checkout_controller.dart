@@ -70,18 +70,20 @@ class TiendaCheckoutController extends GetxController {
     });
 
     ResponseApi responseApi = await usersProvider.nuevoPedido(
-        selectedProducts, metodoDepagoSeleccionado,total_coste, total.value);
+        selectedProducts, metodoDepagoSeleccionado, total_coste, total.value);
     print('responseApi: ${responseApi.toJson()}');
     if (responseApi.success == true) {
       // BORRAMOS EL STORAGE
+      GetStorage().remove('shopping_bag');
       // REDIRIGIMOS A PAGINA DE CONFIRMACION VENTA.
+      goToConfirmacionPage();
     } else {
       Get.snackbar('ERROR', responseApi.message ?? '');
     }
+  }
 
-    // BORRAMOS EL GETSTORAGE
-
-    // MENSAJE DE CONFIRMACION
+  void goToConfirmacionPage() {
+    Get.offAllNamed('tienda/confirmacion');
   }
 
   void handleRadioValueChange(int? value) {

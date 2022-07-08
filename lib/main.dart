@@ -61,7 +61,9 @@ class _MyAppState extends State<MyApp> {
         GetPage(name: '/tienda', page: () => TiendaPage()),
         GetPage(name: '/tienda/carrito', page: () => TiendaCarritoPage()),
         GetPage(name: '/tienda/checkout', page: () => TiendaCheckoutPage()),
-        GetPage(name: '/tienda/confirmacion', page: () => TiendaPedidosConfirmacionPage()),
+        GetPage(
+            name: '/tienda/confirmacion',
+            page: () => TiendaPedidosConfirmacionPage()),
         GetPage(name: '/producto', page: () => TiendaProductoPage()),
         GetPage(name: '/canjeo', page: () => TiendaPedidosCanjeoPage()),
         GetPage(
