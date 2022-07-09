@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
         GetPage(name: '/', page: () => LoginPage()),
         GetPage(name: '/register', page: () => RegisterPage()),
         GetPage(name: '/home', page: () => HomePage()),
-        GetPage(name: '/utils', page: () => const UtilsPage()),
+        GetPage(name: '/utils', page: () => UtilsPage()),
         GetPage(name: '/perfil', page: () => PerfilPage()),
         GetPage(name: '/perfil/pedidos', page: () => PerfilPedidosPage()),
         GetPage(name: '/perfil/info', page: () => PerfilInfoPage()),

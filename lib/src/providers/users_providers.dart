@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
-
+import 'package:eltriodigital_flutter/src/utils/utils.dart';
+import 'package:http/http.dart' as http;
 import 'package:eltriodigital_flutter/src/environment/environment.dart';
 import 'package:eltriodigital_flutter/src/models/producto_carrito.dart';
 import 'package:eltriodigital_flutter/src/models/response_api.dart';
@@ -12,50 +14,53 @@ import '../models/user.dart';
 class UsersProvider extends GetConnect {
   String url = Environment.API_URL + 'api';
   User user = User.fromJson(GetStorage().read('user') ?? {});
+  Future<ResponseApi> prueba() async {
+    final respuesta = await http.get(Uri.parse(url));
 
-  Future<Response> prueba() async {
-    Response response =
-        await get(url, headers: {'Content-type': 'application/json'});
-    return response;
+    if (respuesta.statusCode == 200) {
+      print(respuesta.body);
+      ResponseApi responseApi =
+          ResponseApi.fromJson(jsonDecode(respuesta.body));
+      return responseApi;
+    } else {
+      print("Error con la respusta");
+      return ResponseApi();
+    }
   }
 
   Future<ResponseApi> nuevoPedido(List<ProductoCarrito> productosVendidos,
-      int metodoDePago, double coste, double total) async {
+      int metodoDePago, double coste, double total, String direccion) async {
     Map valoresApasar = {
       'pedido': productosVendidos,
       'metodoDePago': metodoDePago,
       'total_pago': total,
-      'total_coste': coste
+      'total_coste': coste,
+      'direccion': direccion
     };
     //print('antes de llamar a la api: ${user.sessionToken}');
 
-    Response response =
-        await post('${url}/nuevo-pedido', jsonEncode(valoresApasar), headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${user.sessionToken}'
-    });
-
-    if (response.body == null) {
-      Get.snackbar('Error', 'No se pudo actualizar la información');
+    // Response response =
+    //     await post('${url}/nuevo-pedido', jsonEncode(valoresApasar), headers: {
+    //   'Content-Type': 'application/json',
+    //   'Authorization': 'Bearer ${user.sessionToken}'
+    // });
+    final respuesta = await http.post(Uri.parse('${url}/nuevo-pedido'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${user.sessionToken}'
+        },
+        body: jsonEncode(valoresApasar));
+    if (respuesta.statusCode == 200) {
+      ResponseApi responseApi =
+          ResponseApi.fromJson(jsonDecode(respuesta.body));
+      return responseApi;
+    } else if (respuesta.statusCode == 401) {
+      Utils.snackBarError('error', 'No estas autorizado');
+      return ResponseApi();
+    } else {
+      print("Error con la respusta");
       return ResponseApi();
     }
-
-    if (response.body is String) {
-      Get.snackbar('Error', 'No se ha podido actualizar los datos',
-          icon: const Icon(Icons.dangerous, color: Colors.red),
-          snackPosition: SnackPosition.TOP,
-          colorText: Colors.red,
-          backgroundColor: Colors.white);
-      return ResponseApi();
-    }
-
-    if (response.statusCode == 401) {
-      Get.snackbar('Error', 'No estas autorizado');
-      return ResponseApi();
-    }
-
-    ResponseApi responseApi = ResponseApi.fromJson(response.body);
-    return responseApi;
   }
 
   // SIN FOTO

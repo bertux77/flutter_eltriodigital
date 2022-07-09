@@ -69,18 +69,24 @@ class TiendaCheckoutController extends GetxController {
         metodoDepagoSeleccionado = element.id!;
       }
     });
+    String direccion =
+        '${userSession.name} - ${userSession.direccion} - ${userSession.cp} - ${userSession.poblacion} - ${userSession.provincia} - ${userSession.email} - ${userSession.telefono}';
     // ENVIAMOS LA PETICION DE COMPRA A LA API
-    ResponseApi responseApi = await usersProvider.nuevoPedido(
-        selectedProducts, metodoDepagoSeleccionado, total_coste, total.value);
+    ResponseApi responseApi = await usersProvider.nuevoPedido(selectedProducts,
+        metodoDepagoSeleccionado, total_coste, total.value, direccion);
     print('responseApi: ${responseApi.toJson()}');
     if (responseApi.success == true) {
       // BORRAMOS EL STORAGE
       GetStorage().remove('shopping_bag');
       // REDIRIGIMOS A PAGINA DE CONFIRMACION VENTA.
       //print(responseApi.da);
-     goToConfirmacionPage(responseApi.data);
+      goToConfirmacionPage(responseApi.data);
     } else {
-      Get.snackbar('ERROR', responseApi.message ?? '');
+      if (responseApi.message != null) {
+        print(responseApi.message);
+        Get.snackbar('ERROR', responseApi.message!);
+      }
+      isLoading.value = false;
     }
   }
 

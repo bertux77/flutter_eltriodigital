@@ -89,8 +89,8 @@ class TiendaPage extends StatelessWidget {
                                                   title: GestureDetector(
                                                     onTap: () =>
                                                         con.goToProductoPage(
-                                                            snapshot.data[index]
-                                                          ),
+                                                            snapshot
+                                                                .data[index]),
                                                     child: Text(snapshot
                                                         .data[index].name),
                                                   ),

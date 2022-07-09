@@ -32,6 +32,8 @@ class MyAppBarController extends GetxController {
       //print('selected products en controller: ${selectedProducts.length}');
       items = selectedProducts.length;
       //print('selectProducts.length: ${selectedProducts.length}');
+    } else {
+      selectedProducts.clear();
     }
   }
 
