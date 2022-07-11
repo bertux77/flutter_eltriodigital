@@ -12,6 +12,9 @@ class Pedido {
   Pedido({
     this.id,
     this.tipo,
+    this.formaPago,
+    this.estado,
+    this.direccion,
     this.totalCoste,
     this.canjeoWallet,
     this.totalVenta,
@@ -25,6 +28,9 @@ class Pedido {
 
   int? id;
   int? tipo;
+  String? formaPago;
+  String? estado;
+  String? direccion;
   double? totalCoste;
   double? canjeoWallet;
   double? totalVenta;
@@ -38,6 +44,9 @@ class Pedido {
   factory Pedido.fromJson(Map<String, dynamic> json) => Pedido(
         id: json["id"],
         tipo: json["tipo"],
+        formaPago: json["forma_pago"],
+        estado: json["estado"],
+        direccion: json["direccion"],
         totalCoste: json["total_coste"].toDouble(),
         canjeoWallet: json["canjeo_wallet"].toDouble(),
         totalVenta: json["total_venta"].toDouble(),
@@ -54,6 +63,9 @@ class Pedido {
   Map<String, dynamic> toJson() => {
         "id": id,
         "tipo": tipo,
+        "forma_pago": formaPago,
+        "estado": estado,
+        "direccion": direccion,
         "total_coste": totalCoste,
         "canjeo_wallet": canjeoWallet,
         "total_venta": totalVenta,

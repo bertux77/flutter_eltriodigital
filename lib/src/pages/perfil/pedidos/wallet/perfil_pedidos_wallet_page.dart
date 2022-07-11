@@ -1,14 +1,13 @@
 import 'package:eltriodigital_flutter/src/models/wallet.dart';
-import 'package:eltriodigital_flutter/src/pages/perfil/pedidos/perfil_pedidos_controller.dart';
+import 'package:eltriodigital_flutter/src/pages/perfil/pedidos/wallet/perfil_pedidos_wallet_controller.dart';
 import 'package:eltriodigital_flutter/src/providers/users_providers.dart';
-import 'package:eltriodigital_flutter/src/widgets/appbar/my_appbar.dart';
 import 'package:eltriodigital_flutter/src/widgets/bottomNavigationBar/my_bottom_navigation_bar.dart';
 import 'package:eltriodigital_flutter/src/widgets/varios/fecha_formateada.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PerfilPedidosPage extends StatelessWidget {
-  PerfilPedidosController con = Get.put(PerfilPedidosController());
+class PerfilPedidosWalletPage extends StatelessWidget {
+  PerfilPedidosWalletController con = Get.put(PerfilPedidosWalletController());
   UsersProvider usersProvider = UsersProvider();
   @override
   Widget build(BuildContext context) {
@@ -84,23 +83,6 @@ class PerfilPedidosPage extends StatelessWidget {
       },
     );
   }
-
-  // Widget _btnScanCompra() {
-  //   return Container(
-  //     height: 40,
-  //     //padding: EdgeInsets.all(0),
-  //     child: ElevatedButton.icon(
-  //         onPressed: () => con.scanBar(),
-  //         icon: const Icon(
-  //           Icons.qr_code_scanner,
-  //           color: Colors.white,
-  //         ),
-  //         label: const Text(
-  //           'Scan compra',
-  //           style: TextStyle(color: Colors.white),
-  //         )),
-  //   );
-  // }
 
   Widget _tituloUltimosPedidos() {
     return Text('Ultimos movimientos');

@@ -20,12 +20,21 @@ class PerfilPage extends StatelessWidget {
           child: Column(
             children: [
               GestureDetector(
-                onTap: () => con.goToPerfilPedidosPage(),
+                onTap: () => con.goToPerfilPedidosWalletPage(),
                 child: const _btnGordo(
                   icon: Icons.euro,
                   color1: Color(0xff2F80ED),
                   color2: Color.fromARGB(255, 21, 63, 117),
                   titulo: 'Mi wallet',
+                ),
+              ),
+              GestureDetector(
+                onTap: () => con.goToPerfilPedidosOnlinePage(),
+                child: const _btnGordo(
+                  icon: Icons.shopping_cart_checkout,
+                  color1: Color(0xff2F80ED),
+                  color2: Color.fromARGB(255, 21, 63, 117),
+                  titulo: 'Mis pedidos',
                 ),
               ),
               GestureDetector(

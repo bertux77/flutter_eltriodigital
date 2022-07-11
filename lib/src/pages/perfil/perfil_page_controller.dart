@@ -53,8 +53,12 @@ class PerfilPageController extends GetxController {
     }
   }
 
-  void goToPerfilPedidosPage() {
-    Get.toNamed('/perfil/pedidos');
+  void goToPerfilPedidosWalletPage() {
+    Get.toNamed('/perfil/pedidos/wallet');
+  }
+
+  void goToPerfilPedidosOnlinePage() {
+    Get.toNamed('/perfil/pedidos/online');
   }
 
   void goToPerfilShowQrPage() {

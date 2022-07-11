@@ -196,6 +196,36 @@ class UsersProvider extends GetConnect {
     return responseApi;
   }
 
+  // LISTADO DE PEDIDOS REALIZADOS EN LA APP
+  Future<ResponseApi> listarPedidos() async {
+    Response response = await get('$url/listar-pedidos', headers: {
+      'Content-type': 'application/json',
+      'Authorization': 'Bearer ${user.sessionToken}'
+    });
+
+    if (response.body == null) {
+      Get.snackbar('Error', 'No se ha podido ejecutar la petición',
+          icon: const Icon(Icons.dangerous, color: Colors.red),
+          snackPosition: SnackPosition.TOP,
+          colorText: Colors.red,
+          backgroundColor: Colors.white);
+      return ResponseApi();
+    }
+    if (response.body is String) {
+      Get.snackbar('Error', 'No se ha podido actualizar los datos',
+          icon: const Icon(Icons.dangerous, color: Colors.red),
+          snackPosition: SnackPosition.TOP,
+          colorText: Colors.red,
+          backgroundColor: Colors.white);
+      return ResponseApi();
+    }
+    //print('Respuesta cargar Wallet: ${response.body}');
+    ResponseApi responseApi = ResponseApi.fromJson(response.body);
+
+    //print(responseApi.toJson());
+    return responseApi;
+  }
+
   Future<Response> registro(User user) async {
     Response response = await post('$url/registro', user.toJson(),
         headers: {'Content-type': 'application/json'});
